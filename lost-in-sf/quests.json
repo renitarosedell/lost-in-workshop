@@ -1,0 +1,94 @@
+{
+  "quests": [
+    {
+      "id": 1,
+      "name": "The Mission Run",
+      "start": {
+        "neighborhood": "The Mission",
+        "description": "You wake up disoriented outside a taqueria on Valencia Street. The smell of carnitas is everywhere. Your phone says it's 9:15am. Build starts at 10:00. You need to get to Fort Mason \u2014 but you have no idea how.",
+        "flavor": "A street musician is playing outside. A mural covers the wall behind you."
+      },
+      "stop1": {
+        "neighborhood": "Hayes Valley",
+        "arrival_description": "You arrive at Hayes Valley. A vintage shop owner waves at you from the doorway. 'You must be the one Agent42 sent. Come in.'",
+        "challenge_type": "a2a",
+        "a2a_context": "You are lost in The Mission and need to get to Hayes Valley. Ask the local expert (agent42) for the best transport option: taxi, walking, or bike.",
+        "transport_prompt": "What transport are you taking to Hayes Valley? (taxi / walking / bike)",
+        "valid_transports": ["taxi", "walking", "bike"]
+      },
+      "stop2": {
+        "neighborhood": "Hayes Valley",
+        "challenge_type": "rag",
+        "setup_description": "The shop owner hands you a heavy bag. 'Someone left these for you. The code you need is in there somewhere.' Inside are stacks of documents \u2014 zines, flyers, local event programs.",
+        "documents_zip_url": "https://your-storage-url/quest1-documents.zip",
+        "secret_code": "VALENCIA42",
+        "code_hint": "What is the secret code written in the documents?"
+      },
+      "end": {
+        "transport_prompt": "Time to go to Build! What transport are you taking to Fort Mason? (taxi / walking / bike)",
+        "valid_transports": ["taxi", "walking", "bike"],
+        "arrival_message": "You arrive at Fort Mason. The doors open. Welcome to Build!"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Chinatown Express",
+      "start": {
+        "neighborhood": "Chinatown",
+        "description": "You find yourself on Grant Avenue in Chinatown. Paper lanterns sway overhead. Market stalls crowd the sidewalk. A sign says Fort Mason is 2.3 miles away. Build starts in 45 minutes.",
+        "flavor": "A cable car bell rings in the distance."
+      },
+      "stop1": {
+        "neighborhood": "North Beach",
+        "arrival_description": "You step into North Beach. The smell of coffee and old books. A figure leans against the wall outside City Lights bookstore. 'You made it. I was starting to worry.'",
+        "challenge_type": "a2a",
+        "a2a_context": "You are in Chinatown and need to get to North Beach. Ask the local expert (agent42) for the best transport option: taxi, walking, or bike.",
+        "transport_prompt": "What transport are you taking to North Beach? (taxi / walking / bike)",
+        "valid_transports": ["taxi", "walking", "bike"]
+      },
+      "stop2": {
+        "neighborhood": "North Beach",
+        "challenge_type": "rag",
+        "setup_description": "The stranger unzips a weathered bag and tips it out \u2014 photocopied manuscripts, bookstore receipts, handwritten notes on napkins. 'The code is in there. Somewhere. Good luck.'",
+        "documents_zip_url": "https://your-storage-url/quest2-documents.zip",
+        "secret_code": "BEATNIK99",
+        "code_hint": "What is the secret code written in the documents?"
+      },
+      "end": {
+        "transport_prompt": "Time to go to Build! What transport are you taking to Fort Mason? (taxi / walking / bike)",
+        "valid_transports": ["taxi", "walking", "bike"],
+        "arrival_message": "You walk through the gates of Fort Mason. A volunteer scans your badge. Welcome to Build!"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Waterfront Route",
+      "start": {
+        "neighborhood": "Embarcadero",
+        "description": "You're standing at the Ferry Building. Fog rolls in off the bay. Seagulls argue overhead. The clock tower reads 9:18am. Fort Mason is up the waterfront. Build starts in 42 minutes.",
+        "flavor": "A ferry horn echoes across the water."
+      },
+      "stop1": {
+        "neighborhood": "Fisherman's Wharf",
+        "arrival_description": "You reach Fisherman's Wharf. The smell of sourdough and sea air. A fisherman in waders spots you immediately. 'Agent42 radioed ahead. Been expecting you.'",
+        "challenge_type": "a2a",
+        "a2a_context": "You are at the Embarcadero and need to get to Fisherman's Wharf along the waterfront. Ask the local expert (agent42) for the best transport option: taxi, walking, or bike.",
+        "transport_prompt": "What transport are you taking to Fisherman's Wharf? (taxi / walking / bike)",
+        "valid_transports": ["taxi", "walking", "bike"]
+      },
+      "stop2": {
+        "neighborhood": "Fisherman's Wharf",
+        "challenge_type": "rag",
+        "setup_description": "The fisherman hauls a salt-stained satchel from his boat. 'Logbooks, manifests, dock reports. Messy bunch of papers. But the code you need \u2014 it's in there.'",
+        "documents_zip_url": "https://your-storage-url/quest3-documents.zip",
+        "secret_code": "ANCHOR77",
+        "code_hint": "What is the secret code written in the documents?"
+      },
+      "end": {
+        "transport_prompt": "Time to go to Build! What transport are you taking to Fort Mason? (taxi / walking / bike)",
+        "valid_transports": ["taxi", "walking", "bike"],
+        "arrival_message": "Fort Mason comes into view. The bay glittering behind you. You made it. Welcome to Build!"
+      }
+    }
+  ]
+}
