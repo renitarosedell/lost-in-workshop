@@ -1,10 +1,10 @@
 {
-  "ResourceGroup":       "raleigh-workshop",
+  "ResourceGroup":       "lost-workshop",
   "Location":            "eastus2",
-  "AcrName":             "raleighworkshop",
-  "StorageAccount":      "raleighworkshop",
+  "AcrName":             "lostworkshop",
+  "StorageAccount":      "lostworkshop",
   "Environment":         "raleigh-env",
   "OpenAiEndpoint":      "https://<your-hub>.openai.azure.com/",
   "OpenAiDeployment":    "gpt-4o-mini",
-  "OpenAiResourceGroup": "raleigh-workshop"
+  "OpenAiResourceGroup": "lost-workshop"
 }
