@@ -234,11 +234,11 @@ if ($envExists) {
 
 Step "Step 5/7 — Building and pushing Docker images"
 
-docker build -t "$AcrLoginServer/lost-in-raleigh:latest" (Join-Path $RepoRoot "lost-in-raleigh")
+docker build --platform linux/amd64 -t "$AcrLoginServer/lost-in-raleigh:latest" (Join-Path $RepoRoot "lost-in-raleigh")
 docker push "$AcrLoginServer/lost-in-raleigh:latest"
 Ok "Game server image pushed"
 
-docker build -t "$AcrLoginServer/a2a-expert:latest" (Join-Path $RepoRoot "a2a-expert")
+docker build --platform linux/amd64 -t "$AcrLoginServer/a2a-expert:latest" (Join-Path $RepoRoot "a2a-expert")
 docker push "$AcrLoginServer/a2a-expert:latest"
 Ok "A2A expert image pushed"
 
@@ -305,7 +305,7 @@ if ($a2aExists) {
         --max-replicas 3 `
         --cpu 0.25 `
         --memory 0.5Gi `
-        --set-env-vars `
+        --env-vars `
             "AZURE_OPENAI_ENDPOINT=$OpenAiEndpoint" `
             "AZURE_OPENAI_DEPLOYMENT_NAME=$OpenAiDeployment" `
         --output none
@@ -355,7 +355,7 @@ Set-Content $ConfigPath $config -NoNewline
 Ok "city_config.yaml patched"
 
 # Rebuild and redeploy game server with updated config
-docker build -t "$AcrLoginServer/lost-in-raleigh:latest" (Join-Path $RepoRoot "lost-in-raleigh")
+docker build --platform linux/amd64 -t "$AcrLoginServer/lost-in-raleigh:latest" (Join-Path $RepoRoot "lost-in-raleigh")
 docker push "$AcrLoginServer/lost-in-raleigh:latest"
 az containerapp update `
     --name lost-in-raleigh `
