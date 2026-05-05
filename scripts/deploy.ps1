@@ -26,11 +26,12 @@
 .PARAMETER OpenAiEndpoint
     Azure OpenAI endpoint URL (required). Example: https://my-hub.openai.azure.com/
 
-.PARAMETER OpenAiApiKey
-    Azure OpenAI API key (required).
-
 .PARAMETER OpenAiDeployment
     Azure OpenAI model deployment name. Default: gpt-4o-mini
+
+.PARAMETER OpenAiResourceGroup
+    Resource group containing the Azure OpenAI account.
+    Defaults to the same resource group as the rest of the workshop infrastructure.
 
 .PARAMETER ConfigFile
     Path to a JSON config file. Defaults to scripts/deploy.config.json.
@@ -45,7 +46,7 @@
 
 .EXAMPLE
     # Override individual values from the command line
-    .\scripts\deploy.ps1 -OpenAiApiKey "abc123"
+    .\.\scripts\deploy.ps1 -OpenAiEndpoint "https://my-hub.openai.azure.com/"
 #>
 
 [CmdletBinding()]
@@ -58,8 +59,8 @@ param(
     [string] $StorageAccount,
     [string] $Environment,
     [string] $OpenAiEndpoint,
-    [string] $OpenAiApiKey,
-    [string] $OpenAiDeployment
+    [string] $OpenAiDeployment,
+    [string] $OpenAiResourceGroup
 )
 
 Set-StrictMode -Version Latest
@@ -75,9 +76,9 @@ $cfg = @{
     AcrName          = "raleighworkshop"
     StorageAccount   = "raleighworkshop"
     Environment      = "raleigh-env"
-    OpenAiEndpoint   = ""
-    OpenAiApiKey     = ""
-    OpenAiDeployment = "gpt-4o-mini"
+    OpenAiEndpoint       = ""
+    OpenAiDeployment     = "gpt-4o-mini"
+    OpenAiResourceGroup  = ""
 }
 
 if (Test-Path $ConfigFile) {
@@ -99,9 +100,9 @@ if ($Location)         { $cfg.Location         = $Location }
 if ($AcrName)          { $cfg.AcrName          = $AcrName }
 if ($StorageAccount)   { $cfg.StorageAccount   = $StorageAccount }
 if ($Environment)      { $cfg.Environment      = $Environment }
-if ($OpenAiEndpoint)   { $cfg.OpenAiEndpoint   = $OpenAiEndpoint }
-if ($OpenAiApiKey)     { $cfg.OpenAiApiKey     = $OpenAiApiKey }
-if ($OpenAiDeployment) { $cfg.OpenAiDeployment = $OpenAiDeployment }
+if ($OpenAiEndpoint)       { $cfg.OpenAiEndpoint      = $OpenAiEndpoint }
+if ($OpenAiDeployment)     { $cfg.OpenAiDeployment    = $OpenAiDeployment }
+if ($OpenAiResourceGroup)  { $cfg.OpenAiResourceGroup = $OpenAiResourceGroup }
 
 # Unpack for readability
 $ResourceGroup    = $cfg.ResourceGroup
@@ -109,9 +110,9 @@ $Location         = $cfg.Location
 $AcrName          = $cfg.AcrName
 $StorageAccount   = $cfg.StorageAccount
 $Environment      = $cfg.Environment
-$OpenAiEndpoint   = $cfg.OpenAiEndpoint
-$OpenAiApiKey     = $cfg.OpenAiApiKey
-$OpenAiDeployment = $cfg.OpenAiDeployment
+$OpenAiEndpoint      = $cfg.OpenAiEndpoint
+$OpenAiDeployment    = $cfg.OpenAiDeployment
+$OpenAiResourceGroup = if ($cfg.OpenAiResourceGroup) { $cfg.OpenAiResourceGroup } else { $cfg.ResourceGroup }
 
 function Step([string]$msg) {
     Write-Host ""
@@ -130,9 +131,6 @@ function Fail([string]$msg) {
 # Validate required values
 if (-not $OpenAiEndpoint -or $OpenAiEndpoint -like "*<*") {
     Fail "OpenAiEndpoint is not set. Add it to deploy.config.json or pass -OpenAiEndpoint."
-}
-if (-not $OpenAiApiKey -or $OpenAiApiKey -like "*<*") {
-    Fail "OpenAiApiKey is not set. Add it to deploy.config.json or pass -OpenAiApiKey."
 }
 
 # ─── Preflight ────────────────────────────────────────────────────────────────
@@ -308,11 +306,34 @@ if ($a2aExists) {
         --memory 0.5Gi `
         --set-env-vars `
             "AZURE_OPENAI_ENDPOINT=$OpenAiEndpoint" `
-            "AZURE_OPENAI_API_KEY=$OpenAiApiKey" `
             "AZURE_OPENAI_DEPLOYMENT_NAME=$OpenAiDeployment" `
         --output none
     Ok "A2A expert deployed"
 }
+
+# Assign system-managed identity and grant Cognitive Services OpenAI User role
+$A2aPrincipalId = az containerapp identity assign `
+    --name a2a-expert `
+    --resource-group $ResourceGroup `
+    --system-assigned `
+    --query principalId -o tsv
+
+# Derive the Azure OpenAI account name from the endpoint URL
+# e.g. https://my-hub.openai.azure.com/ -> my-hub
+$OpenAiAccountName = $OpenAiEndpoint -replace 'https://', '' -replace '\.openai\.azure\.com.*', ''
+
+$OpenAiResourceId = az cognitiveservices account show `
+    --name $OpenAiAccountName `
+    --resource-group $OpenAiResourceGroup `
+    --query id -o tsv
+
+az role assignment create `
+    --assignee $A2aPrincipalId `
+    --role "Cognitive Services OpenAI User" `
+    --scope $OpenAiResourceId `
+    --output none
+
+Ok "Managed identity assigned and 'Cognitive Services OpenAI User' role granted"
 
 $A2aFqdn = az containerapp show `
     --name a2a-expert `
