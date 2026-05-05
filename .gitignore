@@ -73,11 +73,25 @@ coverage.xml
 *.log
 logs/
 
-# Node (in case of any JS tooling)
+# Node / VitePress
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.vitepress/dist/
+.vitepress/cache/
 
 # Project-specific
 lost-in-sf/state.json
+lost-in-raleigh/state.json
+lost-in-raleigh/quests.json
+
+# Organiser-only directories (gitignored on attendee branch)
+lost-in-raleigh/
+a2a-expert/
+
+# AI
+.github/
+!.github/workflows/
+.specify/
+.vscode/
