@@ -83,9 +83,10 @@ $cfg = @{
 
 if (Test-Path $ConfigFile) {
     $json = Get-Content $ConfigFile -Raw | ConvertFrom-Json
-    foreach ($key in $cfg.Keys) {
-        if ($null -ne $json.$key -and $json.$key -ne "") {
-            $cfg[$key] = $json.$key
+    foreach ($key in @($cfg.Keys)) {
+        $val = $json.PSObject.Properties[$key]
+        if ($null -ne $val -and $val.Value -ne "") {
+            $cfg[$key] = $val.Value
         }
     }
     Write-Host "Config loaded from $ConfigFile" -ForegroundColor DarkGray
