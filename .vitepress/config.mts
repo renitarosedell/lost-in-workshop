@@ -28,6 +28,9 @@ export default defineConfig({
 
   lastUpdated: true,
 
+  // localhost URLs appear intentionally in workshop code examples
+  ignoreDeadLinks: [/^http:\/\/localhost/],
+
   themeConfig: {
     nav: [
       {
