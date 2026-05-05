@@ -25,6 +25,9 @@ MANIFEST
 .env
 .venv
 env/
+
+# Deployment config (contains secrets — never commit)
+scripts/deploy.config.json
 venv/
 ENV/
 env.bak/

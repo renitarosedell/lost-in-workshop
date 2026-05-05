@@ -1,0 +1,10 @@
+{
+  "ResourceGroup":    "raleigh-workshop",
+  "Location":         "eastus2",
+  "AcrName":          "raleighworkshop",
+  "StorageAccount":   "raleighworkshop",
+  "Environment":      "raleigh-env",
+  "OpenAiEndpoint":   "https://<your-hub>.openai.azure.com/",
+  "OpenAiApiKey":     "<your-api-key>",
+  "OpenAiDeployment": "gpt-4o-mini"
+}

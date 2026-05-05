@@ -32,33 +32,86 @@
 .PARAMETER OpenAiDeployment
     Azure OpenAI model deployment name. Default: gpt-4o-mini
 
+.PARAMETER ConfigFile
+    Path to a JSON config file. Defaults to scripts/deploy.config.json.
+    Copy scripts/deploy.config.json.example to scripts/deploy.config.json and fill in your values.
+    Any parameter passed on the command line takes precedence over the config file.
+
 .EXAMPLE
-    .\scripts\deploy.ps1 `
-        -OpenAiEndpoint "https://my-hub.openai.azure.com/" `
-        -OpenAiApiKey "abc123"
+    # Recommended: use a config file
+    Copy-Item scripts\deploy.config.json.example scripts\deploy.config.json
+    # Edit scripts\deploy.config.json with your values, then:
+    .\scripts\deploy.ps1
+
+.EXAMPLE
+    # Override individual values from the command line
+    .\scripts\deploy.ps1 -OpenAiApiKey "abc123"
 #>
 
 [CmdletBinding()]
 param(
-    [string] $ResourceGroup    = "raleigh-workshop",
-    [string] $Location         = "eastus2",
-    [string] $AcrName          = "raleighworkshop",
-    [string] $StorageAccount   = "raleighworkshop",
-    [string] $Environment      = "raleigh-env",
+    [string] $ConfigFile       = (Join-Path $PSScriptRoot "deploy.config.json"),
 
-    [Parameter(Mandatory)]
+    [string] $ResourceGroup,
+    [string] $Location,
+    [string] $AcrName,
+    [string] $StorageAccount,
+    [string] $Environment,
     [string] $OpenAiEndpoint,
-
-    [Parameter(Mandatory)]
     [string] $OpenAiApiKey,
-
-    [string] $OpenAiDeployment = "gpt-4o-mini"
+    [string] $OpenAiDeployment
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $RepoRoot = Split-Path -Parent $PSScriptRoot
+
+# ─── Load config file, then apply CLI overrides ──────────────────────────────
+
+$cfg = @{
+    ResourceGroup    = "raleigh-workshop"
+    Location         = "eastus2"
+    AcrName          = "raleighworkshop"
+    StorageAccount   = "raleighworkshop"
+    Environment      = "raleigh-env"
+    OpenAiEndpoint   = ""
+    OpenAiApiKey     = ""
+    OpenAiDeployment = "gpt-4o-mini"
+}
+
+if (Test-Path $ConfigFile) {
+    $json = Get-Content $ConfigFile -Raw | ConvertFrom-Json
+    foreach ($key in $cfg.Keys) {
+        if ($null -ne $json.$key -and $json.$key -ne "") {
+            $cfg[$key] = $json.$key
+        }
+    }
+    Write-Host "Config loaded from $ConfigFile" -ForegroundColor DarkGray
+} else {
+    Write-Host "No config file found at $ConfigFile — using defaults and CLI parameters." -ForegroundColor Yellow
+    Write-Host "Tip: copy scripts\deploy.config.json.example to scripts\deploy.config.json" -ForegroundColor DarkGray
+}
+
+# CLI parameters override config file values
+if ($ResourceGroup)    { $cfg.ResourceGroup    = $ResourceGroup }
+if ($Location)         { $cfg.Location         = $Location }
+if ($AcrName)          { $cfg.AcrName          = $AcrName }
+if ($StorageAccount)   { $cfg.StorageAccount   = $StorageAccount }
+if ($Environment)      { $cfg.Environment      = $Environment }
+if ($OpenAiEndpoint)   { $cfg.OpenAiEndpoint   = $OpenAiEndpoint }
+if ($OpenAiApiKey)     { $cfg.OpenAiApiKey     = $OpenAiApiKey }
+if ($OpenAiDeployment) { $cfg.OpenAiDeployment = $OpenAiDeployment }
+
+# Unpack for readability
+$ResourceGroup    = $cfg.ResourceGroup
+$Location         = $cfg.Location
+$AcrName          = $cfg.AcrName
+$StorageAccount   = $cfg.StorageAccount
+$Environment      = $cfg.Environment
+$OpenAiEndpoint   = $cfg.OpenAiEndpoint
+$OpenAiApiKey     = $cfg.OpenAiApiKey
+$OpenAiDeployment = $cfg.OpenAiDeployment
 
 function Step([string]$msg) {
     Write-Host ""
@@ -72,6 +125,14 @@ function Ok([string]$msg) {
 function Fail([string]$msg) {
     Write-Host "  ✖ $msg" -ForegroundColor Red
     exit 1
+}
+
+# Validate required values
+if (-not $OpenAiEndpoint -or $OpenAiEndpoint -like "*<*") {
+    Fail "OpenAiEndpoint is not set. Add it to deploy.config.json or pass -OpenAiEndpoint."
+}
+if (-not $OpenAiApiKey -or $OpenAiApiKey -like "*<*") {
+    Fail "OpenAiApiKey is not set. Add it to deploy.config.json or pass -OpenAiApiKey."
 }
 
 # ─── Preflight ────────────────────────────────────────────────────────────────
