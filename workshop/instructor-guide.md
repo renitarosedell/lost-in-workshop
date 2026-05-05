@@ -13,6 +13,18 @@ This guide walks you through everything needed to run a Lost in Workshop event f
 Share this URL directly with co-facilitators. It does not appear in the site navigation.
 :::
 
+::: tip One-command deployment
+All steps below are automated in `scripts/deploy.ps1`. Run it once with your Azure OpenAI credentials and it handles everything end-to-end:
+
+```powershell
+.\scripts\deploy.ps1 `
+    -OpenAiEndpoint "https://my-hub.openai.azure.com/" `
+    -OpenAiApiKey   "your-api-key"
+```
+
+The manual steps below explain what each phase does if you need to run them individually or troubleshoot.
+:::
+
 ---
 
 ## Overview of what you are deploying
