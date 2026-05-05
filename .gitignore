@@ -91,7 +91,7 @@ lost-in-raleigh/
 a2a-expert/
 
 # AI
-.github/
+.github/*
 !.github/workflows/
 .specify/
 .vscode/
