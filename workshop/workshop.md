@@ -1,36 +1,39 @@
 
+---
+title: Workshop Guide
+description: Build a Python AI agent that navigates a quest through Raleigh, NC using MCP, A2A, and RAG.
+---
+
 # Lost in Raleigh — Workshop Guide
 
-Welcome! In this workshop you will build a Python AI agent that navigates a quest through
+<Badge type="tip" text="~90 minutes" /> <Badge type="info" text="Beginner–Intermediate Python" />
+
+In this workshop you will build a Python AI agent that navigates a quest through
 Raleigh, NC. Your agent will use **Microsoft Agent Framework**, **Azure OpenAI**, an **MCP
 game server**, memory persistence, an **A2A transport expert**, and document search (RAG).
 
-**Duration**: ~90 minutes   **Level**: Beginner–Intermediate Python
+## Prerequisites
 
----
-
-## Before you start
-
-- Complete [azure-foundry-setup.md](azure-foundry-setup.md) to create your Azure OpenAI
+::: warning Before you start
+- Complete [Azure Foundry Setup](azure-foundry-setup) to create your Azure OpenAI
   deployment and fill in your `.env` file.
 - Your facilitator will provide the `MCP_SERVER_URL` for the game server.
 - All step files are in `sample-agent/steps/`. Run each one from the `sample-agent/`
   directory: `python steps/step1_foundry_test.py`
+:::
 
 ---
 
-## Step 1 — Connect to Azure OpenAI (baseline check)
+## Step 1 — Connect to Azure OpenAI <Badge type="tip" text="~15 min" />
 
-### Concept
+::: info What you'll build
+Verify that your Azure OpenAI credentials work using the bare `openai` SDK — no agent
+framework, no tools. This is your baseline connectivity check before anything else.
+:::
 
-Before we use the agent framework, we verify that your Azure OpenAI credentials work.
-This step uses the bare `openai` SDK — no agent framework, no tools.
+Open (or create) `steps/step1_foundry_test.py`:
 
-### What to add
-
-Create `steps/step1_foundry_test.py` (or open the provided fallback):
-
-```python
+```python [steps/step1_foundry_test.py]
 import os
 from openai import AzureOpenAI
 from dotenv import load_dotenv
@@ -52,36 +55,35 @@ print("Connected to Azure OpenAI!")
 print("Model response:", response.choices[0].message.content)
 ```
 
-### How to test
+Run it:
 
-```
+```bash
 python steps/step1_foundry_test.py
 ```
 
-**Expected output**:
+::: tip Expected output
 ```
 Connected to Azure OpenAI!
 Model response: I am ready to help you navigate Raleigh.
 ```
+:::
 
-### Fallback
-
-The complete file is in `steps/step1_foundry_test.py`.
+::: details Stuck? Use the fallback
+The complete file is already at `steps/step1_foundry_test.py`. Open it and run it as-is.
+:::
 
 ---
 
-## Step 2 — Hello Raleigh (bare OpenAI, no framework)
+## Step 2 — Hello Raleigh <Badge type="tip" text="~10 min" />
 
-### Concept
-
-We send a real question about Raleigh to verify the model is working and that you
-understand the chat completions API before adding the framework abstraction.
-
-### What to add
+::: info What you'll build
+Send a real question about Raleigh to verify the model is working and to understand
+the chat completions API before adding the framework abstraction.
+:::
 
 Create `steps/step2_hello_world.py`:
 
-```python
+```python [steps/step2_hello_world.py]
 import os
 from openai import AzureOpenAI
 from dotenv import load_dotenv
@@ -102,34 +104,33 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-### How to test
+Run it:
 
-```
+```bash
 python steps/step2_hello_world.py
 ```
 
-**Expected output**: A short paragraph about Raleigh mentioning Research Triangle,
-universities, or the tech scene.
+::: tip Expected output
+A short paragraph about Raleigh mentioning Research Triangle, universities, or the tech scene.
+:::
 
-### Fallback
-
+::: details Stuck? Use the fallback
 `steps/step2_hello_world.py`
+:::
 
 ---
 
-## Step 3 — Connect to the MCP Game Server
+## Step 3 — Connect to the MCP Game Server <Badge type="warning" text="~15 min" />
 
-### Concept
-
+::: info What you'll build
 Switch from the bare OpenAI SDK to **Microsoft Agent Framework**. Add an
 `MCPStreamableHTTPTool` that connects your agent to the game server. Call
 `register_player` to get your player ID and quest assignment.
-
-### What to add
+:::
 
 Create `steps/step3_mcp_connect.py`:
 
-```python
+```python [steps/step3_mcp_connect.py]
 import asyncio, os
 from agent_framework import Agent, MCPStreamableHTTPTool
 from agent_framework.openai import OpenAIChatClient
@@ -171,40 +172,41 @@ async def main():
 asyncio.run(main())
 ```
 
-### How to test
+Run it:
 
-```
+```bash
 python steps/step3_mcp_connect.py
 ```
 
-**Expected output**:
+::: tip Expected output
 ```
 Your player_id is PLR-XXXXXXXX.
 Quest: Glenwood Getaway
 A2A Expert: https://...
 ```
+:::
 
-> **Tip**: You can see all registered players on the admin dashboard at
-> `MCP_SERVER_URL` (replace `/mcp` with `/admin`).
+::: info Track your progress
+You can see all registered players on the admin dashboard. Ask your facilitator for the
+URL — it is `MCP_SERVER_URL` with `/mcp` replaced by `/admin`.
+:::
 
-### Fallback
-
+::: details Stuck? Use the fallback
 `steps/step3_mcp_connect.py`
+:::
 
 ---
 
-## Step 4 — Add Memory (persist your player ID)
+## Step 4 — Add Memory <Badge type="tip" text="~10 min" />
 
-### Concept
-
+::: info What you'll build
 Agents are stateless by default. Add a `ContextProvider` that saves your `player_id` to a
 local `memory.json` file and injects it back on subsequent runs — so you never register twice.
-
-### What to add
+:::
 
 Add a `FileContextProvider` class to your agent file:
 
-```python
+```python [steps/step4_memory.py]
 import json, re
 from pathlib import Path
 from agent_framework import ContextProvider, SessionContext
@@ -258,41 +260,37 @@ agent = Agent(
 )
 ```
 
-### How to test
+Run it **twice**:
 
-Run `step4_memory.py` twice:
-
-```
+```bash
 python steps/step4_memory.py
 python steps/step4_memory.py
 ```
 
-First run: registers you and saves the player_id.  
-Second run: injects the player_id from `memory.json` — no second registration.
+::: tip Expected behaviour
+- **First run**: registers you and saves the player_id to `memory.json`.
+- **Second run**: injects the player_id from `memory.json` — no second registration.
+:::
 
-### Fallback
-
+::: details Stuck? Use the fallback
 `steps/step4_memory.py`
+:::
 
 ---
 
-## Step 5 — Complete the Quest
+## Step 5 — Complete the Quest <Badge type="warning" text="~20 min" />
 
-### Concept
-
+::: info What you'll build
 Put it all together. Your agent will:
-
 1. Register (or resume from memory).
-2. Call the **A2A transport expert** via `httpx.post` to get route advice.
-3. Call `declare_transport_stop1` to record your route choice and receive a **document
-   bundle URL**.
+2. Call the **A2A transport expert** to get route advice.
+3. Call `declare_transport_stop1` to record your route and receive a **document bundle URL**.
 4. **Download** the ZIP bundle and **search** the Markdown files for the secret code.
 5. Call `submit_secret_code` with the code.
-6. Call `declare_transport_final` to complete the quest and receive your **final score**.
+6. Call `declare_transport_final` to finish the quest and receive your **final score**.
+:::
 
-### What to add
-
-The A2A call (outside the agent framework — it is a direct HTTP call):
+### A2A call
 
 ```python
 import httpx
@@ -304,7 +302,7 @@ def ask_a2a_expert(a2a_url: str, question: str) -> str:
         return r.json()["advice"]
 ```
 
-The document RAG search:
+### Document RAG search
 
 ```python
 import io, zipfile, re, httpx
@@ -324,14 +322,13 @@ def find_secret_code(bundle_url: str) -> str:
     raise RuntimeError("Code not found.")
 ```
 
-### How to test
+Run it:
 
-```
+```bash
 python steps/step5_quest.py
 ```
 
-**Expected output** (approximate):
-
+::: tip Expected output
 ```
 === Phase 1: Register ===
 player_id = PLR-XXXXXXXX
@@ -353,10 +350,11 @@ Code accepted! Attempt 1.
 === Phase 6: Final Transport → NC Biotech Center ===
 Quest complete! Final score: 920
 ```
+:::
 
-### Fallback
-
+::: details Stuck? Use the fallback
 `steps/step5_quest.py` — or the complete reference implementation at `agent.py`.
+:::
 
 ---
 
@@ -375,11 +373,15 @@ where you rank.
 | 4 | ContextProvider for persistent memory |
 | 5 | A2A HTTP call + RAG document search + full quest loop |
 
-### Want to go further?
+### Scoring formula
 
-See [bonus-exercises.md](bonus-exercises.md) for four bonus challenges:
-- Build your own A2A transport expert
-- Add streaming responses
-- Multi-agent orchestration (Planner + Runner)
-- Eval harness (run the quest 3× and compare scores)
+$$\text{score} = \max(0,\ 1000 - (50 \times \text{failed\_code\_attempts}) - (10 \times \text{minutes\_taken}))$$
+
+::: info Want to go further?
+See [Bonus Exercises](bonus-exercises) for four bonus challenges:
+- **A** — Build your own A2A transport expert
+- **B** — Add streaming responses
+- **C** — Multi-agent orchestration (Planner + Runner)
+- **D** — Eval harness (run the quest 3× and compare scores)
+:::
 

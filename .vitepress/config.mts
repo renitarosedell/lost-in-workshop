@@ -20,29 +20,50 @@ export default defineConfig({
     '.vscode/**',
     '.specify/**',
     '.claude/**',
+    'README.md',
   ],
 
   // Required for GitHub Pages — set to your repo name
-  // e.g. if hosted at https://<org>.github.io/lost-in-workshop-v2/
-  base: '/lost-in-workshop-v2/',
+  base: '/lost-in-workshop/',
+
+  lastUpdated: true,
 
   themeConfig: {
     nav: [
-      { text: 'Workshop', link: '/workshop/workshop' },
-      { text: 'Azure Setup', link: '/workshop/azure-foundry-setup' },
+      {
+        text: 'Workshop',
+        items: [
+          { text: 'Azure Setup (Step 1)', link: '/workshop/azure-foundry-setup' },
+          { text: 'Workshop Guide (Steps 2–5)', link: '/workshop/workshop' },
+          { text: 'Bonus Exercises', link: '/workshop/bonus-exercises' },
+        ],
+      },
+      {
+        text: 'Facilitators',
+        items: [
+          { text: 'Pre-Event Checklist', link: '/workshop/pre-event-checklist' },
+          { text: 'Deployment Guide', link: '/workshop/deployment-guide' },
+        ],
+      },
       { text: 'City Guide', link: '/city-guide/raleigh/01_welcome_to_raleigh' },
     ],
 
     sidebar: {
       '/workshop/': [
         {
-          text: 'Workshop',
+          text: 'Attendee Guide',
           items: [
-            { text: 'Workshop Guide', link: '/workshop/workshop' },
-            { text: 'Azure Foundry Setup', link: '/workshop/azure-foundry-setup' },
+            { text: '① Azure Foundry Setup', link: '/workshop/azure-foundry-setup' },
+            { text: '② – ⑤ Workshop Guide', link: '/workshop/workshop' },
             { text: 'Bonus Exercises', link: '/workshop/bonus-exercises' },
-            { text: 'Deployment Guide', link: '/workshop/deployment-guide' },
+          ],
+        },
+        {
+          text: 'Facilitators',
+          collapsed: true,
+          items: [
             { text: 'Pre-Event Checklist', link: '/workshop/pre-event-checklist' },
+            { text: 'Deployment Guide', link: '/workshop/deployment-guide' },
           ],
         },
       ],
@@ -77,11 +98,16 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/microsoft/lost-in-workshop-v2' },
+      { icon: 'github', link: 'https://github.com/RoelantD/lost-in-workshop' },
     ],
 
     search: {
       provider: 'local',
+    },
+
+    footer: {
+      message: 'Lost in Workshop — AI Agent Workshop',
+      copyright: 'Global AI Community',
     },
   },
 })

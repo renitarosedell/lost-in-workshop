@@ -1,21 +1,32 @@
+---
+title: Bonus Exercises
+description: Four additional challenges to extend your Lost in Raleigh agent after completing the main quest.
+---
+
 # Bonus Exercises
 
-Finished the main quest? Here are four bonus challenges.
-Each is self-contained — you can do them in any order.
+Finished the main quest? Here are four bonus challenges. Each is self-contained — do them in any order.
+
+| Bonus | Challenge | Skill |
+|-------|-----------|-------|
+| A | Build your own A2A transport expert | FastAPI + Agent Framework |
+| B | Add streaming responses | Async token streaming |
+| C | Multi-agent orchestration | Planner / Runner pattern |
+| D | Eval harness | Parallel quest runs + scoring |
 
 ---
 
-## Bonus A — Build Your Own A2A Transport Expert
+## Bonus A — Build Your Own A2A Transport Expert <Badge type="tip" text="Intermediate" />
 
-### What you'll build
-
+::: info What you'll build
 Your own transport advice service, deployed locally and hooked into the game server.
 When attendees call `declare_transport_stop1`, the game will call **your** `/a2a` endpoint
 instead of the facilitator's.
+:::
 
-### How it works
+### A2A contract
 
-The A2A contract is simple. Any service that accepts:
+Any service that accepts:
 
 ```
 POST /a2a
@@ -32,9 +43,8 @@ and responds with:
 
 is a valid A2A expert.
 
-### Starter: FastAPI + Microsoft Agent Framework
-
-```python
+::: details Starter: FastAPI + Microsoft Agent Framework
+```python [bonus_a2a_expert.py]
 # bonus_a2a_expert.py
 import os
 from fastapi import FastAPI
@@ -81,13 +91,13 @@ if __name__ == "__main__":
 
 ### Run it
 
-```
+```bash
 uvicorn bonus_a2a_expert:app --port 9000
 ```
 
 ### Expose it with ngrok
 
-```
+```bash
 ngrok http 9000
 ```
 
@@ -105,18 +115,18 @@ PUT /api/players/<your-player-id>/a2a_url
 
 Then re-run `step5_quest.py` — your transport call now hits your own service.
 
-### Challenge
-
+::: tip Challenge
 Add a tool to your A2A expert that fetches the [GoRaleigh trip planner](https://goraleigh.org)
 and uses the live schedule data to answer.
+:::
 
 ---
 
-## Bonus B — Streaming Responses
+## Bonus B — Streaming Responses <Badge type="tip" text="Beginner" />
 
-### What you'll add
-
+::: info What you'll add
 Stream tokens to the console as they arrive instead of waiting for the full response.
+:::
 
 ### Before (blocking)
 
@@ -162,12 +172,12 @@ with Live(text, refresh_per_second=20) as live:
 
 ---
 
-## Bonus C — Multi-Agent Orchestration
+## Bonus C — Multi-Agent Orchestration <Badge type="warning" text="Advanced" />
 
-### What you'll build
-
+::: info What you'll build
 A **Planner** agent that breaks the quest into steps, and a **Runner** agent that executes
 each step using the MCP tools. The Planner never calls tools directly.
+:::
 
 ### Architecture
 
@@ -181,9 +191,7 @@ Planner (no tools) ──── generates plan as JSON list of actions
 Runner (MCPStreamableHTTPTool) ──── executes each action
 ```
 
-### Starter
-
-```python
+::: details Starter code
 import asyncio, json, os, re
 from agent_framework import Agent, MCPStreamableHTTPTool
 from agent_framework.openai import OpenAIChatClient
@@ -249,20 +257,22 @@ async def main():
 asyncio.run(main())
 ```
 
-### Challenge
+:::
 
+::: tip Challenge
 Add a **Critic** agent that reviews the Runner's output after each step and decides whether
 to retry, skip, or continue. If the Critic says "retry," call the Runner again with the
 error message as context.
+:::
 
 ---
 
-## Bonus D — Eval Harness
+## Bonus D — Eval Harness <Badge type="warning" text="Advanced" />
 
-### What you'll build
-
+::: info What you'll build
 Run the full quest three times in parallel and produce a score comparison table.
 Useful for testing prompt changes or transport strategy variations.
+:::
 
 ### Starter: `sample-agent/eval_harness.py`
 

@@ -1,7 +1,14 @@
+---
+title: Deployment Guide
+description: Deploy the game server and A2A expert to Azure Container Apps.
+---
+
 # Deployment Guide — Azure Container Apps
 
+<Badge type="danger" text="Facilitators only" />
+
 Deploy both services to Azure Container Apps for the workshop.
-All commands are Azure CLI (`az`). Install it from https://docs.microsoft.com/cli/azure/ if needed.
+All commands use the Azure CLI (`az`). Install it from [docs.microsoft.com/cli/azure](https://docs.microsoft.com/cli/azure/) if needed.
 
 ---
 
