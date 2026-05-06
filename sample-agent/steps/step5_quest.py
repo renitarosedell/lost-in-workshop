@@ -126,47 +126,49 @@ async def main() -> None:
     saved = memory._load()
     saved_player_id = saved.get("player_id")
 
-    # Step 1: Register (or resume) and get quest details
-    register_agent = Agent(
-        client=client,
-        name="RaleighAgent",
-        instructions=(
-            "Register as a new player with the name 'Workshop Attendee' using "
-            "register_player. Return a JSON object with: player_id, a2a_expert_url, "
-            "stop1_location, and transport_options. Return ONLY valid JSON."
-        ) if not saved_player_id else (
-            f"The player is already registered with player_id='{saved_player_id}'. "
-            "Call get_player_status to retrieve quest details. "
-            "Return a JSON object with: player_id, a2a_expert_url, "
-            "stop1_location, and transport_options. Return ONLY valid JSON."
-        ),
-        tools=[game_mcp],
-        context_providers=[memory],
-    )
-    session = register_agent.create_session()
-    reg_response = await register_agent.run(
-        "Register me and return the quest details as JSON." if not saved_player_id
-        else "Return my quest details as JSON.",
-        session=session,
-    )
+    if saved_player_id and saved.get("a2a_expert_url"):
+        # Resume from memory — no need to call register_player again
+        player_id = saved_player_id
+        a2a_url = saved["a2a_expert_url"]
+        stop1_location = saved.get("stop1_location", "stop 1")
+        print(f"Resuming with saved player_id: {player_id}")
+    else:
+        # Step 1: Register as a new player
+        register_agent = Agent(
+            client=client,
+            name="RaleighAgent",
+            instructions=(
+                "Register as a new player with the name 'Workshop Attendee' using "
+                "register_player. Return a JSON object with: player_id, a2a_expert_url, "
+                "stop1_location, and transport_options. Return ONLY valid JSON."
+            ),
+            tools=[game_mcp],
+            context_providers=[memory],
+        )
+        session = register_agent.create_session()
+        reg_response = await register_agent.run(
+            "Register me and return the quest details as JSON.", session=session
+        )
 
-    # Parse the registration JSON from the response
-    reg_text = reg_response.text or ""
-    json_match = re.search(r"\{.*\}", reg_text, re.DOTALL)
-    if not json_match:
-        print("Registration response:", reg_text)
-        raise RuntimeError("Could not parse registration response as JSON.")
-    reg_data = json.loads(json_match.group(0))
+        # Parse the registration JSON from the response
+        reg_text = reg_response.text or ""
+        json_match = re.search(r"\{.*\}", reg_text, re.DOTALL)
+        if not json_match:
+            print("Registration response:", reg_text)
+            raise RuntimeError("Could not parse registration response as JSON.")
+        reg_data = json.loads(json_match.group(0))
 
-    player_id: str = reg_data.get("player_id") or saved_player_id
-    if not player_id:
-        raise RuntimeError("No player_id found in response or memory.")
-    # Save to memory if newly registered
-    if not saved_player_id:
-        memory._save({"player_id": player_id})
-    a2a_url: str = reg_data["a2a_expert_url"]
-    stop1_location: str = reg_data.get("stop1_location", "stop 1")
-    print(f"\nRegistered! player_id = {player_id}")
+        player_id = reg_data["player_id"]
+        a2a_url = reg_data["a2a_expert_url"]
+        stop1_location = reg_data.get("stop1_location", "stop 1")
+        print(f"\nRegistered! player_id = {player_id}")
+
+        # Save all quest data to memory for future steps
+        memory._save({
+            "player_id": player_id,
+            "a2a_expert_url": a2a_url,
+            "stop1_location": stop1_location,
+        })
 
     # Step 2: Ask A2A expert for transport advice
     question = f"What is the best way to get to {stop1_location} for the quest?"

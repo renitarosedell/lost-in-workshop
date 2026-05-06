@@ -84,7 +84,8 @@ async def main() -> None:
             "You are a workshop participant in the Lost in Raleigh game. "
             "If you have a player_id in memory, confirm it and stop. "
             "If not, register as a new player with the name 'Workshop Attendee' "
-            "and print the player_id."
+            "using register_player and return a JSON object with: "
+            "player_id, a2a_expert_url, stop1_location. Return ONLY valid JSON if registering."
         ),
         tools=[game_mcp],
         context_providers=[memory],
@@ -94,12 +95,26 @@ async def main() -> None:
     response = await agent.run("Check my registration status.", session=session)
     print(response.text)
 
-    # Save player_id if newly registered this run
+    # Save player_id (and quest data) if newly registered this run
     if not memory._load().get("player_id"):
-        match = re.search(r"PLR-[A-Z0-9]{8}", response.text)
+        text = response.text or ""
+        match = re.search(r"PLR-[A-Z0-9]{8}", text)
         if match:
-            memory._save({"player_id": match.group(0)})
-            print(f"Saved player_id: {match.group(0)}")
+            pid = match.group(0)
+            save_data: dict = {"player_id": pid}
+            # Try to extract quest data from JSON response
+            json_match = re.search(r"\{.*\}", text, re.DOTALL)
+            if json_match:
+                try:
+                    reg_data = json.loads(json_match.group(0))
+                    if reg_data.get("a2a_expert_url"):
+                        save_data["a2a_expert_url"] = reg_data["a2a_expert_url"]
+                    if reg_data.get("stop1_location"):
+                        save_data["stop1_location"] = reg_data["stop1_location"]
+                except json.JSONDecodeError:
+                    pass
+            memory._save(save_data)
+            print(f"Saved player_id: {pid}")
 
     await game_mcp.close()
 
