@@ -2,28 +2,28 @@
 layout: home
 
 hero:
-  name: Lost in Workshop
-  text: Build AI agents with MCP, A2A & RAG
-  tagline: A 60–90 minute hands-on workshop using Azure AI Foundry and the Microsoft Agent Framework.
+  name: Lost in Raleigh
+  text: Build AI agents with MCP, A2A & Multi-Agent Orchestration
+  tagline: A 90-minute hands-on workshop using Azure AI Foundry and the Microsoft Agent Framework.
   actions:
     - theme: brand
       text: Start the Workshop
-      link: /workshop/workshop
+      link: /workshop/step1
     - theme: alt
-      text: Azure Setup (Step 1)
-      link: /workshop/azure-foundry-setup
+      text: Get Azure Subscription
+      link: /workshop/get-azure
 
 features:
-  - icon: 🤖
-    title: Step-by-Step Agent Building
-    details: Five guided steps take you from Azure connectivity to a fully autonomous quest-playing agent — no prior Azure or agent-framework experience required.
   - icon: 🔌
-    title: Model Context Protocol (MCP)
-    details: Connect your agent to a live game server via MCP tools. Discover how tool-use works in practice by navigating a real narrative quest.
+    title: "Step 3: Model Context Protocol"
+    details: Connect your agent to a live game server via MCP tools. Your agent discovers available tools automatically and decides which to call — no hardcoded logic.
   - icon: 🗣️
-    title: Agent-to-Agent (A2A)
-    details: Your agent consults a remote expert agent to pick the best transport option — hands-on experience with multi-agent communication.
-  - icon: 📚
-    title: RAG Challenge
-    details: Retrieve and read a bundle of city-guide documents to extract a hidden secret code, putting retrieval-augmented generation into practice.
+    title: "Step 5: Agent-to-Agent (A2A)"
+    details: Consult a remote transport expert agent using the A2A protocol. One specialist agent delegates to another — the building block of multi-agent systems.
+  - icon: 🧠
+    title: "Step 6: Multi-turn Sessions"
+    details: Keep context alive across conversation turns. Your agent remembers what it learned in turn 1 when taking action in turn 2.
+  - icon: 🎯
+    title: "Step 7: Orchestration"
+    details: Coordinate a transport expert and a city guide expert in sequence. Your code acts as the orchestrator — routing tasks to the right specialist at the right time.
 ---

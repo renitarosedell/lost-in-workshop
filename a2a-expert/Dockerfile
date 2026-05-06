@@ -9,4 +9,4 @@ COPY . .
 
 EXPOSE 8001
 
-CMD ["uvicorn", "expert:app", "--host", "0.0.0.0", "--port", "8001"]
+CMD ["python", "expert.py"]

@@ -14,15 +14,18 @@ Share this URL directly with co-facilitators. It does not appear in the site nav
 :::
 
 ::: tip One-command deployment
-All steps below are automated in `scripts/deploy.ps1`. Run it once with your Azure OpenAI credentials and it handles everything end-to-end:
+All steps below are automated in `scripts/deploy.ps1`. Set up a config file once and then run the script with no arguments:
 
 ```powershell
-.\scripts\deploy.ps1 `
-    -OpenAiEndpoint "https://my-hub.openai.azure.com/" `
-    -OpenAiApiKey   "your-api-key"
+# First time only — copy the example and fill in your values
+Copy-Item scripts\deploy.config.json.example scripts\deploy.config.json
+notepad scripts\deploy.config.json
+
+# Deploy everything
+.\scripts\deploy.ps1
 ```
 
-The manual steps below explain what each phase does if you need to run them individually or troubleshoot.
+The config file (`scripts/deploy.config.json`) is gitignored — your API key will never be committed. The manual steps below explain what each phase does if you need to run them individually or troubleshoot.
 :::
 
 ---

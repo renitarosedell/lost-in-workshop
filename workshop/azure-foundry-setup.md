@@ -1,19 +1,18 @@
 ---
-title: Azure Foundry Setup
-description: Create your Azure OpenAI deployment in Azure AI Foundry. Complete this before the workshop.
+title: Azure AI Foundry Setup
+description: Create your Azure OpenAI deployment in Azure AI Foundry. Complete this as part of the Developer Environment Setup.
 ---
 
-# Step 1: Set Up Azure AI Foundry
+# Azure AI Foundry Setup
 
-<Badge type="warning" text="~15 minutes" /> <Badge type="info" text="Complete before the workshop" />
+<Badge type="warning" text="~15 minutes" /> <Badge type="info" text="Complete before Step 1" />
 
-This guide walks you through setting up an Azure OpenAI deployment in Azure AI Foundry.
-
-::: warning You will need
-- A laptop with a web browser and Python 3.11 or later installed.
-- The subscription code provided by your facilitator (look for a printed card at your seat,
-  or check the event Slack/Teams channel).
+::: tip Before you start
+Make sure you have an Azure subscription. If you don't have one yet, see [Get Azure Subscription](get-azure) first.
 :::
+
+This guide walks you through creating an Azure OpenAI deployment in Azure AI Foundry — the service your agent uses to call GPT-4o-mini.
+
 
 ---
 

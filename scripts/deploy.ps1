@@ -193,14 +193,32 @@ if ($storageExists) {
         --resource-group $ResourceGroup `
         --location $Location `
         --sku Standard_LRS `
+        --allow-blob-public-access true `
         --output none
     Ok "Storage account '$StorageAccount' created"
 }
+
+$StorageId = az storage account show `
+    --name $StorageAccount `
+    --resource-group $ResourceGroup `
+    --query id -o tsv
+
+$CurrentUpn = az ad signed-in-user show --query userPrincipalName -o tsv
+az role assignment create `
+    --assignee $CurrentUpn `
+    --role "Storage Blob Data Contributor" `
+    --scope $StorageId `
+    --output none 2>$null
+Ok "Storage Blob Data Contributor role ensured for $CurrentUpn"
+
+# Brief pause for role propagation
+Start-Sleep -Seconds 15
 
 az storage container create `
     --name bundles `
     --account-name $StorageAccount `
     --public-access blob `
+    --auth-mode login `
     --output none
 
 az storage blob upload-batch `
@@ -209,6 +227,7 @@ az storage blob upload-batch `
     --source (Join-Path $RepoRoot "bundles\raleigh") `
     --pattern "*.zip" `
     --overwrite `
+    --auth-mode login `
     --output none
 
 $BlobBase = "https://$StorageAccount.blob.core.windows.net/bundles"
@@ -348,7 +367,7 @@ Step "Step 7/7 — Patching city_config.yaml with live URLs"
 $ConfigPath = Join-Path $RepoRoot "lost-in-raleigh\city_config.yaml"
 $config = Get-Content $ConfigPath -Raw
 
-$config = $config -replace [regex]::Escape("https://<a2a-expert-host>/a2a"), "https://$A2aFqdn/a2a"
+$config = $config -replace [regex]::Escape("https:///a2a"), "https://$A2aFqdn/a2a"
 $config = $config -replace [regex]::Escape("https://<blob-storage-host>/bundles/raleigh/"), "$BlobBase/"
 
 Set-Content $ConfigPath $config -NoNewline

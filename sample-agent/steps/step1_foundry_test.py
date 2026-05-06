@@ -29,7 +29,7 @@ client = AzureOpenAI(
 response = client.chat.completions.create(
     model=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
     messages=[
-        {"role": "user", "content": "Say: 'Hello! I am ready to help you navigate Raleigh.'"},
+        {"role": "user", "content": "Tell a joke about navigating Raleigh.'"},
     ],
     max_tokens=50,
 )
