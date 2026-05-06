@@ -58,19 +58,21 @@ class FileContextProvider(ContextProvider):
             )
             print(f"Resuming with saved player_id: {player_id}")
 
-    async def after_run(self, *, context: SessionContext, **_) -> None:
+    async def after_run(self, *, context: SessionContext, **kwargs) -> None:
         data = self._load()
         if data.get("player_id"):
             return  # already saved
-        # Scan assistant messages for a player_id
-        for msg in context.output_messages:
-            text = getattr(msg, "text", "") or ""
-            match = re.search(r"PLR-[A-Z0-9]{8}", text)
-            if match:
-                pid = match.group(0)
-                self._save({"player_id": pid})
-                print(f"Saved player_id: {pid}")
-                break
+        # Scan the response text for a player_id
+        response = kwargs.get("response")
+        text = getattr(response, "text", "") or ""
+        # Also scan input_messages for any assistant messages
+        for msg in context.input_messages:
+            text += " " + (getattr(msg, "text", "") or "")
+        match = re.search(r"PLR-[A-Z0-9]{8}", text)
+        if match:
+            pid = match.group(0)
+            self._save({"player_id": pid})
+            print(f"Saved player_id: {pid}")
 
 
 async def main() -> None:
