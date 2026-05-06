@@ -41,11 +41,14 @@ async def main() -> None:
     saved = memory._load()
 
     player_id = saved.get("player_id")
-    a2a_url = saved.get("a2a_expert_url") or os.environ.get("A2A_SERVER_URL")
+    # Env var takes priority — ensures a stale memory.json never uses the old URL
+    a2a_url = os.environ.get("A2A_SERVER_URL") or saved.get("a2a_expert_url")
     stop1_location = saved.get("stop1_location", "your quest destination")
 
     if not player_id or not a2a_url:
-        print("No registration found in memory. Run step4_memory.py first.")
+        print("Missing player_id or A2A URL.")
+        print("  - player_id: run step4_memory.py first")
+        print("  - A2A URL:   set A2A_SERVER_URL in .env")
         return
 
     print(f"Player: {player_id}")
