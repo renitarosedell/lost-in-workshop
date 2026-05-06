@@ -57,7 +57,7 @@ The `FileContextProvider` in `shared.py` implements this pattern using a local `
 
 ## Write the code
 
-The `FileContextProvider` is already defined in `cheatsheet/shared.py`. You just need to use it in your agent.
+The `FileContextProvider` is already defined in `shared.py` (in the `create-agent/` directory). You just need to use it in your agent.
 
 Create a new file `create-agent/my_step4.py` and paste in:
 
