@@ -1,14 +1,17 @@
 """
-Step 7 — Orchestration: query two A2A agents in sequence, then submit the code.
+Step 7 — Orchestration: a @workflow that calls two A2A agents then submits the code.
 
 What this adds:
-  Two remote A2A agents are called in sequence — a real multi-agent workflow:
+  Three stages wrapped in a @workflow function — a structured multi-agent pipeline:
 
-  1. Transport Expert  → advises on the final leg (stop 2 → NC Biotech Center).
-  2. City Guide        → knows the neighbourhood history + the quest reference code.
+  1. Transport Expert (A2A) → advises on the final leg (stop 2 → NC Biotech Center).
+  2. City Guide (A2A)       → neighbourhood history + the quest reference code.
+  3. Submit agent (MCP)     → submits the extracted code to the game server.
 
-  The reference code from the city guide is then submitted to the MCP game server
-  via a local agent with tool-calling.
+  The @workflow decorator turns a plain async function into a tracked pipeline.
+  Inside the workflow, agents are called exactly like normal Python async functions —
+  no special wrappers needed. Agents are created at module level (outside the workflow)
+  and captured via closure, just like the framework sample 05.
 
 Install the A2A package first:
   pip install agent-framework-a2a --pre
@@ -18,32 +21,36 @@ Run it:
 
 Expected output:
   Player: PLR-XXXXXXXX
-  --- Transport Expert: final leg ---
+
+  --- Stage 1: Transport Expert ---
+    Connected to: Raleigh Transport Expert
   Rideshare is your fastest option from Cameron Village to RTP...
   Final transport chosen: rideshare
 
-  --- City Guide: quest reference code ---
+  --- Stage 2: City Guide ---
+    Connected to: Raleigh City Guide
   Cameron Village is one of the first planned shopping centres...
-  Extracted code: GLENWOOD42
+  Extracted code: CAMERON99
 
-  --- Submitting code via MCP ---
+  --- Stage 3: Submit code ---
   Code accepted! Attempts: 1
 
+  Workflow state: WorkflowRunState.IDLE
   Saved transport_final=rideshare to memory.
 """
 from __future__ import annotations
 
 import asyncio
 import os
+import re
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-import re
 
 import httpx
 from a2a.client import A2ACardResolver
-from agent_framework import Agent, MCPStreamableHTTPTool
+from agent_framework import Agent, MCPStreamableHTTPTool, workflow
 from agent_framework.a2a import A2AAgent
 from agent_framework.openai import OpenAIChatClient
 from dotenv import load_dotenv
@@ -53,6 +60,33 @@ from shared import FileContextProvider, get_base_endpoint
 load_dotenv()
 
 MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "http://localhost:8000/mcp")
+A2A_SERVER_URL = os.environ.get("A2A_SERVER_URL", "")
+CITY_GUIDE_URL = os.environ.get("CITY_GUIDE_URL", "")
+
+# -------------------------------------------------------------------
+# Agents created at module level — available to the workflow via closure.
+# This mirrors the framework sample: create agents once, call them many times.
+# -------------------------------------------------------------------
+client = OpenAIChatClient(
+    azure_endpoint=get_base_endpoint(),
+    api_key=os.environ.get("AZURE_OPENAI_API_KEY", ""),
+    model=os.environ.get("AZURE_OPENAI_DEPLOYMENT_NAME", ""),
+)
+game_mcp = MCPStreamableHTTPTool(
+    name="Lost in Raleigh Game Server",
+    url=MCP_SERVER_URL,
+    description="MCP game server for the Lost in Raleigh workshop.",
+)
+submit_agent = Agent(
+    client=client,
+    name="RaleighAgent",
+    instructions=(
+        "You are a game assistant. When asked to submit a code, "
+        "call submit_secret_code with the provided player_id and code. "
+        "Report whether it was accepted."
+    ),
+    tools=[game_mcp],
+)
 
 
 async def call_a2a(url: str, message: str) -> str:
@@ -66,30 +100,21 @@ async def call_a2a(url: str, message: str) -> str:
     return "\n".join(m.text for m in response.messages if m.text)
 
 
-async def main() -> None:
-    memory = FileContextProvider()
-    saved = memory._load()
+# -------------------------------------------------------------------
+# The workflow — three stages as plain async Python.
+# @workflow turns this into a tracked, structured pipeline.
+# Inside: call agents (or any async function) exactly like normal Python.
+# -------------------------------------------------------------------
+@workflow
+async def quest_workflow(player_id: str, stop2_location: str) -> tuple[str, str]:
+    """Three-stage pipeline: transport → city guide → submit code.
 
-    player_id = saved.get("player_id")
-    stop2_location = saved.get("stop2_location", "Cameron Village")
-    transport_url = os.environ.get("A2A_SERVER_URL")
-    city_guide_url = os.environ.get("CITY_GUIDE_URL")
-
-    if not player_id:
-        print("No player_id found. Run step4_memory.py first.")
-        return
-    if not transport_url or not city_guide_url:
-        print("Missing A2A URLs. Set A2A_SERVER_URL and CITY_GUIDE_URL in .env")
-        return
-
-    print(f"Player: {player_id}\n")
-
-    # ------------------------------------------------------------------
-    # 1. Transport Expert — best route for the final leg
-    # ------------------------------------------------------------------
-    print("--- Transport Expert: final leg ---")
+    Returns (submit_result, transport_final).
+    """
+    # Stage 1: Transport Expert — best route for the final leg
+    print("--- Stage 1: Transport Expert ---")
     transport_advice = await call_a2a(
-        transport_url,
+        A2A_SERVER_URL,
         f"What is the fastest way to get from {stop2_location} to the NC Biotech Center?",
     )
     print(transport_advice)
@@ -107,54 +132,56 @@ async def main() -> None:
             break
     print(f"\nFinal transport chosen: {transport_final}")
 
-    # ------------------------------------------------------------------
-    # 2. City Guide — neighbourhood history + quest reference code
-    # ------------------------------------------------------------------
-    print("\n--- City Guide: quest reference code ---")
+    # Stage 2: City Guide — neighbourhood history + quest reference code
+    print("\n--- Stage 2: City Guide ---")
     city_guide_response = await call_a2a(
-        city_guide_url,
+        CITY_GUIDE_URL,
         f"I'm on a quest at {stop2_location}. Tell me about this neighbourhood "
         "and share the archivist's reference code for it.",
     )
     print(city_guide_response)
 
-    # Extract the reference code — uppercase alphanumeric, 6+ characters
     code_match = re.search(r"\b([A-Z][A-Z0-9]{5,})\b", city_guide_response)
     if not code_match:
-        print("\nCould not extract a reference code. Check the output above and retry.")
-        return
-
+        return "[FAILED] Could not extract a reference code.", transport_final
     secret_code = code_match.group(1)
     print(f"\nExtracted code: {secret_code}")
 
-    # ------------------------------------------------------------------
-    # 3. Submit the code via MCP
-    # ------------------------------------------------------------------
-    print("\n--- Submitting code via MCP ---")
-    client = OpenAIChatClient(
-        azure_endpoint=get_base_endpoint(),
-        api_key=os.environ["AZURE_OPENAI_API_KEY"],
-        model=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
-    )
-    game_mcp = MCPStreamableHTTPTool(
-        name="Lost in Raleigh Game Server",
-        url=MCP_SERVER_URL,
-        description="MCP game server for the Lost in Raleigh workshop.",
-    )
+    # Stage 3: Submit the code — call submit_agent just like a plain async function
+    print("\n--- Stage 3: Submit code ---")
+    submit_result = (
+        await submit_agent.run(f"Submit code='{secret_code}' for player_id='{player_id}'.")
+    ).text or "[no response]"
+
+    return submit_result, transport_final
+
+
+async def main() -> None:
+    memory = FileContextProvider()
+    saved = memory._load()
+
+    player_id = saved.get("player_id")
+    stop2_location = saved.get("stop2_location", "Cameron Village")
+
+    if not player_id:
+        print("No player_id found. Run step4_memory.py first.")
+        return
+    if not A2A_SERVER_URL or not CITY_GUIDE_URL:
+        print("Missing A2A URLs. Set A2A_SERVER_URL and CITY_GUIDE_URL in .env")
+        return
+
+    print(f"Player: {player_id}\n")
+
+    # Connect MCP before the workflow runs so submit_agent can use game_mcp
     await game_mcp.connect()
 
-    agent = Agent(
-        client=client,
-        name="RaleighAgent",
-        instructions=(
-            f"Call submit_secret_code with player_id='{player_id}' and "
-            f"code='{secret_code}'. Report whether the code was accepted."
-        ),
-        tools=[game_mcp],
-    )
-    session = agent.create_session()
-    response = await agent.run("Submit the secret code.", session=session)
-    print(f"\n{response.text}")
+    # Run the workflow — same as calling any async function, but tracked
+    result = await quest_workflow.run(player_id, stop2_location)
+
+    submit_result, transport_final = result.get_outputs()[0]
+    print(f"\n{submit_result}")
+    print(f"Workflow state: {result.get_final_state()}")
+
     await game_mcp.close()
 
     memory._save({"transport_final": transport_final})
