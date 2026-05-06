@@ -20,7 +20,7 @@ The **Lost in Raleigh** game server manages player registration, quest state, an
 | | URL |
 |---|---|
 | **MCP endpoint** | `https://lost-in-raleigh.redriver-3b1b0600.eastus2.azurecontainerapps.io/mcp` |
-| **Leaderboard** | [lost-in-raleigh.redriver-3b1b0600.eastus2.azurecontainerapps.io](https://lost-in-raleigh.redriver-3b1b0600.eastus2.azurecontainerapps.io) |
+
 
 ```ini [.env]
 MCP_SERVER_URL=https://lost-in-raleigh.redriver-3b1b0600.eastus2.azurecontainerapps.io/mcp
