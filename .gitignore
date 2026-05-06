@@ -98,3 +98,4 @@ a2a-expert/
 !.github/workflows/
 .specify/
 .vscode/
+sample-agent/memory.json
