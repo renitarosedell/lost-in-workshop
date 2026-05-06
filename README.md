@@ -4,7 +4,7 @@
 
 ## Workshop Overview
 
-In this hands-on 90-minute session you will build a Python AI agent that navigates a quest through Raleigh, NC. Starting from a simple Azure OpenAI connection, you'll progressively add capabilities until your agent can autonomously complete a multi-leg city quest.
+In this hands-on 90-minute session you will build a Python AI agent that navigates a quest through Raleigh, NC. Starting from a simple Azure OpenAI connection, you'll progressively add capabilities with the Microsoft Agent Framework (MAF) until your agent can autonomously complete a multi-leg city quest.
 
 By the end of the workshop you will have built an agent that:
 
