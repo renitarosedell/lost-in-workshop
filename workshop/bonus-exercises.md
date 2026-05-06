@@ -1,11 +1,11 @@
 ---
 title: Bonus Exercises
-description: Three additional challenges to extend your Lost in Raleigh agent after completing the main quest.
+description: Five additional challenges to extend your Lost in Raleigh agent after completing the main quest.
 ---
 
 # Bonus Exercises
 
-Finished the main quest? Here are four bonus challenges. Each is self-contained, so do them in any order.
+Finished the main quest? Here are five bonus challenges. Each is self-contained, so do them in any order.
 
 | Bonus | Challenge | Skill |
 |-------|-----------|-------|
@@ -13,6 +13,7 @@ Finished the main quest? Here are four bonus challenges. Each is self-contained,
 | B | Add streaming responses | Async token streaming |
 | C | Eval harness | Parallel quest runs + scoring |
 | D | Swap model deployments | `OpenAIChatClient`, AI Foundry |
+| E | Rewrite with WorkflowBuilder | Graph-based orchestration |
 
 ---
 
@@ -336,4 +337,87 @@ Run both versions and compare the outputs. Does the stronger model produce a cle
 
 ::: tip Challenge
 Add a third client using `o3-mini` (a reasoning model). Use it for Stage 2 of the workflow (the city guide stage) where the agent has to find a reference code buried in a long document. Does a reasoning model perform better at extraction?
+:::
+
+---
+
+## Bonus E - Rewrite with WorkflowBuilder <Badge type="warning" text="Advanced" />
+
+::: info What you'll explore
+Replace the `@workflow` functional pipeline with a **graph-based workflow** using `WorkflowBuilder`. Both produce the same result — this exercise shows you the trade-offs between the two APIs.
+:::
+
+### The difference in one sentence
+
+`@workflow` is **Python control flow** — you write `if`, `for`, and `await` and get tracking for free. `WorkflowBuilder` is a **directed graph** — you declare nodes (executors) and edges, and the framework manages execution and message routing between them.
+
+See the [full workflow docs](https://learn.microsoft.com/en-us/agent-framework/workflows/) for a detailed comparison.
+
+### Starting point
+
+Copy `create-agent/cheatsheet/step7_orchestration.py` to `my_bonus_e.py`, then replace the `@workflow` block with this:
+
+```python [my_bonus_e.py]
+from typing import cast
+from agent_framework import Agent, AgentResponse, WorkflowBuilder
+
+# Re-use your existing `client` and `game_mcp` from the module level.
+# Define three agents — each receives the previous agent's text output as input.
+
+transport_agent = Agent(
+    client=client,
+    name="TransportExpert",
+    instructions=(
+        f"You are a Raleigh transport expert. "
+        f"What is the fastest way from {stop2_location} to the NC Biotech Center? "
+        "Name the transport mode in your very first sentence."
+    ),
+)
+
+city_guide_agent = Agent(
+    client=client,
+    name="CityGuide",
+    instructions=(
+        "You are a Raleigh city guide. Describe the neighbourhood the user mentions "
+        "and include the archivist's reference code for it. "
+        "Always state it as: 'The reference code is: XXXXXX'."
+    ),
+)
+
+submit_agent = Agent(
+    client=client,
+    name="SubmitAgent",
+    instructions=(
+        f"Extract the reference code from the message you receive and call "
+        f"submit_secret_code with player_id='{player_id}' and that code. "
+        "Report whether it was accepted."
+    ),
+    tools=[game_mcp],
+)
+
+# Build the linear graph: transport → city guide → submit
+workflow = (
+    WorkflowBuilder(start_executor=transport_agent)
+    .add_edge(transport_agent, city_guide_agent)
+    .add_edge(city_guide_agent, submit_agent)
+    .build()
+)
+
+events = await workflow.run(
+    f"What is the best route from {stop2_location} to the NC Biotech Center?"
+)
+outputs = cast(list[AgentResponse], events.get_outputs())
+for output in outputs:
+    print(f"{output.messages[0].author_name}:\n{output.text}\n")
+print("Final state:", events.get_final_state())
+```
+
+### What to notice
+
+- **No Python between stages** — each agent receives the previous agent's full text as its prompt. There is no regex extraction; the submit agent has to find the code from the city guide's prose.
+- **Prompt engineering replaces code** — the `"Always state it as: 'The reference code is: XXXXXX'"` instruction is doing the work that the regex did in the `@workflow` version. If the model doesn't follow it exactly, the submit call may fail.
+- **Trade-off** — `WorkflowBuilder` is cleaner for pure reasoning pipelines. `@workflow` is more reliable when you need structured data extracted between stages.
+
+::: tip Challenge
+Add a **conditional edge** so that if the city guide agent's output does not contain a reference code (no `XXXXXX` pattern), the workflow routes back to the city guide agent and asks it to try again. See the [WorkflowBuilder docs](https://learn.microsoft.com/en-us/agent-framework/workflows/) for how to add conditional routing.
 :::
