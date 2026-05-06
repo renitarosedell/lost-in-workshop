@@ -39,7 +39,7 @@ export default defineConfig({
       {
         text: 'Workshop',
         items: [
-          { text: 'Dev Environment Setup', link: '/workshop/dev-setup' },
+          { text: 'Developer Environment Setup', link: '/workshop/dev-setup' },
           { text: '1. Connect to Azure OpenAI', link: '/workshop/step1' },
           { text: '2. Hello Raleigh', link: '/workshop/step2' },
           { text: '3. MCP Game Server', link: '/workshop/step3' },
