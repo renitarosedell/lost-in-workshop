@@ -1,0 +1,200 @@
+# Lost in Raleigh — City Configuration
+# All city-specific values live here. Swapping cities = editing this file only.
+# Reload requires server restart.
+
+city:
+  name: "Raleigh"
+  final_destination:
+    name: "NC Biotech Center"
+    address: "15 T.W. Alexander Drive, Research Triangle Park, NC 27709"
+    narrative: >
+      The NC Biotech Center is the hub of the Research Triangle's life sciences
+      ecosystem — a fitting end to your journey through the City of Oaks.
+      Welcome to the workshop!
+
+quests:
+  # -------------------------------------------------------------------------
+  - id: glenwood_getaway
+    name: "The Glenwood Getaway"
+
+    start:
+      name: "Moore Square"
+      description: >
+        You find yourself standing in Moore Square, Raleigh's oldest public park.
+        Brick paths wind between magnolias and oaks. Your phone buzzes: the
+        workshop starts soon and you need to reach the NC Biotech Center — but
+        first you must pick up a package in Glenwood South. The city awaits.
+
+    stop1:
+      location:
+        name: "Glenwood South"
+        description: >
+          Glenwood South is Raleigh's premier entertainment district — tree-lined
+          streets, rooftop bars, farm-to-table restaurants, and boutique shops
+          stretching along Glenwood Avenue north of Peace Street.
+      transport_options:
+        - id: goRaleigh_bus
+          label: "GoRaleigh bus"
+          description: "Route 11 departs Moore Square Transit Center. ~18 min, $1.25."
+        - id: rideshare
+          label: "Rideshare"
+          description: "~8 min from Moore Square. Pickup on Fayetteville Street."
+        - id: bike
+          label: "Bike"
+          description: "Capital Bikeshare dock at Moore Square. ~12 min ride."
+        - id: walk
+          label: "Walk"
+          description: "~15 min walk north along Glenwood Avenue."
+      a2a_expert_url: "https://a2a-expert.redriver-3b1b0600.eastus2.azurecontainerapps.io"
+      narrative: >
+        A contact in Glenwood South has a document package for you. Ask the local
+        transport expert which way is fastest, then get moving.
+
+    stop2:
+      location:
+        name: "Cameron Village"
+        description: >
+          One of the first planned shopping centres built in the American South,
+          Cameron Village sits at the edge of Raleigh's historic Five Points
+          neighbourhood. Independent shops and restaurants line the courtyards.
+      document_bundle_url: "https://lostworkshop.blob.core.windows.net/bundles/glenwood_getaway.zip"
+      secret_code: "GLENWOOD42"
+      narrative: >
+        Your contact hands you a bag of documents — neighbourhood histories,
+        local newsletters, merchant records. The secret code is hidden in the
+        prose somewhere. Read carefully and submit it when you find it.
+
+    end:
+      transport_options:
+        - id: rideshare
+          label: "Rideshare"
+          description: "Direct ride to RTP, ~20 min."
+        - id: goTriangle
+          label: "GoTriangle bus"
+          description: "Route 100 Express to Research Triangle Park, ~35 min."
+      narrative: >
+        Final sprint to the NC Biotech Center. The document package is secured.
+        Choose your transport wisely — every minute counts toward your score.
+
+  # -------------------------------------------------------------------------
+  - id: museum_mile
+    name: "The Museum Mile"
+
+    start:
+      name: "City Market"
+      description: >
+        You emerge into City Market, a cobblestone courtyard in downtown Raleigh
+        ringed by galleries, studios, and cafés. Hanging baskets of flowers
+        catch the morning light. The workshop clock is ticking — your first stop
+        is the Museum District on West Jones Street.
+
+    stop1:
+      location:
+        name: "North Carolina Museum of Natural Sciences"
+        description: >
+          The largest natural history museum in the Southeast, the NC Museum of
+          Natural Sciences sits on Bicentennial Plaza between Jones and Edenton.
+          Its soaring atrium houses a whale skeleton and a living butterfly garden.
+      transport_options:
+        - id: walk
+          label: "Walk"
+          description: "~8 min walk west along Martin Street to Bicentennial Plaza."
+        - id: rideshare
+          label: "Rideshare"
+          description: "~5 min ride. Drop-off on Jones Street."
+        - id: goRaleigh_bus
+          label: "GoRaleigh bus"
+          description: "Route 16 from City Market to Fayetteville/Jones. ~10 min."
+      a2a_expert_url: "https://a2a-expert.redriver-3b1b0600.eastus2.azurecontainerapps.io"
+      narrative: >
+        A researcher at the museum is holding an envelope for you. Ask the
+        transport expert the quickest route, then head to Bicentennial Plaza.
+
+    stop2:
+      location:
+        name: "CAM Raleigh"
+        description: >
+          The Contemporary Art Museum of Raleigh (CAM Raleigh) anchors the
+          Warehouse District on South Blount Street, occupying a transformed
+          1950s warehouse. Its rotating exhibitions span painting, sculpture,
+          and digital media.
+      document_bundle_url: "https://lostworkshop.blob.core.windows.net/bundles/museum_mile.zip"
+      secret_code: "MUSEUMRUN88"
+      narrative: >
+        The researcher's envelope contains a bundle of curated documents about
+        the city's arts institutions. The code is woven into one of them.
+        Find it and submit.
+
+    end:
+      transport_options:
+        - id: rideshare
+          label: "Rideshare"
+          description: "Direct to RTP, ~22 min from Warehouse District."
+        - id: goTriangle
+          label: "GoTriangle bus"
+          description: "Route 100 from downtown Raleigh to Research Triangle Park."
+      narrative: >
+        The art district fades behind you. One final leg to the NC Biotech Center.
+        Pick the transport that gets you there with the most points to spare.
+
+  # -------------------------------------------------------------------------
+  - id: warehouse_run
+    name: "The Warehouse Run"
+
+    start:
+      name: "Nash Square"
+      description: >
+        Nash Square, one of Raleigh's four original public squares, is quiet in
+        the early morning. Pigeons pick at the paths between the old oaks. Your
+        mission leads you southwest to the Warehouse District — Raleigh's
+        revitalised arts and brewing corridor along South Blount and Davie.
+
+    stop1:
+      location:
+        name: "Warehouse District"
+        description: >
+          Once home to cotton warehouses and tobacco processing, Raleigh's
+          Warehouse District has been transformed into a creative hub of breweries,
+          restaurants, galleries, and live music venues centred on South Blount
+          and Davie streets.
+      transport_options:
+        - id: walk
+          label: "Walk"
+          description: "~10 min walk south on Dawson Street to the Warehouse District."
+        - id: rideshare
+          label: "Rideshare"
+          description: "~4 min ride. Drop-off on South Blount Street."
+        - id: bike
+          label: "Bike"
+          description: "Capital Bikeshare near Nash Square. ~8 min ride."
+      a2a_expert_url: "https://a2a-expert.redriver-3b1b0600.eastus2.azurecontainerapps.io"
+      narrative: >
+        Someone in the Warehouse District has left a package behind a brewery.
+        Ask the local transport expert the best way to get there from Nash Square.
+
+    stop2:
+      location:
+        name: "Boylan Heights"
+        description: >
+          Boylan Heights is one of Raleigh's oldest residential neighbourhoods,
+          a hillside community of craftsman bungalows and Victorian cottages south
+          of the Warehouse District, overlooking the downtown skyline from Boylan
+          Avenue Bridge.
+      document_bundle_url: "https://lostworkshop.blob.core.windows.net/bundles/warehouse_run.zip"
+      secret_code: "TOBACCO55"
+      narrative: >
+        The package contains a collection of neighbourhood histories and local
+        journalism about Raleigh's industrial past. The secret code is buried
+        in one of the stories. Read, search, submit.
+
+    end:
+      transport_options:
+        - id: rideshare
+          label: "Rideshare"
+          description: "Quickest option from Boylan Heights to RTP, ~20 min."
+        - id: goTriangle
+          label: "GoTriangle bus"
+          description: "Route 100 to Research Triangle Park from downtown stop, ~35 min."
+      narrative: >
+        The neighbourhood rooftops shrink behind you. Final push to the NC Biotech
+        Center. Choose well — points are still on the line.

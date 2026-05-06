@@ -81,3 +81,9 @@ yarn-error.log*
 
 # Project-specific
 lost-in-sf/state.json
+
+.github/
+.specify/
+.venv/
+.vitepress/
+.vscode/
