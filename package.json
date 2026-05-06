@@ -1,0 +1,13 @@
+{
+  "name": "lost-in-workshop-v2",
+  "version": "1.0.0",
+  "description": "Lost in Workshop — AI agent workshop documentation",
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  }
+}

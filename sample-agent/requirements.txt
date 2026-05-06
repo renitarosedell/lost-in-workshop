@@ -1,2 +1,7 @@
+grpcio>=1.68.0
 agent-framework
+agent-framework-a2a
 python-dotenv
+httpx
+requests
+openai

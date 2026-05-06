@@ -25,6 +25,9 @@ MANIFEST
 .env
 .venv
 env/
+
+# Deployment config (contains secrets — never commit)
+scripts/deploy.config.json
 venv/
 ENV/
 env.bak/
@@ -73,11 +76,13 @@ coverage.xml
 *.log
 logs/
 
-# Node (in case of any JS tooling)
+# Node / VitePress
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.vitepress/dist/
+.vitepress/cache/
 
 # Project-specific
 lost-in-sf/state.json
