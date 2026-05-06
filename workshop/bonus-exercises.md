@@ -5,13 +5,14 @@ description: Three additional challenges to extend your Lost in Raleigh agent af
 
 # Bonus Exercises
 
-Finished the main quest? Here are three bonus challenges. Each is self-contained, so do them in any order.
+Finished the main quest? Here are four bonus challenges. Each is self-contained, so do them in any order.
 
 | Bonus | Challenge | Skill |
 |-------|-----------|-------|
 | A | Build your own A2A transport expert | FastAPI + Agent Framework |
 | B | Add streaming responses | Async token streaming |
 | C | Eval harness | Parallel quest runs + scoring |
+| D | Swap model deployments | `OpenAIChatClient`, AI Foundry |
 
 ---
 
@@ -272,3 +273,67 @@ maximises the score?
 python eval_harness.py --strategy rideshare
 python eval_harness.py --strategy bike
 ```
+
+---
+
+## Bonus D - Swap Model Deployments <Badge type="tip" text="Beginner" />
+
+::: info What you'll explore
+Change the model your agent uses — without touching any agent logic. Because `OpenAIChatClient` is just a config object, swapping models is a one-line change.
+:::
+
+### How to add a second deployment
+
+1. Open [ai.azure.com](https://ai.azure.com) and go to your project
+2. Click **Models + endpoints → Deploy model**
+3. Pick a different model — for example `gpt-4o` or `o3-mini`
+4. Give it a deployment name, for example `gpt-4o`
+
+### How to switch models in your code
+
+Everywhere you create an `OpenAIChatClient`, the `model=` parameter is the deployment name from AI Foundry:
+
+```python
+# Uses gpt-4o-mini (your original deployment)
+client = OpenAIChatClient(
+    azure_endpoint=get_base_endpoint(),
+    api_key=os.environ["AZURE_OPENAI_API_KEY"],
+    model=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],  # e.g. "gpt-4o-mini"
+)
+
+# Switch to a different deployment by changing the model name
+client_fast = OpenAIChatClient(
+    azure_endpoint=get_base_endpoint(),
+    api_key=os.environ["AZURE_OPENAI_API_KEY"],
+    model="gpt-4o",   # your second deployment name
+)
+```
+
+You can create **multiple clients** and pass them to different agents in the same workflow — for example, use a cheaper model for simple tool calls and a more capable model for reasoning.
+
+### Try it
+
+Copy `create-agent/cheatsheet/step7_orchestration.py` to `my_step7_models.py` and make these two changes:
+
+1. Create a second client pointing at your new deployment:
+   ```python
+   client_powerful = OpenAIChatClient(
+       azure_endpoint=get_base_endpoint(),
+       api_key=os.environ["AZURE_OPENAI_API_KEY"],
+       model="gpt-4o",  # your new deployment name
+   )
+   ```
+2. Pass `client_powerful` to `submit_agent` so the code-submission stage uses the stronger model:
+   ```python
+   submit_agent = Agent(
+       client=client_powerful,   # upgraded for the final stage
+       name="RaleighAgent",
+       ...
+   )
+   ```
+
+Run both versions and compare the outputs. Does the stronger model produce a cleaner submission response? Does it extract the secret code more reliably?
+
+::: tip Challenge
+Add a third client using `o3-mini` (a reasoning model). Use it for Stage 2 of the workflow (the city guide stage) where the agent has to find a reference code buried in a long document. Does a reasoning model perform better at extraction?
+:::
