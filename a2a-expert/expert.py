@@ -1,15 +1,16 @@
-"""A2A Expert: Raleigh transport adviser — FastAPI + Microsoft Agent Framework."""
+"""A2A Expert: Raleigh transport adviser — exposed via the A2A protocol."""
 from __future__ import annotations
 
 import os
 
-import httpx
-from azure.identity import DefaultAzureCredential, get_bearer_token_provider
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-
-app = FastAPI(title="Raleigh A2A Transport Expert")
+import uvicorn
+from a2a.server.apps import A2AStarletteApplication
+from a2a.server.request_handlers import DefaultRequestHandler
+from a2a.server.tasks import InMemoryTaskStore
+from a2a.types import AgentCapabilities, AgentCard, AgentSkill
+from agent_framework import Agent
+from agent_framework.a2a import A2AExecutor
+from agent_framework.openai import OpenAIChatClient
 
 # ---------------------------------------------------------------------------
 # System prompt — Raleigh transport knowledge
@@ -62,61 +63,58 @@ ADVICE STYLE
 # Request / response models
 # ---------------------------------------------------------------------------
 
-class A2ARequest(BaseModel):
-    message: str
-
-
-class A2AResponse(BaseModel):
-    advice: str
-
-
 # ---------------------------------------------------------------------------
-# Azure OpenAI client (bare openai SDK — no agent framework needed here)
+# Agent card — describes this agent to any A2A client
 # ---------------------------------------------------------------------------
 
-def _get_advice(question: str) -> str:
-    """Call Azure OpenAI directly to answer a transport question."""
-    import openai
+_transport_skill = AgentSkill(
+    id="raleigh_transport_advice",
+    name="Raleigh Transport Advice",
+    description="Gives transport advice for navigating Raleigh during the Lost in Raleigh quest.",
+    tags=["transport", "raleigh", "navigation"],
+    examples=["What is the fastest way to get to Glenwood South?"],
+)
 
-    token_provider = get_bearer_token_provider(
-        DefaultAzureCredential(),
-        "https://cognitiveservices.azure.com/.default",
-    )
-    client = openai.AzureOpenAI(
-        azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
-        azure_ad_token_provider=token_provider,
-        api_version="2024-12-01-preview",
-    )
-    response = client.chat.completions.create(
-        model=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": question},
-        ],
-        max_tokens=300,
-        temperature=0.3,
-    )
-    return response.choices[0].message.content or "No advice available."
+_BASE_URL = os.environ.get("A2A_BASE_URL", "http://localhost:8001")
 
+agent_card = AgentCard(
+    name="Raleigh Transport Expert",
+    description="A local Raleigh, NC transport expert for the Lost in Raleigh workshop quest.",
+    url=_BASE_URL,
+    version="1.0.0",
+    defaultInputModes=["text"],
+    defaultOutputModes=["text"],
+    capabilities=AgentCapabilities(streaming=False),
+    skills=[_transport_skill],
+)
 
 # ---------------------------------------------------------------------------
-# Endpoint
+# Agent (backed by Azure OpenAI)
 # ---------------------------------------------------------------------------
 
-@app.post("/a2a", response_model=A2AResponse)
-async def a2a(request: A2ARequest) -> JSONResponse:
-    """Receive a natural-language transport question; return transport advice."""
-    if not request.message or not request.message.strip():
-        raise HTTPException(status_code=400, detail="message field must not be empty.")
-    advice = _get_advice(request.message.strip())
-    return JSONResponse({"advice": advice})
+_client = OpenAIChatClient(
+    azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+    api_key=os.environ["AZURE_OPENAI_API_KEY"],
+    model=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
+)
 
+_agent = Agent(
+    client=_client,
+    name="Raleigh Transport Expert",
+    instructions=SYSTEM_PROMPT,
+)
 
-@app.get("/health")
-async def health() -> dict[str, str]:
-    return {"status": "ok"}
+# ---------------------------------------------------------------------------
+# A2A server
+# ---------------------------------------------------------------------------
 
+server = A2AStarletteApplication(
+    agent_card=agent_card,
+    http_handler=DefaultRequestHandler(
+        agent_executor=A2AExecutor(_agent),
+        task_store=InMemoryTaskStore(),
+    ),
+).build()
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(server, host="0.0.0.0", port=int(os.environ.get("PORT", 8001)))

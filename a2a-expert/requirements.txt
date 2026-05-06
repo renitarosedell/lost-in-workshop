@@ -1,5 +1,3 @@
-fastapi
+agent-framework-a2a
 uvicorn[standard]
-openai
 python-dotenv
-azure-identity

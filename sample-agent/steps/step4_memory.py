@@ -21,45 +21,16 @@ import asyncio
 import json
 import os
 import re
-from pathlib import Path
 
-from agent_framework import Agent, MCPStreamableHTTPTool, ContextProvider, SessionContext
+from agent_framework import Agent, MCPStreamableHTTPTool
 from agent_framework.openai import OpenAIChatClient
 from dotenv import load_dotenv
+
+from shared import FileContextProvider, MEMORY_FILE
 
 load_dotenv()
 
 MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "http://localhost:8000/mcp")
-MEMORY_FILE = Path(__file__).parent.parent / "memory.json"
-
-
-class FileContextProvider(ContextProvider):
-    """Persists player_id to a local JSON file."""
-
-    def __init__(self) -> None:
-        super().__init__("player-memory")
-
-    def _load(self) -> dict:
-        if MEMORY_FILE.exists():
-            return json.loads(MEMORY_FILE.read_text(encoding="utf-8"))
-        return {}
-
-    def _save(self, data: dict) -> None:
-        MEMORY_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
-
-    async def before_run(self, *, context: SessionContext, **_) -> None:
-        data = self._load()
-        player_id = data.get("player_id")
-        if player_id:
-            context.extend_instructions(
-                self.source_id,
-                f"Your player_id is {player_id}. You are already registered. "
-                "Do not call register_player again.",
-            )
-            print(f"Resuming with saved player_id: {player_id}")
-
-    async def after_run(self, *, context: SessionContext, **kwargs) -> None:
-        pass  # player_id is saved from main() after agent.run() returns
 
 
 async def main() -> None:
@@ -77,12 +48,17 @@ async def main() -> None:
     await game_mcp.connect()
 
     memory = FileContextProvider()
+    saved = memory._load()
+    if saved.get("player_id"):
+        print(f"Resuming with saved player_id: {saved['player_id']}")
+
     agent = Agent(
         client=client,
         name="RaleighAgent",
         instructions=(
             "You are a workshop participant in the Lost in Raleigh game. "
-            "If you have a player_id in memory, confirm it and stop. "
+            "If your player_id is already in memory, confirm it and stop — "
+            "do NOT call register_player again. "
             "If not, register as a new player with the name 'Workshop Attendee' "
             "using register_player and return a JSON object with: "
             "player_id, a2a_expert_url, stop1_location. Return ONLY valid JSON if registering."
