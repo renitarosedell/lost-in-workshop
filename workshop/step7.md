@@ -249,11 +249,15 @@ The workflow is **just Python**. The `@workflow` decorator adds tracking and a s
 
 Agents are created **outside** the workflow at module level. Inside the workflow you capture them via closure, the same way you'd reference any module-level variable.
 
-::: tip @workflow only accepts one input parameter
-If you need to pass multiple values, wrap them in a single `dict` (or dataclass) and unpack inside the function. This is a current constraint of the functional workflow API.
+::: tip @workflow is experimental
+You'll see an `ExperimentalWarning` when the decorator is applied — this is expected. The API is stable enough for this workshop but may change in future versions.
+
+It also only accepts **one input parameter**. If you need to pass multiple values, wrap them in a single `dict` and unpack inside the function body — which is what the code above does.
 :::
 
-### Make sure CITY_GUIDE_URL is set
+### Check CITY_GUIDE_URL is set
+
+Your `.env` should already have this from the event resources page:
 
 ```ini [.env]
 CITY_GUIDE_URL=https://a2a-expert.redriver-3b1b0600.eastus2.azurecontainerapps.io/city-guide
@@ -300,12 +304,12 @@ Saved transport_final=rideshare to memory.
 
 ## What happened?
 
-You just ran a **three-stage `@workflow`** that:
-1. Called a remote A2A transport expert and parsed its advice
-2. Called a remote A2A city guide and extracted the secret code with regex
-3. Called an MCP agent to submit that code — an `await` like any other in the pipeline
+You just ran a three-stage `@workflow`:
+1. **Stage 1** — Transport Expert told you the best route for the final leg
+2. **Stage 2** — City Guide described the neighbourhood and gave you the secret code
+3. **Stage 3** — `submit_agent` called `submit_secret_code` via MCP to register it
 
-Your Python code was the orchestrator. No single component knew about the others. `@workflow` gave you a structured result and final state without changing how you write async code.
+Each stage is a plain `await`. `@workflow` tracked execution and gave you a structured result — `get_outputs()` returned what the function returned, `get_final_state()` confirmed it completed cleanly.
 
 ::: info Next step
 [Step 8 - Complete the Quest](step8) →
