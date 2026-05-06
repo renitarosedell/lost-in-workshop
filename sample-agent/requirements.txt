@@ -1,3 +1,4 @@
+grpcio>=1.68.0
 agent-framework
 python-dotenv
 httpx
