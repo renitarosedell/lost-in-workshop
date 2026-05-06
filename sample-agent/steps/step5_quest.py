@@ -41,7 +41,7 @@ async def main() -> None:
     saved = memory._load()
 
     player_id = saved.get("player_id")
-    a2a_url = saved.get("a2a_expert_url")
+    a2a_url = saved.get("a2a_expert_url") or os.environ.get("A2A_SERVER_URL")
     stop1_location = saved.get("stop1_location", "your quest destination")
 
     if not player_id or not a2a_url:
