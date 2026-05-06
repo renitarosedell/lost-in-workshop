@@ -1,8 +1,8 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'Lost in Workshop',
-  description: 'A hands-on AI agent workshop — MCP, A2A, RAG, and Azure AI Foundry',
+  title: 'Lost in Raleigh',
+  description: 'A hands-on AI agent workshop — MCP, A2A, multi-agent orchestration, and Azure AI Foundry',
 
   // Source is the repo root; .vitepress/ itself is excluded automatically
   srcDir: '.',
@@ -33,31 +33,61 @@ export default defineConfig({
 
   themeConfig: {
     nav: [
+      { text: 'Get started', link: '/' },
+      { text: 'Get Azure', link: '/workshop/get-azure' },
+      { text: 'Event Resources', link: '/workshop/event-resources' },
       {
         text: 'Workshop',
         items: [
-          { text: 'Azure Setup (Step 1)', link: '/workshop/azure-foundry-setup' },
-          { text: 'Workshop Guide (Steps 2–5)', link: '/workshop/workshop' },
-          { text: 'Bonus Exercises', link: '/workshop/bonus-exercises' },
+          { text: 'Dev Environment Setup', link: '/workshop/dev-setup' },
+          { text: '1. Connect to Azure OpenAI', link: '/workshop/step1' },
+          { text: '2. Hello Raleigh', link: '/workshop/step2' },
+          { text: '3. MCP Game Server', link: '/workshop/step3' },
+          { text: '4. Memory', link: '/workshop/step4' },
+          { text: '5. A2A Transport Expert', link: '/workshop/step5' },
+          { text: '6. Multi-turn Conversations', link: '/workshop/step6' },
+          { text: '7. Orchestration', link: '/workshop/step7' },
+          { text: '8. Complete the Quest', link: '/workshop/step8' },
         ],
       },
+      { text: 'Bonus', link: '/workshop/bonus-exercises' },
       {
         text: 'Facilitators',
         items: [
           { text: 'Pre-Event Checklist', link: '/workshop/pre-event-checklist' },
           { text: 'Deployment Guide', link: '/workshop/deployment-guide' },
+          { text: 'Instructor Guide', link: '/workshop/instructor-guide' },
         ],
       },
-      { text: 'City Guide', link: '/city-guide/raleigh/01_welcome_to_raleigh' },
     ],
 
     sidebar: {
       '/workshop/': [
         {
-          text: 'Attendee Guide',
+          text: 'Getting Started',
           items: [
-            { text: '① Azure Foundry Setup', link: '/workshop/azure-foundry-setup' },
-            { text: '② – ⑤ Workshop Guide', link: '/workshop/workshop' },
+            { text: 'Get Azure Subscription', link: '/workshop/get-azure' },
+            { text: 'Dev Environment Setup', link: '/workshop/dev-setup' },
+            { text: 'Azure AI Foundry Setup', link: '/workshop/azure-foundry-setup' },
+            { text: 'Event Resources', link: '/workshop/event-resources' },
+          ],
+        },
+        {
+          text: 'Workshop Steps',
+          items: [
+            { text: '1. Connect to Azure OpenAI', link: '/workshop/step1' },
+            { text: '2. Hello Raleigh', link: '/workshop/step2' },
+            { text: '3. MCP Game Server', link: '/workshop/step3' },
+            { text: '4. Memory', link: '/workshop/step4' },
+            { text: '5. A2A Transport Expert', link: '/workshop/step5' },
+            { text: '6. Multi-turn Conversations', link: '/workshop/step6' },
+            { text: '7. Orchestration', link: '/workshop/step7' },
+            { text: '8. Complete the Quest', link: '/workshop/step8' },
+          ],
+        },
+        {
+          text: 'Extras',
+          items: [
             { text: 'Bonus Exercises', link: '/workshop/bonus-exercises' },
           ],
         },
@@ -67,6 +97,7 @@ export default defineConfig({
           items: [
             { text: 'Pre-Event Checklist', link: '/workshop/pre-event-checklist' },
             { text: 'Deployment Guide', link: '/workshop/deployment-guide' },
+            { text: 'Instructor Guide', link: '/workshop/instructor-guide' },
           ],
         },
       ],
@@ -109,8 +140,9 @@ export default defineConfig({
     },
 
     footer: {
-      message: 'Lost in Workshop — AI Agent Workshop',
+      message: 'Lost in Raleigh — AI Agent Workshop',
       copyright: 'Global AI Community',
     },
   },
 })
+

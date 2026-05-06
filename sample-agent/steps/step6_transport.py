@@ -1,17 +1,14 @@
 """
 Step 6 — Multi-turn conversations: use session memory to declare transport.
 
-What this adds (tutorial: Step 3 — Multi-Turn Conversations):
+What this adds:
   A single agent session is kept alive across two turns:
-    Turn 1 — ask the agent to summarise the transport choice from step 5.
+    Turn 1 — ask the agent to confirm the transport choice from step 5.
     Turn 2 — tell it to call declare_transport_stop1 with that choice.
 
-  Because both turns share the same session, the agent remembers the transport
-  from turn 1 when executing the tool call in turn 2. Without a session each
-  turn would start from scratch and the agent would have no context.
-
-  The response includes the next stop and the bundle URL, both saved to memory
-  for step 7.
+  Because both turns share the same session, the agent remembers turn 1 when
+  executing the tool call in turn 2. Without a session, each turn would start
+  fresh and the agent would have no context about what transport was chosen.
 
 Run it:
   python steps/step6_transport.py
@@ -19,18 +16,17 @@ Run it:
 Expected output:
   Player: PLR-XXXXXXXX  |  Transport: rideshare
 
-  [Turn 1] Summarising transport choice...
+  [Turn 1] Confirming transport choice...
   Agent: You have chosen rideshare to reach Glenwood South...
 
   [Turn 2] Declaring transport and collecting next stop...
   Stop 1 reached!
   Next stop: Cameron Village
-  Saved stop2_location and bundle_url to memory.
+  Saved stop2_location to memory.
 """
 from __future__ import annotations
 
 import asyncio
-import json
 import os
 import re
 
@@ -79,8 +75,7 @@ async def main() -> None:
         instructions=(
             f"You are helping player_id='{player_id}' play the Lost in Raleigh quest. "
             "When asked to declare transport, call declare_transport_stop1 with the "
-            "player_id and the transport the player chose. Return the full JSON "
-            "response from the tool as-is."
+            "player_id and transport. Return the full JSON response from the tool."
         ),
         tools=[game_mcp],
     )
@@ -89,39 +84,29 @@ async def main() -> None:
     session = agent.create_session()
 
     # Turn 1: establish context (no tool call yet)
-    print("[Turn 1] Summarising transport choice...")
+    print("[Turn 1] Confirming transport choice...")
     turn1 = await agent.run(
-        f"My transport choice for stop 1 is: {transport}. "
-        "Confirm what I have chosen in one sentence.",
+        f"My transport choice for stop 1 is: {transport}. Confirm in one sentence.",
         session=session,
     )
     print(f"Agent: {turn1.text}\n")
 
-    # Turn 2: agent still has turn 1 in its context — uses it to call the tool
+    # Turn 2: agent uses turn 1 context to call the right tool with the right value
     print("[Turn 2] Declaring transport and collecting next stop...")
     turn2 = await agent.run(
         "Now declare my transport to stop 1 using the choice I just told you.",
         session=session,
     )
+    print(turn2.text or "")
 
+    # Extract next stop from the response for step 7
     text = turn2.text or ""
-    json_match = re.search(r"\{.*\}", text, re.DOTALL)
-    if json_match:
-        data = json.loads(json_match.group(0))
-        stop2 = data.get("stop2_location", "")
-        bundle_url = data.get("document_bundle_url", "")
-        print("Stop 1 reached!")
-        if stop2:
-            print(f"Next stop: {stop2}")
-            memory._save({"stop2_location": stop2})
-        if bundle_url:
-            memory._save({"bundle_url": bundle_url})
-            print("Saved stop2_location and bundle_url to memory.")
-        else:
-            print("Warning: no document_bundle_url in response.")
-            print(text)
-    else:
-        print(text)
+    stop2_match = re.search(r'"stop2_location"\s*:\s*"([^"]+)"', text)
+    if stop2_match:
+        stop2 = stop2_match.group(1)
+        memory._save({"stop2_location": stop2})
+        print(f"\nNext stop: {stop2}")
+        print("Saved stop2_location to memory.")
 
     await game_mcp.close()
 

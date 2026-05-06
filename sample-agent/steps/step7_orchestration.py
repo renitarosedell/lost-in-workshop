@@ -1,15 +1,14 @@
 """
 Step 7 — Orchestration: query two A2A agents in sequence, then submit the code.
 
-What this adds (tutorial: Step 5 — Workflows / multi-agent orchestration):
+What this adds:
   Two remote A2A agents are called in sequence — a real multi-agent workflow:
 
   1. Transport Expert  → advises on the final leg (stop 2 → NC Biotech Center).
   2. City Guide        → knows the neighbourhood history + the quest reference code.
 
-  The reference code extracted from the city guide's response is then submitted
-  to the MCP game server via a local Agent with tool-calling. The chosen final
-  transport is saved to memory so step 8 can use it without re-asking.
+  The reference code from the city guide is then submitted to the MCP game server
+  via a local agent with tool-calling.
 
 Install the A2A package first:
   pip install agent-framework-a2a --pre
@@ -20,15 +19,11 @@ Run it:
 Expected output:
   Player: PLR-XXXXXXXX
   --- Transport Expert: final leg ---
-    Connected to: Raleigh Transport Expert
   Rideshare is your fastest option from Cameron Village to RTP...
   Final transport chosen: rideshare
 
   --- City Guide: quest reference code ---
-    Connected to: Raleigh City Guide
   Cameron Village is one of the first planned shopping centres...
-  Archivist reference code for quest players: GLENWOOD42
-
   Extracted code: GLENWOOD42
 
   --- Submitting code via MCP ---
@@ -72,10 +67,8 @@ async def main() -> None:
     saved = memory._load()
 
     player_id = saved.get("player_id")
-    stop2_location = saved.get("stop2_location", "your next stop")
-
-    # Env vars take priority over stale memory values
-    transport_url = os.environ.get("A2A_SERVER_URL") or saved.get("a2a_expert_url")
+    stop2_location = saved.get("stop2_location", "Cameron Village")
+    transport_url = os.environ.get("A2A_SERVER_URL")
     city_guide_url = os.environ.get("CITY_GUIDE_URL")
 
     if not player_id:
@@ -85,8 +78,7 @@ async def main() -> None:
         print("Missing A2A URLs. Set A2A_SERVER_URL and CITY_GUIDE_URL in .env")
         return
 
-    print(f"Player: {player_id}")
-    print(f"Stop 2:  {stop2_location}\n")
+    print(f"Player: {player_id}\n")
 
     # ------------------------------------------------------------------
     # 1. Transport Expert — best route for the final leg
@@ -94,27 +86,21 @@ async def main() -> None:
     print("--- Transport Expert: final leg ---")
     transport_advice = await call_a2a(
         transport_url,
-        f"What is the fastest way to get from {stop2_location} to the "
-        "NC Biotech Center in Research Triangle Park?",
+        f"What is the fastest way to get from {stop2_location} to the NC Biotech Center?",
     )
     print(transport_advice)
 
     transport_final = "rideshare"
-    for tid, kw in [
+    for transport_id, keyword in [
         ("goTriangle", "gotriangle"),
-        ("goTriangle", "triangle"),
-        ("goRaleigh_bus", "goraleigh"),
         ("goRaleigh_bus", "bus"),
         ("bike", "bike"),
         ("walk", "walk"),
         ("rideshare", "rideshare"),
-        ("rideshare", "uber"),
-        ("rideshare", "lyft"),
     ]:
-        if kw in transport_advice.lower():
-            transport_final = tid
+        if keyword in transport_advice.lower():
+            transport_final = transport_id
             break
-
     print(f"\nFinal transport chosen: {transport_final}")
 
     # ------------------------------------------------------------------
@@ -128,13 +114,10 @@ async def main() -> None:
     )
     print(city_guide_response)
 
-    # Extract the reference code — uppercase alphanumeric word, 6+ characters
+    # Extract the reference code — uppercase alphanumeric, 6+ characters
     code_match = re.search(r"\b([A-Z][A-Z0-9]{5,})\b", city_guide_response)
     if not code_match:
-        print(
-            "\nCould not extract a reference code from the city guide response. "
-            "Check the output above and run again."
-        )
+        print("\nCould not extract a reference code. Check the output above and retry.")
         return
 
     secret_code = code_match.group(1)
@@ -170,7 +153,6 @@ async def main() -> None:
     print(f"\n{response.text}")
     await game_mcp.close()
 
-    # Save for step 8
     memory._save({"transport_final": transport_final})
     print(f"\nSaved transport_final={transport_final} to memory.")
 
