@@ -106,11 +106,14 @@ async def call_a2a(url: str, message: str) -> str:
 # Inside: call agents (or any async function) exactly like normal Python.
 # -------------------------------------------------------------------
 @workflow
-async def quest_workflow(player_id: str, stop2_location: str) -> tuple[str, str]:
+async def quest_workflow(inputs: dict) -> tuple[str, str]:
     """Three-stage pipeline: transport → city guide → submit code.
 
+    Accepts a single dict with keys 'player_id' and 'stop2_location'.
     Returns (submit_result, transport_final).
     """
+    player_id: str = inputs["player_id"]
+    stop2_location: str = inputs["stop2_location"]
     # Stage 1: Transport Expert — best route for the final leg
     print("--- Stage 1: Transport Expert ---")
     transport_advice = await call_a2a(
@@ -176,7 +179,7 @@ async def main() -> None:
     await game_mcp.connect()
 
     # Run the workflow — same as calling any async function, but tracked
-    result = await quest_workflow.run(player_id, stop2_location)
+    result = await quest_workflow.run({"player_id": player_id, "stop2_location": stop2_location})
 
     submit_result, transport_final = result.get_outputs()[0]
     print(f"\n{submit_result}")

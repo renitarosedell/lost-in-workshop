@@ -149,8 +149,10 @@ async def call_a2a(url: str, message: str) -> str:
 
 
 @workflow
-async def quest_workflow(player_id: str, stop2_location: str) -> tuple[str, str]:
+async def quest_workflow(inputs: dict) -> tuple[str, str]:
     """Three-stage pipeline: transport → city guide → submit code."""
+    player_id = inputs["player_id"]
+    stop2_location = inputs["stop2_location"]
 
     # Stage 1: Transport Expert — best route for the final leg
     print("--- Stage 1: Transport Expert ---")
@@ -212,7 +214,7 @@ async def main() -> None:
 
     await game_mcp.connect()
 
-    result = await quest_workflow.run(player_id, stop2_location)
+    result = await quest_workflow.run({"player_id": player_id, "stop2_location": stop2_location})
     submit_result, transport_final = result.get_outputs()[0]
 
     print(f"\n{submit_result}")
@@ -231,16 +233,25 @@ asyncio.run(main())
 
 ```python
 @workflow
-async def quest_workflow(player_id: str, stop2_location: str) -> tuple[str, str]:
-    transport_advice = await call_a2a(A2A_SERVER_URL, "...")   # Stage 1
-    city_guide_response = await call_a2a(CITY_GUIDE_URL, "...") # Stage 2
-    submit_result = (await submit_agent.run("...")).text        # Stage 3
+async def quest_workflow(inputs: dict) -> tuple[str, str]:
+    player_id = inputs["player_id"]
+    stop2_location = inputs["stop2_location"]
+    transport_advice = await call_a2a(A2A_SERVER_URL, "...")    # Stage 1
+    city_guide_response = await call_a2a(CITY_GUIDE_URL, "...")  # Stage 2
+    submit_result = (await submit_agent.run("...")).text         # Stage 3
     return submit_result, transport_final
+
+# Run it:
+result = await quest_workflow.run({"player_id": player_id, "stop2_location": stop2_location})
 ```
 
 The workflow is **just Python**. The `@workflow` decorator adds tracking and a structured result — `result.get_outputs()` gives you what the function returned, `result.get_final_state()` tells you whether it completed cleanly.
 
 Agents are created **outside** the workflow at module level. Inside the workflow you capture them via closure, the same way you'd reference any module-level variable.
+
+::: tip @workflow only accepts one input parameter
+If you need to pass multiple values, wrap them in a single `dict` (or dataclass) and unpack inside the function. This is a current constraint of the functional workflow API.
+:::
 
 ### Make sure CITY_GUIDE_URL is set
 
