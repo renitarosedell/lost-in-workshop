@@ -57,11 +57,11 @@ The `FileContextProvider` in `shared.py` implements this pattern using a local `
 
 ## Write the code
 
-The `FileContextProvider` is already defined in `steps/shared.py`. You just need to use it in your agent.
+The `FileContextProvider` is already defined in `cheatsheet/shared.py`. You just need to use it in your agent.
 
-Open `steps/step4_memory.py` and replace its contents with:
+Create a new file `create-agent/my_step4.py` and paste in:
 
-```python [steps/step4_memory.py]
+```python [my_step4.py]
 import asyncio
 import os
 import re
@@ -161,7 +161,7 @@ No second registration. Your `player_id` is safe across restarts.
 :::
 
 ::: details Stuck? Use the fallback
-`steps/step4_memory.py` is already complete in the repo.
+`cheatsheet/step4_memory.py` contains the complete working solution. Run it with `python cheatsheet/step4_memory.py`.
 :::
 
 ---

@@ -174,7 +174,7 @@ pip install -r requirements.txt
 2. Run the connectivity test:
 
 ```bash
-python steps/step1_foundry_test.py
+python cheatsheet/step1_foundry_test.py
 ```
 
 ::: tip Expected output

@@ -59,9 +59,9 @@ pip install agent-framework-a2a --pre
 
 ## Write the code
 
-Open `steps/step5_quest.py` and replace its contents with:
+Create a new file `create-agent/my_step5.py` and paste in:
 
-```python [steps/step5_quest.py]
+```python [my_step5.py]
 import asyncio
 import os
 
@@ -168,7 +168,7 @@ A2A_SERVER_URL=https://a2a-expert.redriver-3b1b0600.eastus2.azurecontainerapps.i
 ## Run it
 
 ```bash
-python steps/step5_quest.py
+python my_step5.py
 ```
 
 ::: tip Expected output
@@ -187,7 +187,7 @@ Saved transport_stop1 to memory.
 :::
 
 ::: details Stuck? Use the fallback
-`steps/step5_quest.py` is already complete in the repo.
+`cheatsheet/step5_quest.py` contains the complete working solution. Run it with `python cheatsheet/step5_quest.py`.
 :::
 
 ---

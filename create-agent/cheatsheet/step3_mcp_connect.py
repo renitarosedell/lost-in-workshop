@@ -7,7 +7,7 @@ What this adds:
   - Prints your player_id and quest details.
 
 Run it:
-  python steps/step3_mcp_connect.py
+  python cheatsheet/step3_mcp_connect.py
 
 Expected output:
   Registered! player_id = PLR-XXXXXXXX

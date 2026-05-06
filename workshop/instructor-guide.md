@@ -217,7 +217,7 @@ pip install -r requirements.txt
 
 ::: tip Smoke test
 ```bash
-python steps/step1_foundry_test.py
+python cheatsheet/step1_foundry_test.py
 # Expected: "Connected to Azure OpenAI!"
 ```
 :::

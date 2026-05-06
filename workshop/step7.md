@@ -67,9 +67,9 @@ pip install agent-framework-a2a --pre
 
 ## Write the code
 
-Open `steps/step7_orchestration.py` and replace its contents with:
+Create a new file `create-agent/my_step7.py` and paste in:
 
-```python [steps/step7_orchestration.py]
+```python [my_step7.py]
 import asyncio
 import os
 import re
@@ -223,7 +223,7 @@ Your facilitator provides this URL at this step of the workshop.
 ## Run it
 
 ```bash
-python steps/step7_orchestration.py
+python my_step7.py
 ```
 
 ::: tip Expected output
@@ -251,7 +251,7 @@ Saved transport_final=rideshare to memory.
 :::
 
 ::: details Stuck? Use the fallback
-`steps/step7_orchestration.py` is already complete in the repo.
+`cheatsheet/step7_orchestration.py` contains the complete working solution. Run it with `python cheatsheet/step7_orchestration.py`.
 :::
 
 ---

@@ -149,7 +149,7 @@ Add streaming to `step3_mcp_connect.py`:
 1. Replace the `response = await agent.run(...)` line with the streaming version above.
 2. Run it:
    ```
-   python steps/step3_mcp_connect.py
+   python cheatsheet/step3_mcp_connect.py
    ```
 3. **Expected**: You see tokens printing character-by-character (or word-by-word) rather
    than all at once.

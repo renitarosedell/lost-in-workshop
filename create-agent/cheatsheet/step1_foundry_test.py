@@ -7,7 +7,7 @@ What this does:
   correct and your Foundry deployment is reachable.
 
 Run it:
-  python steps/step1_foundry_test.py
+  python cheatsheet/step1_foundry_test.py
 
 Expected output (something like):
   Connected to Azure OpenAI!

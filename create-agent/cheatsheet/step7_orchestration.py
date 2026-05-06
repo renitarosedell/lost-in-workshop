@@ -14,7 +14,7 @@ Install the A2A package first:
   pip install agent-framework-a2a --pre
 
 Run it:
-  python steps/step7_orchestration.py
+  python cheatsheet/step7_orchestration.py
 
 Expected output:
   Player: PLR-XXXXXXXX

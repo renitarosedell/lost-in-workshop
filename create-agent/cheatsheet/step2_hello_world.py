@@ -8,7 +8,7 @@ What this does:
   This is the baseline: if this works, Steps 3-5 will work.
 
 Run it:
-  python steps/step2_hello_world.py
+  python cheatsheet/step2_hello_world.py
 
 Expected output:
   Raleigh is famous for: ...

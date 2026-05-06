@@ -42,9 +42,24 @@ The `AzureOpenAI` client from the `openai` SDK handles the slightly different au
 
 ## Write the code
 
-Open `steps/step1_foundry_test.py` and replace its contents with:
+::: tip How the cheatsheet works
+The `create-agent/cheatsheet/` folder contains a working reference copy of every step. You write your own code in `create-agent/` (or any file you like in the Codespace), and if you get stuck or run out of time, you can always run the cheatsheet version directly to see the expected output.
+:::
 
-```python [steps/step1_foundry_test.py]
+::: warning Always work from the `create-agent/` directory
+Your `.env` file lives in `create-agent/`. The `load_dotenv()` call looks for it in the **current working directory**, so all your scripts must be run from there:
+
+```bash
+cd create-agent
+python my_step1.py
+```
+
+If you run from the repo root, the `.env` will not be found and you will get `KeyError` on every environment variable.
+:::
+
+Create a new file `my_step1.py` inside `create-agent/` (or any name you like) and paste in:
+
+```python [my_step1.py]
 import os
 
 from dotenv import load_dotenv
@@ -84,8 +99,10 @@ print(f"Model response: {response.choices[0].message.content}")
 
 ## Run it
 
+Make sure you are in the `create-agent/` directory, then run:
+
 ```bash
-python steps/step1_foundry_test.py
+python my_step1.py
 ```
 
 ::: tip Expected output
@@ -95,8 +112,12 @@ Model response: Why did the tourist get lost in Raleigh? ...
 ```
 :::
 
-::: details Stuck? Use the fallback
-The file `steps/step1_foundry_test.py` is already in the repo with the complete code. Run it as-is.
+::: details Stuck? Use the cheatsheet
+The file `cheatsheet/step1_foundry_test.py` contains the complete working solution. Run it directly:
+
+```bash
+python cheatsheet/step1_foundry_test.py
+```
 :::
 
 ---

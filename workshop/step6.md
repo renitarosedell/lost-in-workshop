@@ -58,9 +58,9 @@ This mirrors how users actually interact with AI assistants: they say something,
 
 ## Write the code
 
-Open `steps/step6_transport.py` and replace its contents with:
+Create a new file `create-agent/my_step6.py` and paste in:
 
-```python [steps/step6_transport.py]
+```python [my_step6.py]
 import asyncio
 import os
 import re
@@ -165,7 +165,7 @@ Without `session=session` on turn 2, the agent would ask "declare what?", as it 
 ## Run it
 
 ```bash
-python steps/step6_transport.py
+python my_step6.py
 ```
 
 ::: tip Expected output
@@ -184,7 +184,7 @@ Saved stop2_location to memory.
 :::
 
 ::: details Stuck? Use the fallback
-`steps/step6_transport.py` is already complete in the repo.
+`cheatsheet/step6_transport.py` contains the complete working solution. Run it with `python cheatsheet/step6_transport.py`.
 :::
 
 ---

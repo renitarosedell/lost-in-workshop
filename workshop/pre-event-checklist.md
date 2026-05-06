@@ -64,7 +64,7 @@ All items should be ✅ before attendees arrive. This checklist takes ~15 minute
 
 - [ ] Your own `gpt-4o-mini` deployment is responding:
   ```bash
-  python create-agent/steps/step1_foundry_test.py
+  python create-agent/cheatsheet/step1_foundry_test.py
   ```
   Expected: `Connected to Azure OpenAI!`
 

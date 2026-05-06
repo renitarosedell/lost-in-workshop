@@ -55,9 +55,9 @@ The framework handles the tool-calling loop automatically. This is the **ReAct p
 
 ## Write the code
 
-Open `steps/step3_mcp_connect.py` and replace its contents with:
+Create a new file `create-agent/my_step3.py` and paste in:
 
-```python [steps/step3_mcp_connect.py]
+```python [my_step3.py]
 import asyncio
 import os
 
@@ -124,7 +124,7 @@ asyncio.run(main())
 ## Run it
 
 ```bash
-python steps/step3_mcp_connect.py
+python my_step3.py
 ```
 
 ::: tip Expected output
@@ -142,7 +142,7 @@ Your registration appears on the admin dashboard immediately. Ask your facilitat
 :::
 
 ::: details Stuck? Use the fallback
-`steps/step3_mcp_connect.py` is already complete in the repo. Run it as-is.
+`cheatsheet/step3_mcp_connect.py` contains the complete working solution. Run it with `python cheatsheet/step3_mcp_connect.py`.
 :::
 
 ---

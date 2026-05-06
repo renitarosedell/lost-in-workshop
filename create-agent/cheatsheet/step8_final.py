@@ -7,7 +7,7 @@ What this adds:
   - Prints the final score and quest completion message.
 
 Run it:
-  python steps/step8_final.py
+  python cheatsheet/step8_final.py
 
 Expected output:
   Player: PLR-XXXXXXXX

@@ -35,9 +35,9 @@ The model reads all messages in order and generates the next `assistant` reply. 
 
 ## Write the code
 
-Open `steps/step2_hello_world.py` and replace its contents with:
+Create a new file `create-agent/my_step2.py` and paste in:
 
-```python [steps/step2_hello_world.py]
+```python [my_step2.py]
 import os
 
 from dotenv import load_dotenv
@@ -77,7 +77,7 @@ Try changing the system prompt to `"You are a grumpy tour guide who hates questi
 ## Run it
 
 ```bash
-python steps/step2_hello_world.py
+python my_step2.py
 ```
 
 ::: tip Expected output
@@ -89,7 +89,7 @@ universities like NC State, Duke, and UNC...
 :::
 
 ::: details Stuck? Use the fallback
-`steps/step2_hello_world.py` is already complete in the repo.
+`cheatsheet/step2_hello_world.py` contains the complete working solution. Run it with `python cheatsheet/step2_hello_world.py`.
 :::
 
 ---

@@ -11,7 +11,7 @@ What this adds:
   fresh and the agent would have no context about what transport was chosen.
 
 Run it:
-  python steps/step6_transport.py
+  python cheatsheet/step6_transport.py
 
 Expected output:
   Player: PLR-XXXXXXXX  |  Transport: rideshare

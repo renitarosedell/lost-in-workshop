@@ -7,7 +7,7 @@ What this adds:
   - On subsequent runs: loads the saved player_id — no second registration needed.
 
 Run it twice to see memory in action:
-  python steps/step4_memory.py
+  python cheatsheet/step4_memory.py
 
 Expected output (first run):
   Registered! player_id = PLR-XXXXXXXX

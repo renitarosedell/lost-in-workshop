@@ -121,7 +121,7 @@ If you haven't yet created your Azure OpenAI deployment, follow the [Azure Found
 Run the connectivity test from inside `create-agent/`:
 
 ```bash
-python steps/step1_foundry_test.py
+python cheatsheet/step1_foundry_test.py
 ```
 
 ::: tip Expected output
@@ -215,7 +215,7 @@ Follow the on-screen instructions to sign in with the account that has your Azur
 **6. Verify your setup**
 
 ```bash
-python steps/step1_foundry_test.py
+python cheatsheet/step1_foundry_test.py
 ```
 
 Expected: `Connected to Azure OpenAI!`

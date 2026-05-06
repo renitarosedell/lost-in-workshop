@@ -20,9 +20,9 @@ You've found the secret code and submitted it. There's one last step: declare ho
 
 ## Write the code
 
-Open `steps/step8_final.py` and replace its contents with:
+Create a new file `create-agent/my_step8.py` and paste in:
 
-```python [steps/step8_final.py]
+```python [my_step8.py]
 import asyncio
 import os
 
@@ -89,7 +89,7 @@ asyncio.run(main())
 ## Run it
 
 ```bash
-python steps/step8_final.py
+python my_step8.py
 ```
 
 ::: tip Expected output
@@ -103,7 +103,7 @@ Well done, Workshop Attendee! You navigated Raleigh like a local.
 :::
 
 ::: details Stuck? Use the fallback
-`steps/step8_final.py` is already complete in the repo.
+`cheatsheet/step8_final.py` contains the complete working solution. Run it with `python cheatsheet/step8_final.py`.
 :::
 
 ---
