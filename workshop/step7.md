@@ -28,7 +28,15 @@ You'll do this by **orchestrating two A2A agents in sequence inside a `@workflow
 
 ## What is a workflow?
 
-The `@workflow` decorator from `agent_framework` turns a plain async function into a **tracked, structured pipeline**:
+The `@workflow` decorator from `agent_framework` turns a plain async function into a **tracked, structured pipeline**.
+
+The key distinction from an `Agent`: an agent's steps are **dynamic** — the LLM decides what to do based on context. A workflow's steps are **explicit** — you write the control flow in Python (`if`, `for`, `await`) and the framework tracks execution, checkpoints, and results around it.
+
+Microsoft Agent Framework offers two workflow APIs. This workshop uses the **Functional Workflow API** (`@workflow`), which is the lighter-weight starting point: plain async functions, native Python control flow, no graph concepts. See the [full workflow documentation](https://learn.microsoft.com/en-us/agent-framework/workflows/) for the graph-based `WorkflowBuilder` API and advanced features like HITL, checkpointing, and parallel fan-out.
+
+---
+
+The `@workflow` decorator in practice:
 
 ```python
 from agent_framework import Agent, workflow
