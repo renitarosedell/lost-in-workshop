@@ -26,7 +26,7 @@ def get_base_endpoint(endpoint: str | None = None) -> str:
     return f"{parsed.scheme}://{parsed.netloc}/"
 
 # memory.json lives alongside create-agent/ (one level up from steps/)
-MEMORY_FILE = Path(__file__).parent.parent / "memory.json"
+MEMORY_FILE = Path(__file__).parent / "memory.json"
 
 
 class FileContextProvider(ContextProvider):

@@ -25,6 +25,10 @@ from __future__ import annotations
 
 import asyncio
 import os
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import httpx
 from a2a.client import A2ACardResolver
