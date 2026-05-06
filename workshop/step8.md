@@ -45,7 +45,7 @@ async def main() -> None:
 
     player_id = saved.get("player_id")
     if not player_id:
-        print("No player_id found. Run step4_memory.py first.")
+        print("No player_id found. Run step 4 first.")
         return
 
     transport_final = saved.get("transport_final", _FALLBACK_TRANSPORT)
@@ -136,7 +136,7 @@ Your agent is on the leaderboard. Ask your facilitator for the dashboard URL to 
 | 4 | Persistent memory | `ContextProvider`, `FileContextProvider` |
 | 5 | Agent-to-Agent communication | `A2AAgent`, `A2ACardResolver` |
 | 6 | Multi-turn sessions | `agent.create_session()` |
-| 7 | Multi-agent orchestration | Sequential A2A pipeline |
+| 7 | Multi-agent orchestration | `@workflow`, A2A + MCP |
 | 8 | Quest completion | `declare_transport_final` |
 
 ---

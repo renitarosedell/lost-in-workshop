@@ -84,10 +84,10 @@ async def main() -> None:
     transport = saved.get("transport_stop1")
 
     if not player_id:
-        print("No player_id found. Run step4_memory.py first.")
+        print("No player_id found. Run step 4 first.")
         return
     if not transport:
-        print("No transport_stop1 found. Run step5_quest.py first.")
+        print("No transport_stop1 found. Run step 5 first.")
         return
 
     print(f"Player: {player_id}  |  Transport: {transport}\n")

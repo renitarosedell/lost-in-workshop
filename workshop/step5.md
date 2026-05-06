@@ -84,7 +84,7 @@ async def main() -> None:
     stop1_location = saved.get("stop1_location", "Glenwood South")
 
     if not player_id:
-        print("No player_id found. Run step4_memory.py first.")
+        print("No player_id found. Run step 4 first.")
         return
     if not a2a_url:
         print("A2A_SERVER_URL not set in .env. Ask your facilitator for the URL.")
@@ -157,7 +157,7 @@ The expert returns natural language. You convert it to a structured value (`"rid
 
 ## Make sure A2A_SERVER_URL is set
 
-Add this to your `.env` file (your facilitator provides the URL):
+Your `.env` should already have this from the event resources page:
 
 ```ini [.env]
 A2A_SERVER_URL=https://a2a-expert.redriver-3b1b0600.eastus2.azurecontainerapps.io

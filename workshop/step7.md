@@ -204,7 +204,7 @@ async def main() -> None:
     stop2_location = saved.get("stop2_location", "Cameron Village")
 
     if not player_id:
-        print("No player_id found. Run step4_memory.py first.")
+        print("No player_id found. Run step 4 first.")
         return
     if not A2A_SERVER_URL or not CITY_GUIDE_URL:
         print("Missing A2A URLs. Set A2A_SERVER_URL and CITY_GUIDE_URL in .env")
