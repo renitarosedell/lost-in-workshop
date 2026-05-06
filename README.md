@@ -1,86 +1,59 @@
-# Lost in Workshop - Raleigh
+# Lost in Raleigh — AI Agent Workshop 🚀
 
-A hands-on workshop for building AI agents that connect to a Model Context Protocol (MCP) server to play **Lost in San Francisco** — a narrative quest game where attendees guide their agent across the city to reach Fort Mason in time for Build.
+[View the published workshop](https://roelantd.github.io/lost-in-workshop/)
+
+## Workshop Overview
+
+In this hands-on 90-minute session you will build a Python AI agent that navigates a quest through Raleigh, NC. Starting from a simple Azure OpenAI connection, you'll progressively add capabilities until your agent can autonomously complete a multi-leg city quest.
+
+By the end of the workshop you will have built an agent that:
+
+- Connects to **Azure AI Foundry** and holds a conversation
+- Discovers and calls live tools via the **Model Context Protocol (MCP)**
+- Persists context across turns using **memory**
+- Delegates to a specialist via the **Agent-to-Agent (A2A) protocol**
+- Coordinates multiple expert agents through **multi-agent orchestration**
+
+## Agenda
+
+| Step | Topic | Time |
+| --- | --- | --- |
+| Step 1 | Connect to Azure OpenAI | ~10 min |
+| Step 2 | Hello Raleigh | ~10 min |
+| Step 3 | MCP Game Server | ~15 min |
+| Step 4 | Memory | ~10 min |
+| Step 5 | A2A Transport Expert | ~15 min |
+| Step 6 | Multi-turn Conversations | ~10 min |
+| Step 7 | Orchestration | ~20 min |
+| Step 8 | Complete the Quest | ~5 min |
+
+## What You'll Need
+
+- A browser and access to the [Azure Portal](https://portal.azure.com/)
+- An [Azure subscription](https://roelantd.github.io/lost-in-workshop/workshop/get-azure) — provided at the event or sign up for a free trial
+- A [development environment](https://roelantd.github.io/lost-in-workshop/workshop/dev-setup) with Python 3.11+ installed
+- Familiarity with Python basics (no deep AI background required)
 
 ## What's in this repo
 
 | Folder | Purpose |
 | --- | --- |
-| [lost-in-sf/](lost-in-sf/) | The MCP game server + FastAPI admin UI that powers the quest. |
-| [sample-agent/](sample-agent/) | A reference Python agent (Microsoft Agent Framework) that plays the game. |
-| [city-guide/](city-guide/) | 20-chapter San Francisco guide used as source material for the RAG challenge. |
-| [workshop/](workshop/) | Workshop outline and facilitator notes. |
-| [instructions/](instructions/) | Build prompt that specifies the MCP server behaviour. |
+| [workshop/](workshop/) | Step-by-step workshop guide and facilitator notes. |
+| [sample-agent/](sample-agent/) | Reference Python agent (Microsoft Agent Framework) used throughout the workshop. |
+| [lost-in-raleigh/](lost-in-raleigh/) | MCP game server + FastAPI admin UI that powers the quest. |
+| [a2a-expert/](a2a-expert/) | A2A transport expert agent consulted in Step 5. |
+| [city-guide/](city-guide/) | 20-chapter Raleigh city guide used as source material for the quest. |
+| [bundles/](bundles/) | Pre-built document bundles served to agents during the quest. |
+| [instructions/](instructions/) | MCP server prompt that defines the game behaviour. |
 
-## How the game works
+## Workshop Goal
 
-1. An attendee runs their agent, which connects to the MCP server.
-2. The agent calls `register_player` and is randomly assigned a quest (e.g. *The Mission Run*, *Chinatown Express*).
-3. The quest has three legs:
-   - **Stop 1 — A2A challenge:** agent asks a local "expert" for the best transport option.
-   - **Stop 2 — RAG challenge:** agent reads a bundle of documents and extracts a secret code.
-   - **Final leg:** agent chooses transport to Fort Mason and finishes the quest.
-4. Score = `1000 − 50 × failed_code_attempts − 10 × minutes_taken` (floored at 0).
-5. Top 10 appear on the leaderboard in the admin UI.
+By the end of this session you'll know how to:
 
-## Quick start
+1. Create and configure an agent with Azure AI Foundry
+2. Connect it to external tools via MCP
+3. Persist state across conversation turns
+4. Delegate tasks to specialist agents using A2A
+5. Orchestrate multiple agents to solve a complex, multi-leg problem
 
-### 1. Run the MCP server
-
-```bash
-cd lost-in-sf
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python server.py       # serves MCP at http://localhost:8000/mcp
-```
-
-In another terminal, launch the admin UI to edit quests and watch the leaderboard:
-
-```bash
-python admin.py        # http://localhost:8080
-```
-
-See [lost-in-sf/README.md](lost-in-sf/README.md) for the full tool reference and config options.
-
-### 2. Run the sample agent
-
-The sample agent uses Azure OpenAI via the Microsoft Agent Framework. Create a `.env` in `sample-agent/` with:
-
-```env
-AZURE_OPENAI_ENDPOINT=https://<your-resource>.openai.azure.com
-AZURE_OPENAI_API_KEY=<your-key>
-AZURE_OPENAI_DEPLOYMENT_NAME=<your-deployment>
-```
-
-Then:
-
-```bash
-cd sample-agent
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python agent.py
-```
-
-The agent connects to the MCP server at `http://localhost:8000/mcp`, registers a player, and plays the quest interactively. It demonstrates a `ContextProvider` that persists the assigned `player_id` across turns.
-
-## Workshop flow
-
-High-level workshop steps (see [workshop/workshop.md](workshop/workshop.md)):
-
-1. Create a hello-world agent.
-2. Connect it to the gaming MCP server.
-3. Add memory so the agent remembers its `player_id`.
-
-## Prerequisites
-
-- Python 3.11+
-- An Azure OpenAI deployment (or swap in `FoundryChatClient` — see [sample-agent/agent.py](sample-agent/agent.py))
-- Network access to the MCP server (local by default)
-
-## Repository notes
-
-- Game state lives in `lost-in-sf/state.json` and is gitignored — reset it from the admin UI or by deleting the file.
-- Quest content lives in `lost-in-sf/quests.json` and can be edited live through the admin UI.
-- The server is intended for short-lived workshop use, not production.
+You'll walk away with a working agent that can autonomously navigate Raleigh and complete the quest.
