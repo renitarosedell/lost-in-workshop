@@ -36,7 +36,7 @@ All items should be ✅ before attendees arrive. This checklist takes ~15 minute
   Expected: HTTP 200 with `Content-Type: application/zip`.
 
 - [ ] Admin dashboard loads: `https://<GAME_URL>/admin`
-  Expected: "Lost in Raleigh — Admin" page with an empty players table.
+  Expected: "Lost in Raleigh - Admin" page with an empty players table.
 
 ---
 
@@ -108,6 +108,6 @@ All items should be ✅ before attendees arrive. This checklist takes ~15 minute
 
 ---
 
-## ✅ All checks complete — you are ready!
+## ✅ All checks complete - you are ready!
 
 Good luck, and remember: the leaderboard auto-refreshes every 5 seconds.

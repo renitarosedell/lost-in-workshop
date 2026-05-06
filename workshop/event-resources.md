@@ -5,7 +5,7 @@ description: URLs and access information for all shared services running during 
 
 # Event Resources
 
-This page lists all the URLs and shared endpoints you will need during the workshop. Your facilitator will fill these in before the event — bookmark this page.
+This page lists all the URLs and shared endpoints you will need during the workshop. Your facilitator will fill these in before the event - bookmark this page.
 
 ::: info These values go in your `.env` file
 Copy each URL into the matching variable in `sample-agent/.env`. See [Developer Environment Setup](dev-setup) for the full setup guide.
@@ -86,7 +86,7 @@ You create this yourself during the [Azure AI Foundry Setup](azure-foundry-setup
 Once you have all the values from your facilitator, your `.env` file should look like this:
 
 ```ini [sample-agent/.env]
-# Azure OpenAI (your own — from AI Foundry)
+# Azure OpenAI (your own - from AI Foundry)
 AZURE_OPENAI_ENDPOINT=https://your-hub.openai.azure.com/
 AZURE_OPENAI_API_KEY=your-key-here
 AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o-mini

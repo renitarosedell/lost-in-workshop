@@ -5,7 +5,7 @@ description: Four additional challenges to extend your Lost in Raleigh agent aft
 
 # Bonus Exercises
 
-Finished the main quest? Here are four bonus challenges. Each is self-contained — do them in any order.
+Finished the main quest? Here are four bonus challenges. Each is self-contained - do them in any order.
 
 | Bonus | Challenge | Skill |
 |-------|-----------|-------|
@@ -16,7 +16,7 @@ Finished the main quest? Here are four bonus challenges. Each is self-contained 
 
 ---
 
-## Bonus A — Build Your Own A2A Transport Expert <Badge type="tip" text="Intermediate" />
+## Bonus A - Build Your Own A2A Transport Expert <Badge type="tip" text="Intermediate" />
 
 ::: info What you'll build
 Your own transport advice service, deployed locally and hooked into the game server.
@@ -113,7 +113,7 @@ PUT /api/players/<your-player-id>/a2a_url
 { "url": "https://your-ngrok-id.ngrok.io/a2a" }
 ```
 
-Then re-run `step5_quest.py` — your transport call now hits your own service.
+Then re-run `step5_quest.py` - your transport call now hits your own service.
 
 ::: tip Challenge
 Add a tool to your A2A expert that fetches the [GoRaleigh trip planner](https://goraleigh.org)
@@ -122,7 +122,7 @@ and uses the live schedule data to answer.
 
 ---
 
-## Bonus B — Streaming Responses <Badge type="tip" text="Beginner" />
+## Bonus B - Streaming Responses <Badge type="tip" text="Beginner" />
 
 ::: info What you'll add
 Stream tokens to the console as they arrive instead of waiting for the full response.
@@ -172,7 +172,7 @@ with Live(text, refresh_per_second=20) as live:
 
 ---
 
-## Bonus C — Multi-Agent Orchestration <Badge type="warning" text="Advanced" />
+## Bonus C - Multi-Agent Orchestration <Badge type="warning" text="Advanced" />
 
 ::: info What you'll build
 A **Planner** agent that breaks the quest into steps, and a **Runner** agent that executes
@@ -267,7 +267,7 @@ error message as context.
 
 ---
 
-## Bonus D — Eval Harness <Badge type="warning" text="Advanced" />
+## Bonus D - Eval Harness <Badge type="warning" text="Advanced" />
 
 ::: info What you'll build
 Run the full quest three times in parallel and produce a score comparison table.

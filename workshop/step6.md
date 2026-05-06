@@ -3,11 +3,11 @@ title: "Step 6: Multi-turn Conversations"
 description: Use a shared session to declare your transport choice across two conversational turns.
 ---
 
-# Step 6 — Multi-turn Conversations <Badge type="tip" text="~10 min" />
+# Step 6 - Multi-turn Conversations <Badge type="tip" text="~10 min" />
 
 ## The story so far
 
-You've picked your transport to stop 1. Now you need to officially declare it to the game server using the `declare_transport_stop1` tool. But you'll do it in a specific way: across **two conversational turns** — to learn how sessions carry context between calls.
+You've picked your transport to stop 1. Now you need to officially declare it to the game server using the `declare_transport_stop1` tool. But you'll do it in a specific way: across **two conversational turns** - to learn how sessions carry context between calls.
 
 ---
 
@@ -49,8 +49,8 @@ await agent.run(f"Declare transport={transport} for player {player_id}.", sessio
 ```
 
 But the two-turn pattern is more realistic for real applications:
-1. **Turn 1** — establish context or let the user confirm something
-2. **Turn 2** — take action based on that confirmed context
+1. **Turn 1** - establish context or let the user confirm something
+2. **Turn 2** - take action based on that confirmed context
 
 This mirrors how users actually interact with AI assistants: they say something, get confirmation, then say "yes, do it". The session makes that workflow work.
 
@@ -115,7 +115,7 @@ async def main() -> None:
         tools=[game_mcp],
     )
 
-    # A single session spans both turns — the agent remembers turn 1 in turn 2.
+    # A single session spans both turns - the agent remembers turn 1 in turn 2.
     session = agent.create_session()
 
     # Turn 1: establish context (no tool call yet)
@@ -158,7 +158,7 @@ turn1 = await agent.run("My transport choice is: rideshare. Confirm.", session=s
 turn2 = await agent.run("Now declare it.", session=session)  # knows from turn 1!
 ```
 
-Without `session=session` on turn 2, the agent would ask "declare what?" — it would have no context. With the shared session, it knows exactly what to declare.
+Without `session=session` on turn 2, the agent would ask "declare what?" - it would have no context. With the shared session, it knows exactly what to declare.
 
 ---
 
@@ -202,5 +202,5 @@ Saved stop2_location to memory.
 The quest is progressing. Next you'll coordinate two specialist agents to gather the information you need to complete it.
 
 ::: info Next step
-[Step 7 — Orchestration](step7) →
+[Step 7 - Orchestration](step7) →
 :::

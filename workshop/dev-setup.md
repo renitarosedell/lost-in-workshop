@@ -17,8 +17,8 @@ This page walks you through everything you need on your laptop before the first 
 |---|---|---|
 | Python | 3.11 or later | `python --version` |
 | Git | any recent | `git --version` |
-| A code editor | VS Code recommended | — |
-| A terminal | PowerShell, bash, zsh | — |
+| A code editor | VS Code recommended | - |
+| A terminal | PowerShell, bash, zsh | - |
 
 ::: tip VS Code users
 Install the **Python** extension and the **Pylance** language server for the best experience.
@@ -51,7 +51,7 @@ python -m venv .venv
 :::
 
 ::: tip Your prompt changes
-Once the virtual environment is active, your terminal prompt shows `(.venv)`. All packages you install go into this isolated environment — they won't affect other Python projects on your machine.
+Once the virtual environment is active, your terminal prompt shows `(.venv)`. All packages you install go into this isolated environment - they won't affect other Python projects on your machine.
 :::
 
 ---
@@ -76,7 +76,7 @@ and enter the code XXXXXXXX to authenticate.
 1. Open that URL in your browser
 2. Enter the code shown in the terminal
 3. Sign in with the **same Microsoft account** that has your Azure subscription
-4. Return to the terminal — it will confirm you are logged in
+4. Return to the terminal - it will confirm you are logged in
 
 ::: tip Expected output
 ```json
@@ -104,10 +104,10 @@ pip install -r requirements.txt
 ```
 
 The `requirements.txt` includes:
-- `agent-framework` — Microsoft Agent Framework
-- `openai` — Azure OpenAI SDK
-- `python-dotenv` — loads `.env` files
-- `httpx` — async HTTP client (used for A2A calls)
+- `agent-framework` - Microsoft Agent Framework
+- `openai` - Azure OpenAI SDK
+- `python-dotenv` - loads `.env` files
+- `httpx` - async HTTP client (used for A2A calls)
 
 ::: details What is installed?
 Run `pip list` after the install to see the full list. The key packages are `agent-framework`, `openai`, and `httpx`.
@@ -132,14 +132,14 @@ Open `.env` in your editor. You will see placeholders for every variable:
 
 ```ini [.env]
 # ──────────────────────────────────────────────────
-#  Azure OpenAI — from your AI Foundry project
+#  Azure OpenAI - from your AI Foundry project
 # ──────────────────────────────────────────────────
 
 # The endpoint URL of your Azure OpenAI resource.
 # Looks like: https://your-hub-name.openai.azure.com/
 AZURE_OPENAI_ENDPOINT=
 
-# Your API key — copy Key 1 from AI Foundry → Settings → Keys and endpoints.
+# Your API key - copy Key 1 from AI Foundry → Settings → Keys and endpoints.
 AZURE_OPENAI_API_KEY=
 
 # The deployment name you chose when you deployed gpt-4o-mini.
@@ -147,7 +147,7 @@ AZURE_OPENAI_API_KEY=
 AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o-mini
 
 # ──────────────────────────────────────────────────
-#  Game server — provided by your facilitator
+#  Game server - provided by your facilitator
 # ──────────────────────────────────────────────────
 
 # The URL of the Lost in Raleigh MCP game server.
@@ -155,7 +155,7 @@ AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o-mini
 MCP_SERVER_URL=
 
 # ──────────────────────────────────────────────────
-#  A2A agents — provided by your facilitator
+#  A2A agents - provided by your facilitator
 # ──────────────────────────────────────────────────
 
 # URL of the transport expert A2A agent (used in Step 5).
@@ -173,8 +173,8 @@ CITY_GUIDE_URL=
 | `AZURE_OPENAI_API_KEY` | Same page → **Key 1** |
 | `AZURE_OPENAI_DEPLOYMENT_NAME` | The name you gave your deployment in AI Foundry (default: `gpt-4o-mini`) |
 | `MCP_SERVER_URL` | See [Event Resources](event-resources) |
-| `A2A_SERVER_URL` | See [Event Resources](event-resources) — provided at Step 5 |
-| `CITY_GUIDE_URL` | See [Event Resources](event-resources) — provided at Step 7 |
+| `A2A_SERVER_URL` | See [Event Resources](event-resources) - provided at Step 5 |
+| `CITY_GUIDE_URL` | See [Event Resources](event-resources) - provided at Step 7 |
 
 ::: danger Keep your .env private
 `.env` is already in `.gitignore`. Never paste your API key into a file that gets committed, posted in chat, or shared on screen.

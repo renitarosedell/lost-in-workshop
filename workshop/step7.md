@@ -3,7 +3,7 @@ title: "Step 7: Orchestration"
 description: Coordinate two specialist A2A agents in sequence, then submit the secret code to the game server.
 ---
 
-# Step 7 — Orchestration <Badge type="warning" text="~20 min" />
+# Step 7 - Orchestration <Badge type="warning" text="~20 min" />
 
 ## The story so far
 
@@ -12,7 +12,7 @@ You've reached stop 1 and the game server has unlocked stop 2. To progress, you 
 2. Find the secret code hidden somewhere in the city guide documents
 3. Submit that code to the game server
 
-You'll do this by **orchestrating two A2A agents in sequence** — the transport expert and a city guide expert — before using an MCP agent to submit the code.
+You'll do this by **orchestrating two A2A agents in sequence** - the transport expert and a city guide expert - before using an MCP agent to submit the code.
 
 ---
 
@@ -27,12 +27,12 @@ You'll do this by **orchestrating two A2A agents in sequence** — the transport
 
 ## What is orchestration?
 
-**Orchestration** is when your code coordinates multiple agents — deciding who to call, in what order, and what to do with each result. It's the difference between:
+**Orchestration** is when your code coordinates multiple agents - deciding who to call, in what order, and what to do with each result. It's the difference between:
 
 - A single agent that tries to do everything (brittle, hard to debug)
 - A coordinator that routes tasks to specialists (composable, maintainable)
 
-In this step your code acts as the orchestrator. It doesn't call a model to decide what to do next — *you* write that logic in Python. The agents you call are the ones that do the reasoning.
+In this step your code acts as the orchestrator. It doesn't call a model to decide what to do next - *you* write that logic in Python. The agents you call are the ones that do the reasoning.
 
 ```
 Your code (orchestrator)
@@ -50,8 +50,8 @@ Your code (orchestrator)
 
 Each specialist has a **focused system prompt** and **relevant knowledge**:
 
-- The **Transport Expert** knows Raleigh bus routes, bike lanes, and rideshare pricing — it doesn't care about city history
-- The **City Guide** knows Raleigh neighbourhoods, landmarks, and has been trained on the quest reference codes — it doesn't know about transport
+- The **Transport Expert** knows Raleigh bus routes, bike lanes, and rideshare pricing - it doesn't care about city history
+- The **City Guide** knows Raleigh neighbourhoods, landmarks, and has been trained on the quest reference codes - it doesn't know about transport
 
 Mixing their knowledge into a single agent would make both worse. Specialisation is a fundamental principle of well-designed multi-agent systems.
 
@@ -118,7 +118,7 @@ async def main() -> None:
     print(f"Player: {player_id}\n")
 
     # ------------------------------------------------------------------
-    # 1. Transport Expert — best route for the final leg
+    # 1. Transport Expert - best route for the final leg
     # ------------------------------------------------------------------
     print("--- Transport Expert: final leg ---")
     transport_advice = await call_a2a(
@@ -141,7 +141,7 @@ async def main() -> None:
     print(f"\nFinal transport chosen: {transport_final}")
 
     # ------------------------------------------------------------------
-    # 2. City Guide — neighbourhood history + quest reference code
+    # 2. City Guide - neighbourhood history + quest reference code
     # ------------------------------------------------------------------
     print("\n--- City Guide: quest reference code ---")
     city_guide_response = await call_a2a(
@@ -151,7 +151,7 @@ async def main() -> None:
     )
     print(city_guide_response)
 
-    # Extract the reference code — uppercase alphanumeric, 6+ characters
+    # Extract the reference code - uppercase alphanumeric, 6+ characters
     code_match = re.search(r"\b([A-Z][A-Z0-9]{5,})\b", city_guide_response)
     if not code_match:
         print("\nCould not extract a reference code. Check the output above and retry.")
@@ -208,7 +208,7 @@ async def call_a2a(url: str, message: str) -> str:
     return text
 ```
 
-This helper wraps the two-step A2A pattern (discover → ask) into a reusable function. You reuse it for both the transport expert and the city guide — same pattern, different URLs and questions.
+This helper wraps the two-step A2A pattern (discover → ask) into a reusable function. You reuse it for both the transport expert and the city guide - same pattern, different URLs and questions.
 
 ### Make sure CITY_GUIDE_URL is set
 
@@ -263,8 +263,8 @@ You just ran a **three-stage workflow** involving:
 2. An HTTP call to a remote A2A city guide
 3. An MCP tool call to the local game server agent
 
-No single component knew about the others. Your Python code was the orchestrator — directing traffic, passing outputs between stages, and deciding what to do with the results. This is exactly how production multi-agent systems are built.
+No single component knew about the others. Your Python code was the orchestrator - directing traffic, passing outputs between stages, and deciding what to do with the results. This is exactly how production multi-agent systems are built.
 
 ::: info Next step
-[Step 8 — Complete the Quest](step8) →
+[Step 8 - Complete the Quest](step8) →
 :::

@@ -3,7 +3,7 @@ title: Workshop Guide
 description: Build a Python AI agent that navigates a quest through Raleigh, NC using MCP, A2A, and multi-agent orchestration.
 ---
 
-# Lost in Raleigh — Workshop Guide
+# Lost in Raleigh - Workshop Guide
 
 ::: info The workshop is split into individual step pages
 Use the sidebar on the left to jump to any step, or start from [Step 1](step1).

@@ -1,13 +1,13 @@
 ---
-title: "Step 5: A2A — Consult the Transport Expert"
+title: "Step 5: A2A - Consult the Transport Expert"
 description: Use the Agent-to-Agent (A2A) protocol to consult a remote expert agent about the best route.
 ---
 
-# Step 5 — A2A: Consult the Transport Expert <Badge type="warning" text="~15 min" />
+# Step 5 - A2A: Consult the Transport Expert <Badge type="warning" text="~15 min" />
 
 ## The story so far
 
-You know where you need to go — stop 1 of your quest. But how do you get there? Raleigh has buses, bikes, rideshare, and greenways. Rather than hardcoding the answer, your agent will consult a **remote expert agent** that specialises in Raleigh transport.
+You know where you need to go - stop 1 of your quest. But how do you get there? Raleigh has buses, bikes, rideshare, and greenways. Rather than hardcoding the answer, your agent will consult a **remote expert agent** that specialises in Raleigh transport.
 
 This is **Agent-to-Agent (A2A) communication**: one agent delegating to another.
 
@@ -22,7 +22,7 @@ This is **Agent-to-Agent (A2A) communication**: one agent delegating to another.
 
 ---
 
-## MCP vs A2A — what's the difference?
+## MCP vs A2A - what's the difference?
 
 | | MCP | A2A |
 |---|---|---|
@@ -31,16 +31,16 @@ This is **Agent-to-Agent (A2A) communication**: one agent delegating to another.
 | **Discovery** | Tool list fetched from the server | AgentCard (JSON descriptor) fetched from `/agent.json` |
 | **When to use** | Calling APIs, databases, calculators | Delegating reasoning to a specialist |
 
-**MCP** is for "do this specific thing" — call a function, write a record, fetch data.  
-**A2A** is for "figure this out for me" — ask another agent to reason about a complex question.
+**MCP** is for "do this specific thing" - call a function, write a record, fetch data.  
+**A2A** is for "figure this out for me" - ask another agent to reason about a complex question.
 
-The transport expert runs as a separate service with its own Azure OpenAI deployment, its own system prompt, and its own knowledge about Raleigh transit. Your agent doesn't know *how* it works — it just asks the question and trusts the answer.
+The transport expert runs as a separate service with its own Azure OpenAI deployment, its own system prompt, and its own knowledge about Raleigh transit. Your agent doesn't know *how* it works - it just asks the question and trusts the answer.
 
 ---
 
 ## What is an AgentCard?
 
-Before your agent can talk to the transport expert, it needs to know what the expert can do. The A2A standard defines an **AgentCard** — a JSON file hosted at `<base-url>/agent.json` that describes:
+Before your agent can talk to the transport expert, it needs to know what the expert can do. The A2A standard defines an **AgentCard** - a JSON file hosted at `<base-url>/agent.json` that describes:
 - The agent's name and description
 - What kinds of questions it can answer
 - What input/output formats it supports
@@ -130,21 +130,21 @@ asyncio.run(main())
 
 ### Walking through the code
 
-**Step 1 — AgentCard discovery:**
+**Step 1 - AgentCard discovery:**
 ```python
 resolver = A2ACardResolver(httpx_client=http_client, base_url=a2a_url)
 agent_card = await resolver.get_agent_card()
 ```
 This fetches `<a2a_url>/agent.json` and parses it into a structured object. It's the A2A equivalent of MCP's tool list discovery.
 
-**Step 2 — Ask the expert:**
+**Step 2 - Ask the expert:**
 ```python
 async with A2AAgent(...) as agent:
     response = await agent.run("What is the fastest way to get to Glenwood South...")
 ```
-`A2AAgent` is a *client-side* wrapper. It doesn't run a model locally — it sends your message to the remote expert agent over HTTP and waits for the reply.
+`A2AAgent` is a *client-side* wrapper. It doesn't run a model locally - it sends your message to the remote expert agent over HTTP and waits for the reply.
 
-**Step 3 — Parse the decision:**
+**Step 3 - Parse the decision:**
 ```python
 for transport_id, keyword in [...]:
     if keyword in advice.lower():
@@ -194,8 +194,8 @@ Saved transport_stop1 to memory.
 
 ## Key takeaway
 
-You just called a *remote AI agent* as if it were a function. The transport expert has its own model, its own knowledge, and its own system prompt — you just asked a question and got an expert answer. This is the power of the A2A pattern: you compose specialists without knowing how they work internally.
+You just called a *remote AI agent* as if it were a function. The transport expert has its own model, its own knowledge, and its own system prompt - you just asked a question and got an expert answer. This is the power of the A2A pattern: you compose specialists without knowing how they work internally.
 
 ::: info Next step
-[Step 6 — Multi-turn Conversations](step6) →
+[Step 6 - Multi-turn Conversations](step6) →
 :::

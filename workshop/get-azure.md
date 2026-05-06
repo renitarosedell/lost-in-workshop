@@ -12,10 +12,10 @@ In case you do not have an Azure subscription, this page shows you how to get on
 ## Azure Classroom <Badge type="tip" text="Recommended for this event" />
 
 ::: info This offer applies to Lost in Workshop events run by the Global AI Community.
-You will receive **$10 USD credit valid for 5 days** — plenty for this workshop.
+You will receive **$10 USD credit valid for 5 days** - plenty for this workshop.
 :::
 
-### Step 1 — Request subscription
+### Step 1 - Request subscription
 
 - Navigate to **[https://aka.ms/JoinEduLab](https://aka.ms/JoinEduLab)**
 - Sign in with a **Microsoft account** or **GitHub account**
@@ -32,7 +32,7 @@ Your facilitator will hand out invite codes at the start of the event. If you ha
 
 ---
 
-### Step 2 — Activate subscription
+### Step 2 - Activate subscription
 
 - Check your email for a message with the subject **"You have a request to take ownership of an Azure subscription"**
 
@@ -46,7 +46,7 @@ Your facilitator will hand out invite codes at the start of the event. If you ha
 
 ---
 
-### Step 3 — Happy hacking!
+### Step 3 - Happy hacking!
 
 - Subscription creation takes **2–5 minutes**
 - You will receive a second email with the subject **"Your Azure subscription is ready"**
@@ -70,7 +70,7 @@ You can see your subscription at [portal.azure.com](https://portal.azure.com). T
 
 #### Invite code already redeemed?
 
-Ask your facilitator for a fresh code — each code is single-use.
+Ask your facilitator for a fresh code - each code is single-use.
 
 ---
 
@@ -79,7 +79,7 @@ Ask your facilitator for a fresh code — each code is single-use.
 If you are following this workshop independently (not at a live event), you can sign up for the Azure free trial:
 
 - Go to **[azure.microsoft.com/free](https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account)**
-- Sign in with a Microsoft account (or create one — it takes two minutes)
+- Sign in with a Microsoft account (or create one - it takes two minutes)
 - You receive **$200 USD credit for 30 days**
 
 ::: warning Credit card required for free trial

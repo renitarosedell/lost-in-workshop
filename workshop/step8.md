@@ -3,11 +3,11 @@ title: "Step 8: Complete the Quest"
 description: Declare your final transport choice and claim your score on the leaderboard.
 ---
 
-# Step 8 — Complete the Quest <Badge type="tip" text="~5 min" />
+# Step 8 - Complete the Quest <Badge type="tip" text="~5 min" />
 
 ## The story so far
 
-You've found the secret code and submitted it. There's one last step: declare how you're getting to the **NC Biotech Center** — the final destination. Once you do, the game server calculates your score and posts it to the leaderboard.
+You've found the secret code and submitted it. There's one last step: declare how you're getting to the **NC Biotech Center** - the final destination. Once you do, the game server calculates your score and posts it to the leaderboard.
 
 ---
 
@@ -114,11 +114,11 @@ $$\text{score} = \max\!\left(0,\ 1000 - (50 \times \text{failed\_code\_attempts}
 
 | Factor | Effect |
 |---|---|
-| Getting the code right first time | No penalty — full 1000 minus time |
+| Getting the code right first time | No penalty - full 1000 minus time |
 | Each failed code attempt | −50 points |
 | Each minute of elapsed time | −10 points |
 
-**A perfect score is 1000.** The fastest player with zero failed attempts wins. Speed matters — but not as much as accuracy.
+**A perfect score is 1000.** The fastest player with zero failed attempts wins. Speed matters - but not as much as accuracy.
 
 ---
 
@@ -126,7 +126,7 @@ $$\text{score} = \max\!\left(0,\ 1000 - (50 \times \text{failed\_code\_attempts}
 
 Your agent is on the leaderboard. Ask your facilitator for the dashboard URL to see your ranking.
 
-### What you built — the complete picture
+### What you built - the complete picture
 
 | Step | Concept | Technology |
 |---|---|---|
@@ -145,7 +145,7 @@ Your agent is on the leaderboard. Ask your facilitator for the dashboard URL to 
 
 See [Bonus Exercises](bonus-exercises) for four additional challenges:
 
-- **A** — Build your own A2A transport expert
-- **B** — Add streaming responses
-- **C** — Multi-agent orchestration with a Planner + Runner pattern
-- **D** — Eval harness: run the quest multiple times and compare scores
+- **A** - Build your own A2A transport expert
+- **B** - Add streaming responses
+- **C** - Multi-agent orchestration with a Planner + Runner pattern
+- **D** - Eval harness: run the quest multiple times and compare scores

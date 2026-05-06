@@ -3,7 +3,7 @@ title: Deployment Guide
 description: Deploy the game server and A2A expert to Azure Container Apps.
 ---
 
-# Deployment Guide — Azure Container Apps
+# Deployment Guide - Azure Container Apps
 
 <Badge type="danger" text="Facilitators only" />
 
@@ -21,7 +21,7 @@ All commands use the Azure CLI (`az`). Install it from [docs.microsoft.com/cli/a
 
 ---
 
-## 1 — Create Azure Container Registry
+## 1 - Create Azure Container Registry
 
 ```bash
 RESOURCE_GROUP=raleigh-workshop
@@ -48,7 +48,7 @@ az acr login --name $ACR_NAME
 
 ---
 
-## 2 — Build and push the game server image
+## 2 - Build and push the game server image
 
 From the repo root:
 ```bash
@@ -62,7 +62,7 @@ cd ..
 
 ---
 
-## 3 — Build and push the A2A expert image
+## 3 - Build and push the A2A expert image
 
 ```bash
 cd a2a-expert
@@ -75,7 +75,7 @@ cd ..
 
 ---
 
-## 4 — Create the Container Apps environment
+## 4 - Create the Container Apps environment
 
 ```bash
 ENVIRONMENT=raleigh-env
@@ -88,7 +88,7 @@ az containerapp env create \
 
 ---
 
-## 5 — Deploy the game server
+## 5 - Deploy the game server
 
 ```bash
 # Replace <acr-password> with the ACR admin password from:
@@ -131,7 +131,7 @@ curl https://$GAME_URL/mcp
 
 ---
 
-## 6 — Deploy the A2A expert
+## 6 - Deploy the A2A expert
 
 ```bash
 az containerapp create \
@@ -173,7 +173,7 @@ curl -X POST https://$A2A_URL/a2a \
 
 ---
 
-## 7 — Update city_config.yaml with live URLs
+## 7 - Update city_config.yaml with live URLs
 
 Edit `lost-in-raleigh/city_config.yaml` and replace the placeholder URLs in every quest:
 
@@ -201,7 +201,7 @@ az containerapp update \
 
 ---
 
-## 8 — Upload document bundles to Azure Blob Storage
+## 8 - Upload document bundles to Azure Blob Storage
 
 ```bash
 STORAGE_ACCOUNT=raleighbundles   # must be globally unique
@@ -234,7 +234,7 @@ echo "Bundle base URL: https://$STORAGE_ACCOUNT.blob.core.windows.net/bundles/ra
 
 ---
 
-## 9 — Share workshop URLs with attendees
+## 9 - Share workshop URLs with attendees
 
 Once everything is deployed, provide attendees with:
 
@@ -253,4 +253,4 @@ Paste these into the workshop Slack/Teams channel before the session starts.
 az group delete --name $RESOURCE_GROUP --yes --no-wait
 ```
 
-This removes all resources — Container Apps, ACR, storage account, and networking.
+This removes all resources - Container Apps, ACR, storage account, and networking.

@@ -1,13 +1,13 @@
 ---
 title: Instructor Guide
-description: End-to-end setup guide for workshop instructors — dependencies, deployment, and day-of operations.
+description: End-to-end setup guide for workshop instructors - dependencies, deployment, and day-of operations.
 ---
 
 # Instructor Guide
 
 <Badge type="danger" text="Facilitators only" />
 
-This guide walks you through everything needed to run a Lost in Workshop event from scratch — from provisioning Azure infrastructure to handing attendees their subscription codes.
+This guide walks you through everything needed to run a Lost in Workshop event from scratch - from provisioning Azure infrastructure to handing attendees their subscription codes.
 
 ::: info Page not linked in nav
 Share this URL directly with co-facilitators. It does not appear in the site navigation.
@@ -17,7 +17,7 @@ Share this URL directly with co-facilitators. It does not appear in the site nav
 All steps below are automated in `scripts/deploy.ps1`. Set up a config file once and then run the script with no arguments:
 
 ```powershell
-# First time only — copy the example and fill in your values
+# First time only - copy the example and fill in your values
 Copy-Item scripts\deploy.config.json.example scripts\deploy.config.json
 notepad scripts\deploy.config.json
 
@@ -25,7 +25,7 @@ notepad scripts\deploy.config.json
 .\scripts\deploy.ps1
 ```
 
-The config file (`scripts/deploy.config.json`) is gitignored — your API key will never be committed. The manual steps below explain what each phase does if you need to run them individually or troubleshoot.
+The config file (`scripts/deploy.config.json`) is gitignored - your API key will never be committed. The manual steps below explain what each phase does if you need to run them individually or troubleshoot.
 :::
 
 ---
@@ -34,7 +34,7 @@ The config file (`scripts/deploy.config.json`) is gitignored — your API key wi
 
 | Component | What it is | Where it runs |
 |---|---|---|
-| **Game server** (`lost-in-raleigh`) | FastMCP + FastAPI — manages players, quests, leaderboard | Azure Container App |
+| **Game server** (`lost-in-raleigh`) | FastMCP + FastAPI - manages players, quests, leaderboard | Azure Container App |
 | **A2A expert** (`a2a-expert`) | GPT-4o-mini powered transport advisor | Azure Container App |
 | **Document bundles** | ZIP files of city-guide chapters (one per quest) | Azure Blob Storage |
 | **Attendee agent** (`sample-agent`) | Python agent skeleton attendees build on | Attendee laptop |
@@ -51,7 +51,7 @@ The config file (`scripts/deploy.config.json`) is gitignored — your API key wi
 
 ---
 
-## Step 1 — Build the document bundles
+## Step 1 - Build the document bundles
 
 The document bundles are ZIP files of city-guide chapters. Each bundle contains one chapter with a hidden secret code that attendees must find.
 
@@ -79,12 +79,12 @@ The secret codes embedded in the bundles are:
 | The Warehouse Run | `TOBACCO55` |
 
 ::: warning Keep these private
-Do not share secret codes with attendees before or during the workshop. Codes are embedded in the prose of one chapter per bundle — finding them is part of the exercise.
+Do not share secret codes with attendees before or during the workshop. Codes are embedded in the prose of one chapter per bundle - finding them is part of the exercise.
 :::
 
 ---
 
-## Step 2 — Upload bundles to Azure Blob Storage
+## Step 2 - Upload bundles to Azure Blob Storage
 
 ```bash
 RESOURCE_GROUP=raleigh-workshop
@@ -126,7 +126,7 @@ curl -I "https://$STORAGE_ACCOUNT.blob.core.windows.net/bundles/glenwood_getaway
 
 ---
 
-## Step 3 — Deploy to Azure Container Apps
+## Step 3 - Deploy to Azure Container Apps
 
 See the full [Deployment Guide](deployment-guide) for detailed `az containerapp` commands.
 
@@ -147,12 +147,12 @@ docker push $ACR_LOGIN_SERVER/a2a-expert:latest
 ```
 
 After deploying, note these two URLs:
-- `GAME_URL` — the game server FQDN (e.g. `lost-in-raleigh.<env>.eastus2.azurecontainerapps.io`)
-- `A2A_URL` — the A2A expert FQDN
+- `GAME_URL` - the game server FQDN (e.g. `lost-in-raleigh.<env>.eastus2.azurecontainerapps.io`)
+- `A2A_URL` - the A2A expert FQDN
 
 ---
 
-## Step 4 — Update city_config.yaml with live URLs
+## Step 4 - Update city_config.yaml with live URLs
 
 Edit `lost-in-raleigh/city_config.yaml` and replace every placeholder with your deployed URLs:
 
@@ -179,7 +179,7 @@ az containerapp update \
 
 ---
 
-## Step 5 — Set attendee environment variables
+## Step 5 - Set attendee environment variables
 
 Attendees need two values in their `.env` file:
 
@@ -193,7 +193,7 @@ Post `MCP_SERVER_URL` to the workshop Slack/Teams channel and on the room screen
 
 ---
 
-## Step 6 — Install attendee Python dependencies (local check)
+## Step 6 - Install attendee Python dependencies (local check)
 
 Attendees run this themselves during [Azure Foundry Setup](azure-foundry-setup) step 8. But if you want to pre-verify the environment works:
 
@@ -210,10 +210,10 @@ pip install -r requirements.txt
 ```
 
 `requirements.txt` installs:
-- `agent-framework` — the scaffolding used in workshop steps
-- `openai` — Azure OpenAI client
-- `python-dotenv` — `.env` file loading
-- `httpx` + `requests` — HTTP clients for MCP and A2A calls
+- `agent-framework` - the scaffolding used in workshop steps
+- `openai` - Azure OpenAI client
+- `python-dotenv` - `.env` file loading
+- `httpx` + `requests` - HTTP clients for MCP and A2A calls
 
 ::: tip Smoke test
 ```bash
@@ -224,7 +224,7 @@ python steps/step1_foundry_test.py
 
 ---
 
-## Step 7 — Pre-event checks (day of)
+## Step 7 - Pre-event checks (day of)
 
 See the [Pre-Event Checklist](pre-event-checklist) for the full day-of checklist. Key items:
 
