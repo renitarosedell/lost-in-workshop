@@ -2,9 +2,28 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
+from urllib.parse import urlparse
 
 from agent_framework import ContextProvider, SessionContext
+
+
+def get_base_endpoint(endpoint: str | None = None) -> str:
+    """Return just the scheme+host of an Azure OpenAI endpoint URL.
+
+    Normalises both the short form (``https://host/``) and the full Target URI
+    that Azure AI Foundry shows by default::
+
+        https://host/openai/deployments/model/chat/completions?api-version=...
+
+    Both forms are accepted so attendees can paste the Target URI directly
+    from AI Foundry without having to trim it.
+    """
+    if endpoint is None:
+        endpoint = os.environ["AZURE_OPENAI_ENDPOINT"]
+    parsed = urlparse(endpoint)
+    return f"{parsed.scheme}://{parsed.netloc}/"
 
 # memory.json lives alongside create-agent/ (one level up from steps/)
 MEMORY_FILE = Path(__file__).parent.parent / "memory.json"

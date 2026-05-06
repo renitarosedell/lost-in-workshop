@@ -65,6 +65,8 @@ from agent_framework import Agent, MCPStreamableHTTPTool
 from agent_framework.openai import OpenAIChatClient
 from dotenv import load_dotenv
 
+from shared import get_base_endpoint
+
 load_dotenv()
 
 MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "http://localhost:8000/mcp")
@@ -73,7 +75,7 @@ MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "http://localhost:8000/mcp")
 async def main() -> None:
     # 1. Create the model client
     client = OpenAIChatClient(
-        azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+        azure_endpoint=get_base_endpoint(),
         api_key=os.environ["AZURE_OPENAI_API_KEY"],
         model=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
     )

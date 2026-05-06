@@ -44,7 +44,7 @@ from agent_framework.a2a import A2AAgent
 from agent_framework.openai import OpenAIChatClient
 from dotenv import load_dotenv
 
-from shared import FileContextProvider
+from shared import FileContextProvider, get_base_endpoint
 
 load_dotenv()
 
@@ -128,7 +128,7 @@ async def main() -> None:
     # ------------------------------------------------------------------
     print("\n--- Submitting code via MCP ---")
     client = OpenAIChatClient(
-        azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+        azure_endpoint=get_base_endpoint(),
         api_key=os.environ["AZURE_OPENAI_API_KEY"],
         model=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
     )
