@@ -36,15 +36,23 @@ By the end of the workshop you will have built an agent that:
 
 ## What's in this repo
 
+### For attendees
+
 | Folder | Purpose |
 | --- | --- |
-| [workshop/](workshop/) | Step-by-step workshop guide and facilitator notes. |
+| [workshop/](workshop/) | Step-by-step workshop guide. |
 | [create-agent/](create-agent/) | Reference Python agent (Microsoft Agent Framework) used throughout the workshop. |
-| [lost-in-raleigh/](lost-in-raleigh/) | MCP game server + FastAPI admin UI that powers the quest. |
-| [a2a-expert/](a2a-expert/) | A2A transport expert agent consulted in Step 5. |
 | [city-guide/](city-guide/) | 20-chapter Raleigh city guide used as source material for the quest. |
-| [bundles/](bundles/) | Pre-built document bundles served to agents during the quest. |
-| [instructions/](instructions/) | MCP server prompt that defines the game behaviour. |
+
+### For facilitators
+
+| Folder | Purpose |
+| --- | --- |
+| [facilitators/lost-in-raleigh/](facilitators/lost-in-raleigh/) | MCP game server + FastAPI admin UI that powers the quest. |
+| [facilitators/a2a-expert/](facilitators/a2a-expert/) | A2A transport expert agent consulted in Step 5. |
+| [facilitators/bundles/](facilitators/bundles/) | Pre-built document bundles served to agents during the quest. |
+| [facilitators/instructions/](facilitators/instructions/) | MCP server prompt that defines the game behaviour. |
+| [facilitators/scripts/](facilitators/scripts/) | Deployment automation scripts. |
 
 ## Workshop Goal
 

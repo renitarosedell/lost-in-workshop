@@ -55,14 +55,14 @@ here. They are plan/tasks-level concerns, not spec-level deficiencies:
 | **I1** — `begin_session` tool in plan not mentioned in spec | HIGH | Resolve in plan.md: remove or add spec FR |
 | **I2** — `start_quest` tool in plan not mentioned in spec | HIGH | Resolve in plan.md: merge into `register_player` response or add FR |
 | **I5** — A2A expert URL delivery mechanism | MEDIUM | Resolved: FR-009 now explicitly states URL delivered by game server |
-| **G1** — `sample-agent/steps/` files have no creation task | HIGH | Add sub-task to T4.2 in tasks.md |
+| **G1** — `create-agent/steps/` files have no creation task | HIGH | Add sub-task to T4.2 in tasks.md |
 | **I3** — `city-guide/` has SF content; plan expects `raleigh/` subdir | HIGH | Add reorganization task before T2.1 |
 | **I4** — `lost-in-sf/` migration path unclear | MEDIUM | Clarify in T1.1 |
 | **G2** — Scoring formula has no explicit implementation task | MEDIUM | Add bullet to T1.3 |
 | **G3** — T5.5 (Bonus E) is truncated in tasks.md | MEDIUM | Complete T5.5 |
 | **G4** — No concurrency validation task | MEDIUM | Add to T6.4 checklist |
 | **A1** — Bundle size NFR not in T2.2 Done-when | LOW | Add to T2.2 |
-| **G5** — `sample-agent/agent.py` update not tasked | LOW | Add sub-task |
+| **G5** — `create-agent/agent.py` update not tasked | LOW | Add sub-task |
 | **A2** — "Reset player" semantics not defined in spec | LOW | Resolved: Assumptions section now clarifies full reset |
 
 ---

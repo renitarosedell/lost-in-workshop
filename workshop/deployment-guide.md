@@ -52,12 +52,12 @@ az acr login --name $ACR_NAME
 
 From the repo root:
 ```bash
-cd lost-in-raleigh
+cd facilitators/lost-in-raleigh
 
 docker build -t $ACR_LOGIN_SERVER/lost-in-raleigh:latest .
 docker push $ACR_LOGIN_SERVER/lost-in-raleigh:latest
 
-cd ..
+cd ../..
 ```
 
 ---
@@ -65,12 +65,12 @@ cd ..
 ## 3 - Build and push the A2A expert image
 
 ```bash
-cd a2a-expert
+cd facilitators/a2a-expert
 
 docker build -t $ACR_LOGIN_SERVER/a2a-expert:latest .
 docker push $ACR_LOGIN_SERVER/a2a-expert:latest
 
-cd ..
+cd ../..
 ```
 
 ---
@@ -175,7 +175,7 @@ curl -X POST https://$A2A_URL/a2a \
 
 ## 7 - Update city_config.yaml with live URLs
 
-Edit `lost-in-raleigh/city_config.yaml` and replace the placeholder URLs in every quest:
+Edit `facilitators/lost-in-raleigh/city_config.yaml` and replace the placeholder URLs in every quest:
 
 ```yaml
 # Before:
@@ -190,7 +190,7 @@ document_bundle_url: "https://<storage-account>.blob.core.windows.net/bundles/ra
 Then rebuild and redeploy the game server image (repeat step 2 and run `az containerapp update`):
 
 ```bash
-docker build -t $ACR_LOGIN_SERVER/lost-in-raleigh:latest lost-in-raleigh/
+docker build -t $ACR_LOGIN_SERVER/lost-in-raleigh:latest facilitators/lost-in-raleigh/
 docker push $ACR_LOGIN_SERVER/lost-in-raleigh:latest
 
 az containerapp update \
@@ -218,10 +218,10 @@ az storage container create \
   --public-access blob
 
 # Build bundles locally first:
-python lost-in-raleigh/build_bundles.py
+python facilitators/lost-in-raleigh/build_bundles.py
 
 # Upload each ZIP:
-for f in bundles/raleigh/*.zip; do
+for f in facilitators/bundles/raleigh/*.zip; do
   az storage blob upload \
     --account-name $STORAGE_ACCOUNT \
     --container-name bundles \

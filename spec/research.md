@@ -222,7 +222,7 @@ All issues from the prior `speckit.analyze` report are resolved:
 | I1 — `begin_session` unexplained | Removed; not in spec or plan |
 | I2 — `start_quest` not in spec | Removed; data merged into `register_player` response |
 | I5 — A2A URL delivery | `register_player` response includes `a2a_expert_url` from config |
-| G1 — `sample-agent/steps/` not tasked | Add to tasks as sub-task under T4.2 |
+| G1 — `create-agent/steps/` not tasked | Add to tasks as sub-task under T4.2 |
 | I3 — SF content in city-guide/ | Add T0.1: reorganise to `city-guide/raleigh/` |
 | I4 — lost-in-sf/ migration | `lost-in-sf/` on `lost-in-raleigh` branch; refactor in T1.1 |
 | G2 — Scoring not explicitly tasked | Add bullet to T1.3; compliance gate covers it |

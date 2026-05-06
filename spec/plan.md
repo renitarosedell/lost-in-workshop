@@ -60,7 +60,7 @@ chapters; 4 bonus exercises; 5 workshop steps + Step 1 standalone guide.
 | 2 | **Agent Framework**: Microsoft Agent Framework only; bare `openai` permitted only in `step2_hello_world.py` | ✅ PASS | No other framework appears; Step 2 raw-OpenAI exception documented |
 | 3 | **Model Provider**: Azure OpenAI via AI Foundry only; no `api.openai.com` or `ml.azure.com` | ✅ PASS | `ai.azure.com` is the sole entry point; East US 2 default region |
 | 4 | **City-Agnostic Architecture**: all city-specific values in `city_config.yaml`; none hardcoded in server or agent code | ✅ PASS | Verified in server design; enforced by compliance gate `grep` check |
-| 5 | **Fallback Code Guarantee**: every step (1–5) has complete, tested, copy-paste-ready Python | ✅ PASS | `sample-agent/steps/step[1-5]_*.py` files; validated by T4.3 |
+| 5 | **Fallback Code Guarantee**: every step (1–5) has complete, tested, copy-paste-ready Python | ✅ PASS | `create-agent/steps/step[1-5]_*.py` files; validated by T4.3 |
 | 6 | **Non-Blocking Step Design**: fallback for step N produces same artifact as live path | ✅ PASS | `player_id` and all downstream artifacts produced by fallback steps |
 | 7 | **Infrastructure Boundary**: server/admin code on separate branch; in `.gitignore` on attendee branch | ✅ PASS | `lost-in-raleigh/` and `a2a-expert/` gitignored on `lost-in-raleigh` branch |
 | 8 | **Scoring Formula**: `max(0, 1000 − (50 × failed_code_attempts) − (10 × minutes_taken))` immutable | ✅ PASS | Implemented in `server.py` `declare_transport_final` handler; formula not configurable |
@@ -97,7 +97,7 @@ lost-in-workshop-v2/
 ├── .gitignore                        # gitignores lost-in-<city>/ and a2a-expert/
 ├── city-guide/
 │   └── raleigh/                      # 20 Markdown chapters about Raleigh
-├── sample-agent/
+├── create-agent/
 │   ├── steps/
 │   │   ├── step1_foundry_test.py     # Azure connectivity test (Step 1)
 │   │   ├── step2_hello_world.py      # Bare OpenAI hello-world (Step 2 only)

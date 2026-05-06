@@ -19,7 +19,7 @@
 ```bash
 git clone https://github.com/<org>/lost-in-workshop-v2.git
 cd lost-in-workshop-v2
-git checkout lost-in-raleigh   # attendee branch (sample-agent + city-guide + workshop docs)
+git checkout lost-in-raleigh   # attendee branch (create-agent + city-guide + workshop docs)
 # OR
 git checkout admin             # organiser branch (server + A2A expert)
 ```
@@ -31,7 +31,7 @@ git checkout admin             # organiser branch (server + A2A expert)
 ### Set up the sample agent
 
 ```bash
-cd sample-agent
+cd create-agent
 python -m venv .venv
 # Windows:
 .venv\Scripts\activate
@@ -144,7 +144,7 @@ No code changes are required. See Constitution §4 (City-Agnostic Architecture).
 Run the step 5 fallback against the live server to confirm end-to-end functionality:
 
 ```bash
-cd sample-agent
+cd create-agent
 python steps/step5_quest.py
 ```
 
@@ -172,7 +172,7 @@ This is the T4.3 validation run. Fix any failures before event day.
 | `lost-in-raleigh/city_config.yaml` | Raleigh city + quest configuration |
 | `lost-in-raleigh/server.py` | FastMCP game server |
 | `lost-in-raleigh/admin.py` | Admin dashboard |
-| `sample-agent/steps/` | Progressive step fallback code |
+| `create-agent/steps/` | Progressive step fallback code |
 | `workshop/workshop.md` | Attendee step-by-step guide |
 | `workshop/azure-foundry-setup.md` | Azure setup guide (Step 1) |
 | `workshop/bonus-exercises.md` | Bonus A–D instructions |

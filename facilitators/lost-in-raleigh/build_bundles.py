@@ -22,9 +22,10 @@ from __future__ import annotations
 import zipfile
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+FACILITATORS = Path(__file__).resolve().parent.parent  # .../facilitators/
+ROOT = FACILITATORS.parent                             # repo root
 CITY_GUIDE = ROOT / "city-guide" / "raleigh"
-BUNDLES_OUT = ROOT / "bundles" / "raleigh"
+BUNDLES_OUT = FACILITATORS / "bundles" / "raleigh"
 
 # ─── Quest bundle definitions ───────────────────────────────────────────────
 # Each entry maps quest id -> list of chapter filenames to include.

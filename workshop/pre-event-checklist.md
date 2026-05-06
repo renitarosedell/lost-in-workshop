@@ -100,7 +100,7 @@ All items should be ✅ before attendees arrive. This checklist takes ~15 minute
 ::: warning Have a local fallback ready
 - [ ] You have a local copy of the game server that can run offline:
   ```bash
-  cd lost-in-raleigh
+  cd facilitators/lost-in-raleigh
   python server.py
   ```
 - [ ] You have printed copies of the `.env.example` with the fallback localhost URL in case of network issues.

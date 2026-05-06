@@ -37,7 +37,7 @@
 
 **Goal**: A first-time attendee follows the five-step workshop guide, builds a working agent, completes the Raleigh quest, and has their final score appear on the leaderboard — in 60–90 minutes.
 
-**Independent Test**: Given only `workshop/workshop.md` and a pre-filled `sample-agent/.env.example`, a first-time attendee completes all five steps and sees their score on the leaderboard without facilitator intervention.
+**Independent Test**: Given only `workshop/workshop.md` and a pre-filled `create-agent/.env.example`, a first-time attendee completes all five steps and sees their score on the leaderboard without facilitator intervention.
 
 ### Infrastructure needed by US1
 
@@ -52,18 +52,18 @@
 
 ### Fallback step files for US1
 
-- [X] T011 [P] [US1] Create `sample-agent/steps/step1_foundry_test.py` — Azure OpenAI connectivity test using bare `AzureOpenAI` client; reads endpoint/key/deployment from `.env`; prints confirmation on success
-- [X] T012 [P] [US1] Create `sample-agent/steps/step2_hello_world.py` — bare `AzureOpenAI` client answering "What is Raleigh famous for?"; no agent framework (constitution principle 2 baseline exception)
-- [X] T013 [US1] Create `sample-agent/steps/step3_mcp_connect.py` — `MCPToolProvider` pointing at game server URL; calls `register_player`; prints returned `player_id` and quest assignment including A2A expert URL
-- [X] T014 [US1] Create `sample-agent/steps/step4_memory.py` — adds `FileContextProvider` persisting `player_id` to local JSON; verifies resume works after agent restart
-- [X] T015 [US1] Create `sample-agent/steps/step5_quest.py` — full quest loop: A2A call via `httpx.post` to `a2a_expert_url`, `declare_transport_stop1`, ZIP download + secret code extraction, `submit_secret_code`, `declare_transport_final`; prints final score
-- [X] T016 [US1] Create `sample-agent/agent.py` — single runnable reference agent combining all five steps in sequence; all constitution compliance gates satisfied
-- [X] T017 [P] [US1] Create `sample-agent/requirements.txt` (Microsoft Agent Framework, python-dotenv, httpx, requests) and `sample-agent/.env.example` with `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_DEPLOYMENT_NAME`, `MCP_SERVER_URL` pre-filled with live Raleigh server URL
+- [X] T011 [P] [US1] Create `create-agent/steps/step1_foundry_test.py` — Azure OpenAI connectivity test using bare `AzureOpenAI` client; reads endpoint/key/deployment from `.env`; prints confirmation on success
+- [X] T012 [P] [US1] Create `create-agent/steps/step2_hello_world.py` — bare `AzureOpenAI` client answering "What is Raleigh famous for?"; no agent framework (constitution principle 2 baseline exception)
+- [X] T013 [US1] Create `create-agent/steps/step3_mcp_connect.py` — `MCPToolProvider` pointing at game server URL; calls `register_player`; prints returned `player_id` and quest assignment including A2A expert URL
+- [X] T014 [US1] Create `create-agent/steps/step4_memory.py` — adds `FileContextProvider` persisting `player_id` to local JSON; verifies resume works after agent restart
+- [X] T015 [US1] Create `create-agent/steps/step5_quest.py` — full quest loop: A2A call via `httpx.post` to `a2a_expert_url`, `declare_transport_stop1`, ZIP download + secret code extraction, `submit_secret_code`, `declare_transport_final`; prints final score
+- [X] T016 [US1] Create `create-agent/agent.py` — single runnable reference agent combining all five steps in sequence; all constitution compliance gates satisfied
+- [X] T017 [P] [US1] Create `create-agent/requirements.txt` (Microsoft Agent Framework, python-dotenv, httpx, requests) and `create-agent/.env.example` with `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_DEPLOYMENT_NAME`, `MCP_SERVER_URL` pre-filled with live Raleigh server URL
 
 ### Workshop documentation for US1
 
 - [X] T018 [P] [US1] Write `workshop/azure-foundry-setup.md` — Step 1 guide covering: subscription code redemption, `ai.azure.com` sign-in, Resource Group (East US 2), Foundry Hub, Project, `gpt-4o-mini` deployment, endpoint/key/deployment-name retrieval, `.env` creation, one-line verification test; numbered sub-steps with expected visual outcome and troubleshooting note each; zero prior Azure experience assumed
-- [X] T019 [US1] Write `workshop/workshop.md` — full five-step guide; for each step: Concept (2–3 sentences), What to add (specific code changes), How to test it (exact command + expected output), Complete code (full copy-pasteable fallback); Step 2 uses bare `AzureOpenAI`; steps 3–5 use Microsoft Agent Framework; content must match the fallback files in `sample-agent/steps/`
+- [X] T019 [US1] Write `workshop/workshop.md` — full five-step guide; for each step: Concept (2–3 sentences), What to add (specific code changes), How to test it (exact command + expected output), Complete code (full copy-pasteable fallback); Step 2 uses bare `AzureOpenAI`; steps 3–5 use Microsoft Agent Framework; content must match the fallback files in `create-agent/steps/`
 
 ### Validation for US1
 
@@ -95,7 +95,7 @@
 - [X] T023 [P] [US3] Write `workshop/bonus-exercises.md` Bonus A — Build Your Own A2A Expert: explain `POST /a2a` contract; provide FastAPI + Microsoft Agent Framework starter code; document the ngrok tunnel override mechanism (attendee gets public URL → facilitator updates `a2a_expert_url` in `city_config.yaml` or via admin quest editor); reference `spec/contracts/a2a-protocol.md` Bonus A Extension section
 - [X] T024 [P] [US3] Write `workshop/bonus-exercises.md` Bonus B — Streaming Responses: show before/after diff for Microsoft Agent Framework streaming API; include console test that prints tokens as they arrive
 - [X] T025 [P] [US3] Write `workshop/bonus-exercises.md` Bonus C — Multi-Agent Orchestration: design Planner + Runner agents; explain message-passing interface; provide complete code for both agents completing the quest cooperatively
-- [X] T026 [P] [US3] Write `workshop/bonus-exercises.md` Bonus D — Evaluate Your Agent: provide `sample-agent/eval_harness.py` that runs the quest three times (resetting the player between runs); outputs table of run number, time to completion, failed code attempts, final score
+- [X] T026 [P] [US3] Write `workshop/bonus-exercises.md` Bonus D — Evaluate Your Agent: provide `create-agent/eval_harness.py` that runs the quest three times (resetting the player between runs); outputs table of run number, time to completion, failed code attempts, final score
 
 **Checkpoint**: US3 complete — all four bonus exercises independently testable; none require modifying core quest code.
 
@@ -158,9 +158,9 @@ T006  a2a-expert/expert.py
 T007  a2a-expert/requirements.txt + Dockerfile
 T008  city-guide/raleigh/ chapters 1–10
 T009  city-guide/raleigh/ chapters 11–20
-T011  sample-agent/steps/step1_foundry_test.py
-T012  sample-agent/steps/step2_hello_world.py
-T017  sample-agent/requirements.txt + .env.example
+T011  create-agent/steps/step1_foundry_test.py
+T012  create-agent/steps/step2_hello_world.py
+T017  create-agent/requirements.txt + .env.example
 T018  workshop/azure-foundry-setup.md
 
 # These run after T008+T009 complete:

@@ -27,7 +27,7 @@ MANIFEST
 env/
 
 # Deployment config (contains secrets — never commit)
-scripts/deploy.config.json
+facilitators/scripts/deploy.config.json
 venv/
 ENV/
 env.bak/
@@ -85,7 +85,7 @@ yarn-error.log*
 .vitepress/cache/
 
 # Project-specific
-lost-in-sf/state.json
+facilitators/lost-in-sf/state.json
 
 .github/
 .specify/

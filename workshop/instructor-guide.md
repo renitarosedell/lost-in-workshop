@@ -14,18 +14,18 @@ Share this URL directly with co-facilitators. It does not appear in the site nav
 :::
 
 ::: tip One-command deployment
-All steps below are automated in `scripts/deploy.ps1`. Set up a config file once and then run the script with no arguments:
+All steps below are automated in `facilitators/scripts/deploy.ps1`. Set up a config file once and then run the script with no arguments:
 
 ```powershell
 # First time only - copy the example and fill in your values
-Copy-Item scripts\deploy.config.json.example scripts\deploy.config.json
-notepad scripts\deploy.config.json
+Copy-Item facilitators\scripts\deploy.config.json.example facilitators\scripts\deploy.config.json
+notepad facilitators\scripts\deploy.config.json
 
 # Deploy everything
-.\scripts\deploy.ps1
+.\facilitators\scripts\deploy.ps1
 ```
 
-The config file (`scripts/deploy.config.json`) is gitignored, so your API key will never be committed. The manual steps below explain what each phase does if you need to run them individually or troubleshoot.
+The config file (`facilitators/scripts/deploy.config.json`) is gitignored, so your API key will never be committed. The manual steps below explain what each phase does if you need to run them individually or troubleshoot.
 :::
 
 ---
@@ -58,15 +58,15 @@ The document bundles are ZIP files of city-guide chapters. Each bundle contains 
 From the repo root:
 
 ```bash
-cd lost-in-raleigh
+cd facilitators/lost-in-raleigh
 python build_bundles.py
 ```
 
 ::: tip Expected output
 ```
-bundles/raleigh/glenwood_getaway.zip
-bundles/raleigh/museum_mile.zip
-bundles/raleigh/warehouse_run.zip
+facilitators/bundles/raleigh/glenwood_getaway.zip
+facilitators/bundles/raleigh/museum_mile.zip
+facilitators/bundles/raleigh/warehouse_run.zip
 ```
 :::
 
@@ -108,7 +108,7 @@ az storage container create \
 az storage blob upload-batch \
   --account-name $STORAGE_ACCOUNT \
   --destination bundles \
-  --source bundles/raleigh \
+  --source facilitators/bundles/raleigh \
   --pattern "*.zip"
 ```
 
@@ -138,8 +138,8 @@ az acr create --name $ACR_NAME --resource-group $RESOURCE_GROUP --sku Basic --ad
 az containerapp env create --name raleigh-env --resource-group $RESOURCE_GROUP --location $LOCATION
 
 # 2. Build and push both images
-docker build -t $ACR_LOGIN_SERVER/lost-in-raleigh:latest lost-in-raleigh/
-docker build -t $ACR_LOGIN_SERVER/a2a-expert:latest a2a-expert/
+docker build -t $ACR_LOGIN_SERVER/lost-in-raleigh:latest facilitators/lost-in-raleigh/
+docker build -t $ACR_LOGIN_SERVER/a2a-expert:latest facilitators/a2a-expert/
 docker push $ACR_LOGIN_SERVER/lost-in-raleigh:latest
 docker push $ACR_LOGIN_SERVER/a2a-expert:latest
 
@@ -154,7 +154,7 @@ After deploying, note these two URLs:
 
 ## Step 4 - Update city_config.yaml with live URLs
 
-Edit `lost-in-raleigh/city_config.yaml` and replace every placeholder with your deployed URLs:
+Edit `facilitators/lost-in-raleigh/city_config.yaml` and replace every placeholder with your deployed URLs:
 
 ```yaml
 # Replace:
@@ -169,7 +169,7 @@ document_bundle_url: "https://raleighworkshop.blob.core.windows.net/bundles/glen
 Then rebuild and redeploy the game server:
 
 ```bash
-docker build -t $ACR_LOGIN_SERVER/lost-in-raleigh:latest lost-in-raleigh/
+docker build -t $ACR_LOGIN_SERVER/lost-in-raleigh:latest facilitators/lost-in-raleigh/
 docker push $ACR_LOGIN_SERVER/lost-in-raleigh:latest
 az containerapp update \
   --name lost-in-raleigh \
