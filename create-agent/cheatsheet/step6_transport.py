@@ -111,6 +111,12 @@ async def main() -> None:
         memory._save({"stop2_location": stop2})
         print(f"\nNext stop: {stop2}")
         print("Saved stop2_location to memory.")
+    else:
+        print("\n[FAILED] Could not parse stop2_location from the agent response.")
+        print("The agent paraphrased the tool output instead of returning the raw JSON.")
+        print("Fix: update the agent instructions to say something like:")
+        print("  'Return the COMPLETE raw JSON response from the tool, do not summarise it.'")
+        print("Then re-run this script.")
 
     await game_mcp.close()
 
