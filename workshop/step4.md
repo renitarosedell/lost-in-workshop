@@ -140,10 +140,10 @@ This single addition wires the `FileContextProvider` into the agent lifecycle. O
 
 ```bash
 # First run - registers you
-python steps/step4_memory.py
+python my_step4.py
 
 # Second run - uses memory.json
-python steps/step4_memory.py
+python my_step4.py
 ```
 
 ::: tip Expected output - first run
