@@ -80,7 +80,7 @@ async def main() -> None:
         tools=[game_mcp],
     )
 
-    # A single session spans both turns — the agent remembers turn 1 in turn 2.
+    # A single session spans both turns — the agent remembers what is said turn 1 in turn 2.
     session = agent.create_session()
 
     # Turn 1: establish context (no tool call yet)

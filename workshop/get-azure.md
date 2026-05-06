@@ -17,6 +17,10 @@ You will receive **$10 USD credit valid for 5 days**, which is plenty for this w
 
 ### Step 1 - Request subscription
 
+::: warning Use a fresh account
+Use an e-mail address that does **not** already have an existing Azure subscription associated with it. If you are unsure, create a new [outlook.com](https://outlook.com) account just for this workshop.
+:::
+
 - Navigate to **[https://aka.ms/JoinEduLab](https://aka.ms/JoinEduLab)**
 - Sign in with a **Microsoft account** or **GitHub account**
 
