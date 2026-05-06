@@ -178,7 +178,25 @@ def declare_transport_stop1(
         if player is None:
             return _err(f"Unknown player_id: {player_id}")
         if player["milestones"]["stop1_at"] is not None:
-            return _err("Stop 1 already declared.")
+            # Already declared — return stop2 data again so the client can still parse it.
+            quest = _quest_index.get(player["quest_id"])
+            if quest is None:
+                return _err("Quest configuration not found.")
+            stop2 = quest["stop2"]
+            return {
+                "status": "stop1_already_declared",
+                "player_id": player_id,
+                "transport_used": player["transport_stop1"],
+                "stop2_location": stop2["location"]["name"],
+                "stop2_description": stop2["location"]["description"],
+                "stop2_narrative": stop2["narrative"],
+                "document_bundle_url": stop2["document_bundle_url"],
+                "next_action": (
+                    f"Download the document bundle at {stop2['document_bundle_url']}. "
+                    "Read the Markdown files to find the secret code, then call "
+                    "submit_secret_code(player_id, code)."
+                ),
+            }
         player["transport_stop1"] = transport
         player["milestones"]["stop1_at"] = utcnow_iso()
 
@@ -305,10 +323,30 @@ def declare_transport_final(
 if __name__ == "__main__":
     import uvicorn
     from starlette.applications import Starlette
-    from starlette.responses import RedirectResponse
+    from starlette.requests import Request
+    from starlette.responses import JSONResponse, RedirectResponse
     from starlette.routing import Mount, Route
 
     from admin import app as admin_app
+
+    async def player_stop2(request: Request) -> JSONResponse:
+        """Return stop2 data for a player — used by step 6 to reliably fetch the location."""
+        player_id = request.path_params["player_id"]
+        state = load_state()
+        player = _get_player(state, player_id)
+        if player is None:
+            return JSONResponse({"status": "error", "message": f"Unknown player_id: {player_id}"}, status_code=404)
+        if player["milestones"]["stop1_at"] is None:
+            return JSONResponse({"status": "error", "message": "Stop 1 not yet declared."}, status_code=400)
+        quest = _quest_index.get(player["quest_id"])
+        stop2 = quest["stop2"]
+        return JSONResponse({
+            "status": "ok",
+            "player_id": player_id,
+            "stop2_location": stop2["location"]["name"],
+            "stop2_description": stop2["location"]["description"],
+            "document_bundle_url": stop2["document_bundle_url"],
+        })
 
     mcp_asgi = mcp.http_app(transport="streamable-http")
 
@@ -317,6 +355,7 @@ if __name__ == "__main__":
         routes=[
             Route("/admin", lambda req: RedirectResponse(url="/admin/")),
             Mount("/admin", app=admin_app),
+            Route("/player/{player_id}/stop2", player_stop2),
             Mount("/", app=mcp_asgi),
         ],
     )

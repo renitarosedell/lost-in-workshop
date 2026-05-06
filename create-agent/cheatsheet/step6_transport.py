@@ -32,8 +32,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-import re
 
+import httpx
 from agent_framework import Agent, MCPStreamableHTTPTool
 from agent_framework.openai import OpenAIChatClient
 from dotenv import load_dotenv
@@ -103,20 +103,20 @@ async def main() -> None:
     )
     print(turn2.text or "")
 
-    # Extract next stop from the response for step 7
-    text = turn2.text or ""
-    stop2_match = re.search(r'"stop2_location"\s*:\s*"([^"]+)"', text)
-    if stop2_match:
-        stop2 = stop2_match.group(1)
+    # Fetch stop2 directly from the server — reliable, no LLM text parsing needed.
+    game_base = MCP_SERVER_URL.replace("/mcp", "")
+    async with httpx.AsyncClient(timeout=10.0) as http:
+        resp = await http.get(f"{game_base}/player/{player_id}/stop2")
+        data = resp.json()
+
+    if data.get("stop2_location"):
+        stop2 = data["stop2_location"]
         memory._save({"stop2_location": stop2})
         print(f"\nNext stop: {stop2}")
         print("Saved stop2_location to memory.")
     else:
-        print("\n[FAILED] Could not parse stop2_location from the agent response.")
-        print("The agent paraphrased the tool output instead of returning the raw JSON.")
-        print("Fix: update the agent instructions to say something like:")
-        print("  'Return the COMPLETE raw JSON response from the tool, do not summarise it.'")
-        print("Then re-run this script.")
+        print("\n[FAILED] Could not retrieve stop2_location from the server.")
+        print(f"Server response: {data}")
 
     await game_mcp.close()
 

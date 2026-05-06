@@ -63,8 +63,8 @@ Create a new file `create-agent/my_step6.py` and paste in:
 ```python [my_step6.py]
 import asyncio
 import os
-import re
 
+import httpx
 from agent_framework import Agent, MCPStreamableHTTPTool
 from agent_framework.openai import OpenAIChatClient
 from dotenv import load_dotenv
@@ -134,16 +134,20 @@ async def main() -> None:
     )
     print(turn2.text or "")
 
-    # Extract next stop from the response for step 7
-    stop2_match = re.search(r'"stop2_location"\s*:\s*"([^"]+)"', turn2.text or "")
-    if stop2_match:
-        stop2 = stop2_match.group(1)
+    # Fetch stop2 directly from the server — reliable, no LLM text parsing.
+    game_base = MCP_SERVER_URL.replace("/mcp", "")
+    async with httpx.AsyncClient(timeout=10.0) as http:
+        resp = await http.get(f"{game_base}/player/{player_id}/stop2")
+        data = resp.json()
+
+    if data.get("stop2_location"):
+        stop2 = data["stop2_location"]
         memory._save({"stop2_location": stop2})
         print(f"\nNext stop: {stop2}")
         print("Saved stop2_location to memory.")
     else:
-        print("\n[FAILED] Could not parse stop2_location from the agent response.")
-        print("The agent paraphrased the tool output. Update the instructions and re-run.")
+        print("\n[FAILED] Could not retrieve stop2_location from the server.")
+        print(f"Server response: {data}")
 
     await game_mcp.close()
 
@@ -179,23 +183,12 @@ Player: PLR-A1B2C3D4  |  Transport: rideshare
 Agent: You have chosen rideshare to reach your first stop.
 
 [Turn 2] Declaring transport and collecting next stop...
-{"status": "ok", "stop2_location": "Cameron Village", ...}
+...
 
 Next stop: Cameron Village
 Saved stop2_location to memory.
 ```
-:::
-
-::: warning stop2_location not saved? This is a prompt engineering problem
-If you see `[FAILED] Could not parse stop2_location` it means the agent **paraphrased** the tool response instead of returning the raw JSON — so the regex had nothing to match.
-
-This is intentional: you need to make the agent more obedient. Think about what you could change:
-
-- The **agent instructions** tell it to "return the full JSON response" — but the wording is not strong enough
-- Try adding something like: *"Do NOT summarise or paraphrase. Output the COMPLETE raw JSON exactly as returned by the tool."*
-- Alternatively, change Turn 2's prompt to explicitly request the raw output
-
-Once you have it working, note what wording made the difference — this is one of the core skills of prompt engineering.
+The agent's exact wording for Turn 2 doesn't matter — `stop2_location` is fetched directly from the server after the agent runs, so it's always reliable.
 :::
 
 ::: details Stuck? Use the fallback
