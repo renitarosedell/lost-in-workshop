@@ -78,36 +78,13 @@ After a few seconds you see "Your deployment is complete." The resource group
 
 ---
 
-## 4. Create a Foundry Hub
+## 4. Create a Project
 
-1. Return to **[ai.azure.com](https://ai.azure.com)**.
-2. Click **+ New hub** (or "Create hub" if visible on the home page).
-3. Fill in the form:
-   - **Hub name**: `raleigh-hub` (or any name you like)
-   - **Subscription**: the subscription from step 1
-   - **Resource group**: `raleigh-workshop` (select the one you just created)
-   - **Location**: `East US 2`
-4. Leave all other fields at their defaults.
-5. Click **Next**, then **Create**.
-
-::: tip Expected result
-The hub is created in about 60–90 seconds. You see it listed in the Foundry home page
-under "Hubs."
-:::
-
-::: details Troubleshooting
-If you get a **quota** error, try a different region, West US 2 or East US are good alternatives.
-:::
-
----
-
-## 5. Create a Project
-
-1. Inside your new hub, click **+ New project**.
-2. Fill in:
+1. Return to **[ai.azure.com](https://ai.azure.com)** and click **+ Create new**.
+2. Select **Microsoft Foundry resource** and click **Next**
+3. Fill in:
    - **Project name**: `raleigh-workshop`
-   - **Hub**: leave as your new hub
-3. Click **Create**.
+4. Click **Create**.
 
 ::: tip Expected result
 The project is created in under 30 seconds. You land on the project overview page.
@@ -115,7 +92,7 @@ The project is created in under 30 seconds. You land on the project overview pag
 
 ---
 
-## 6. Deploy the gpt-4o-mini model
+## 5. Deploy the gpt-4o-mini model
 
 1. In the left navigation of your project, click **Models + endpoints**.
 2. Click **+ Deploy model**, then **Deploy base model**.
@@ -137,7 +114,7 @@ If you see **"Quota exceeded"**, try `East US` instead of `East US 2`.
 
 ---
 
-## 7. Copy your endpoint, key, and deployment name
+## 6. Copy your endpoint, key, and deployment name
 
 1. Click on your `gpt-4o-mini` deployment to open its details.
 2. Find the **Target URI** (endpoint). It looks like:
@@ -153,7 +130,7 @@ The endpoint and key are also visible on the project overview page at
 
 ---
 
-## 8. Create your .env file
+## 7. Create your .env file
 
 1. In your terminal, change directory to `create-agent/`:
 
@@ -186,7 +163,7 @@ into any other file that gets committed.
 
 ---
 
-## 9. Verify your connection
+## 8. Verify your connection
 
 1. Install the requirements (if you haven't already):
 
@@ -212,7 +189,7 @@ Model response: Hello! I am ready to help you navigate Raleigh.
 - **`ResourceNotFoundError`**: check that `AZURE_OPENAI_ENDPOINT` ends with a `/` and matches
   the endpoint shown in Foundry.
 - **`DeploymentNotFound`**: check that `AZURE_OPENAI_DEPLOYMENT_NAME` matches the name you gave
-  the deployment in step 6 exactly, and it is case-sensitive.
+   the deployment in step 5 exactly, and it is case-sensitive.
 :::
 
 ---
