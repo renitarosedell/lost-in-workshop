@@ -11,8 +11,7 @@ from a2a.types import AgentCapabilities, AgentCard, AgentSkill
 from agent_framework import Agent
 from agent_framework.a2a import A2AExecutor
 from agent_framework.openai import OpenAIChatClient
-from starlette.applications import Starlette
-from starlette.routing import Mount
+from starlette.types import ASGIApp, Receive, Scope, Send
 
 # ---------------------------------------------------------------------------
 # System prompt — Raleigh transport knowledge
@@ -183,11 +182,32 @@ _city_guide_server = A2AStarletteApplication(
 # ---------------------------------------------------------------------------
 # Combined ASGI app — city guide at /city-guide, transport at /
 # ---------------------------------------------------------------------------
+# Starlette's Mount strips the prefix but leaves an empty path ("") when there
+# is no trailing slash, so POST /city-guide becomes POST "" which never matches
+# the inner app's POST / route.  A custom dispatcher rewrites the path cleanly.
 
-server = Starlette(routes=[
-    Mount("/city-guide", app=_city_guide_server),
-    Mount("/", app=_transport_server),
-])
+_CITY_GUIDE_PREFIX = "/city-guide"
+
+
+class _MultiAgentASGI:
+    """Route /city-guide/* → city guide agent, everything else → transport agent."""
+
+    def __init__(self, transport: ASGIApp, city_guide: ASGIApp) -> None:
+        self._transport = transport
+        self._city_guide = city_guide
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] == "http" and scope.get("path", "").startswith(_CITY_GUIDE_PREFIX):
+            scope = dict(scope)
+            stripped = scope["path"][len(_CITY_GUIDE_PREFIX):]
+            scope["path"] = stripped or "/"
+            scope["raw_path"] = scope["path"].encode()
+            await self._city_guide(scope, receive, send)
+        else:
+            await self._transport(scope, receive, send)
+
+
+server = _MultiAgentASGI(_transport_server, _city_guide_server)
 
 if __name__ == "__main__":
     uvicorn.run(server, host="0.0.0.0", port=int(os.environ.get("PORT", 8001)))

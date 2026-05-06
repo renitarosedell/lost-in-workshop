@@ -1,20 +1,31 @@
 """
-Step 6 — Declare transport to stop 1 and receive the document bundle URL.
+Step 6 — Multi-turn conversations: use session memory to declare transport.
 
-What this adds:
-  - Calls declare_transport_stop1 on the MCP game server.
-  - Uses player_id (step 4) and transport_stop1 (step 5) from memory.
-  - Saves document_bundle_url to memory for step 7.
+What this adds (tutorial: Step 3 — Multi-Turn Conversations):
+  A single agent session is kept alive across two turns:
+    Turn 1 — ask the agent to summarise the transport choice from step 5.
+    Turn 2 — tell it to call declare_transport_stop1 with that choice.
+
+  Because both turns share the same session, the agent remembers the transport
+  from turn 1 when executing the tool call in turn 2. Without a session each
+  turn would start from scratch and the agent would have no context.
+
+  The response includes the next stop and the bundle URL, both saved to memory
+  for step 7.
 
 Run it:
   python steps/step6_transport.py
 
 Expected output:
   Player: PLR-XXXXXXXX  |  Transport: rideshare
+
+  [Turn 1] Summarising transport choice...
+  Agent: You have chosen rideshare to reach Glenwood South...
+
+  [Turn 2] Declaring transport and collecting next stop...
   Stop 1 reached!
-  Next stop: NC Museum of Natural Sciences
-  Bundle URL: https://lostworkshop.blob.core.windows.net/bundles/...
-  Saved bundle_url to memory.
+  Next stop: Cameron Village
+  Saved stop2_location and bundle_url to memory.
 """
 from __future__ import annotations
 
@@ -48,7 +59,7 @@ async def main() -> None:
         print("No transport_stop1 found. Run step5_quest.py first.")
         return
 
-    print(f"Player: {player_id}  |  Transport: {transport}")
+    print(f"Player: {player_id}  |  Transport: {transport}\n")
 
     client = OpenAIChatClient(
         azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
@@ -66,29 +77,46 @@ async def main() -> None:
         client=client,
         name="RaleighAgent",
         instructions=(
-            f"Call declare_transport_stop1 with player_id='{player_id}' and "
-            f"transport='{transport}'. Return the full JSON response from the tool. "
-            "Return ONLY valid JSON, no extra text."
+            f"You are helping player_id='{player_id}' play the Lost in Raleigh quest. "
+            "When asked to declare transport, call declare_transport_stop1 with the "
+            "player_id and the transport the player chose. Return the full JSON "
+            "response from the tool as-is."
         ),
         tools=[game_mcp],
     )
-    session = agent.create_session()
-    response = await agent.run("Declare my transport to stop 1.", session=session)
 
-    text = response.text or ""
+    # A single session spans both turns — the agent remembers turn 1 in turn 2.
+    session = agent.create_session()
+
+    # Turn 1: establish context (no tool call yet)
+    print("[Turn 1] Summarising transport choice...")
+    turn1 = await agent.run(
+        f"My transport choice for stop 1 is: {transport}. "
+        "Confirm what I have chosen in one sentence.",
+        session=session,
+    )
+    print(f"Agent: {turn1.text}\n")
+
+    # Turn 2: agent still has turn 1 in its context — uses it to call the tool
+    print("[Turn 2] Declaring transport and collecting next stop...")
+    turn2 = await agent.run(
+        "Now declare my transport to stop 1 using the choice I just told you.",
+        session=session,
+    )
+
+    text = turn2.text or ""
     json_match = re.search(r"\{.*\}", text, re.DOTALL)
     if json_match:
         data = json.loads(json_match.group(0))
-        bundle_url = data.get("document_bundle_url", "")
         stop2 = data.get("stop2_location", "")
-        print("\nStop 1 reached!")
+        bundle_url = data.get("document_bundle_url", "")
+        print("Stop 1 reached!")
         if stop2:
             print(f"Next stop: {stop2}")
             memory._save({"stop2_location": stop2})
         if bundle_url:
-            print(f"Bundle URL: {bundle_url}")
             memory._save({"bundle_url": bundle_url})
-            print("Saved bundle_url to memory.")
+            print("Saved stop2_location and bundle_url to memory.")
         else:
             print("Warning: no document_bundle_url in response.")
             print(text)
