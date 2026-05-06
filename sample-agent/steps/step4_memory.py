@@ -59,20 +59,7 @@ class FileContextProvider(ContextProvider):
             print(f"Resuming with saved player_id: {player_id}")
 
     async def after_run(self, *, context: SessionContext, **kwargs) -> None:
-        data = self._load()
-        if data.get("player_id"):
-            return  # already saved
-        # Scan the response text for a player_id
-        response = kwargs.get("response")
-        text = getattr(response, "text", "") or ""
-        # Also scan input_messages for any assistant messages
-        for msg in context.input_messages:
-            text += " " + (getattr(msg, "text", "") or "")
-        match = re.search(r"PLR-[A-Z0-9]{8}", text)
-        if match:
-            pid = match.group(0)
-            self._save({"player_id": pid})
-            print(f"Saved player_id: {pid}")
+        pass  # player_id is saved from main() after agent.run() returns
 
 
 async def main() -> None:
@@ -106,6 +93,13 @@ async def main() -> None:
     session = agent.create_session()
     response = await agent.run("Check my registration status.", session=session)
     print(response.text)
+
+    # Save player_id if newly registered this run
+    if not memory._load().get("player_id"):
+        match = re.search(r"PLR-[A-Z0-9]{8}", response.text)
+        if match:
+            memory._save({"player_id": match.group(0)})
+            print(f"Saved player_id: {match.group(0)}")
 
     await game_mcp.close()
 
