@@ -65,16 +65,7 @@ class FileContextProvider(ContextProvider):
             )
 
     async def after_run(self, *, context: SessionContext, **_) -> None:
-        data = self._load()
-        if data.get("player_id"):
-            return
-        for msg in context.output_messages:
-            text = getattr(msg, "text", "") or ""
-            match = re.search(r"PLR-[A-Z0-9]{8}", text)
-            if match:
-                data["player_id"] = match.group(0)
-                self._save(data)
-                break
+        pass  # player_id is saved from main() after agent.run() returns
 
 
 # ─── A2A helper ─────────────────────────────────────────────────────────────
@@ -131,6 +122,10 @@ async def main() -> None:
 
     memory = FileContextProvider()
 
+    # Check if already registered from a previous step
+    saved = memory._load()
+    saved_player_id = saved.get("player_id")
+
     # Step 1: Register (or resume) and get quest details
     register_agent = Agent(
         client=client,
@@ -139,13 +134,20 @@ async def main() -> None:
             "Register as a new player with the name 'Workshop Attendee' using "
             "register_player. Return a JSON object with: player_id, a2a_expert_url, "
             "stop1_location, and transport_options. Return ONLY valid JSON."
+        ) if not saved_player_id else (
+            f"The player is already registered with player_id='{saved_player_id}'. "
+            "Call get_player_status to retrieve quest details. "
+            "Return a JSON object with: player_id, a2a_expert_url, "
+            "stop1_location, and transport_options. Return ONLY valid JSON."
         ),
         tools=[game_mcp],
         context_providers=[memory],
     )
     session = register_agent.create_session()
     reg_response = await register_agent.run(
-        "Register me and return the quest details as JSON.", session=session
+        "Register me and return the quest details as JSON." if not saved_player_id
+        else "Return my quest details as JSON.",
+        session=session,
     )
 
     # Parse the registration JSON from the response
@@ -156,7 +158,12 @@ async def main() -> None:
         raise RuntimeError("Could not parse registration response as JSON.")
     reg_data = json.loads(json_match.group(0))
 
-    player_id: str = reg_data["player_id"]
+    player_id: str = reg_data.get("player_id") or saved_player_id
+    if not player_id:
+        raise RuntimeError("No player_id found in response or memory.")
+    # Save to memory if newly registered
+    if not saved_player_id:
+        memory._save({"player_id": player_id})
     a2a_url: str = reg_data["a2a_expert_url"]
     stop1_location: str = reg_data.get("stop1_location", "stop 1")
     print(f"\nRegistered! player_id = {player_id}")
