@@ -30,17 +30,12 @@ memory persistence, **A2A expert agents**, and multi-agent orchestration.
 
 ## Before you start
 
-::: warning Prerequisites
-- Claim your Azure subscription → [Get Azure](get-azure)
-- Set up your dev environment → [Developer Environment Setup](dev-setup)
-- Create your Azure OpenAI deployment → [Azure AI Foundry Setup](azure-foundry-setup)
-- Get the shared event URLs → [Event Resources](event-resources)
-
-All step files are in `create-agent/steps/`. Run each from inside the `create-agent/` folder:
-
-```bash
-python steps/step1_foundry_test.py
-```
+::: warning Prerequisites — complete these in order
+1. **Fork the repository** — [github.com/RoelantD/lost-in-workshop](https://github.com/RoelantD/lost-in-workshop) → click **Fork**. You need your own fork to start a Codespace.
+2. **Set up your dev environment** → [Developer Environment Setup](dev-setup) (start your Codespace from your fork)
+3. **Create your Azure OpenAI deployment** → [Azure AI Foundry Setup](azure-foundry-setup)
+4. **Claim your Azure subscription** → [Get Azure](get-azure)
+5. **Get the shared event URLs** → [Event Resources](event-resources)
 :::
 
 [Start Step 1 →](step1)
