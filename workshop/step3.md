@@ -9,6 +9,10 @@ description: Switch from raw API calls to Microsoft Agent Framework and connect 
 
 You know the model works. Now it's time to enter the game. The **Lost in Raleigh** game server manages players, quests, and scoring. Your agent will register with it using the **Model Context Protocol** (MCP), the industry standard for connecting agents to external tools.
 
+::: tip This is where the Microsoft Agent Framework comes in
+Steps 1 and 2 used the raw `openai` SDK — you built the messages array yourself and got a response back. From **Step 3 onwards**, you'll use the **Microsoft Agent Framework** (`agent_framework`). It wraps the model, the tool-calling loop, and session management into a clean abstraction so you can focus on *what* your agent does, not *how* it calls tools.
+:::
+
 ---
 
 ## What you'll learn
