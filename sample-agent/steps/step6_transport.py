@@ -84,6 +84,7 @@ async def main() -> None:
         print("\nStop 1 reached!")
         if stop2:
             print(f"Next stop: {stop2}")
+            memory._save({"stop2_location": stop2})
         if bundle_url:
             print(f"Bundle URL: {bundle_url}")
             memory._save({"bundle_url": bundle_url})

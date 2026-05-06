@@ -3,6 +3,7 @@ Step 8 — Declare final transport and complete the quest.
 
 What this adds:
   - Calls declare_transport_final to record the last leg of the journey.
+  - Reads transport_final from memory (saved by step7_orchestration.py).
   - Prints the final score and quest completion message.
 
 Run it:
@@ -28,8 +29,8 @@ load_dotenv()
 
 MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "http://localhost:8000/mcp")
 
-# Change this to the transport the attendee actually chose for the final leg
-FINAL_TRANSPORT = "rideshare"
+# Fallback transport if step7_orchestration.py hasn't been run
+_FALLBACK_TRANSPORT = "rideshare"
 
 
 async def main() -> None:
@@ -41,8 +42,10 @@ async def main() -> None:
         print("No player_id found. Run step4_memory.py first.")
         return
 
+    # Use transport chosen by the city guide orchestration (step 7), or fallback
+    transport_final = saved.get("transport_final", _FALLBACK_TRANSPORT)
     print(f"Player: {player_id}")
-    print(f"Declaring final transport: {FINAL_TRANSPORT}")
+    print(f"Declaring final transport: {transport_final}")
 
     client = OpenAIChatClient(
         azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
@@ -61,7 +64,7 @@ async def main() -> None:
         name="RaleighAgent",
         instructions=(
             f"Call declare_transport_final with player_id='{player_id}' and "
-            f"transport='{FINAL_TRANSPORT}'. Print the final score and the quest "
+            f"transport='{transport_final}'. Print the final score and the quest "
             "completion message from the response."
         ),
         tools=[game_mcp],

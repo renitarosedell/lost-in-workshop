@@ -1,3 +1,5 @@
 agent-framework-a2a
+agent-framework-openai
+a2a-sdk[http-server]
 uvicorn[standard]
 python-dotenv
