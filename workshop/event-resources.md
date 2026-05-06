@@ -64,8 +64,12 @@ The city guide is a remote agent you consult in **Step 7** to learn about Raleig
 | **AgentCard** | `<CITY_GUIDE_URL>/agent.json` |
 
 ```ini [.env]
-CITY_GUIDE_URL=https://city-guide.<your-event>.azurecontainerapps.io
+CITY_GUIDE_URL=https://a2a-expert.<your-event>.azurecontainerapps.io/city-guide
 ```
+
+::: tip Same server as the transport expert
+`CITY_GUIDE_URL` is the city guide path on the same container as `A2A_SERVER_URL`. It will always be `<A2A_SERVER_URL>/city-guide`.
+:::
 
 ---
 
@@ -92,11 +96,11 @@ AZURE_OPENAI_API_KEY=your-key-here
 AZURE_OPENAI_DEPLOYMENT_NAME=gpt-4o-mini
 
 # Shared game server (from your facilitator)
-MCP_SERVER_URL=https://lost-in-raleigh.redriver-3b1b0600.eastus2.azurecontainerapps.io/mcp
+MCP_SERVER_URL=https://lost-in-raleigh.<your-event>.azurecontainerapps.io/mcp
 
 # Shared A2A agents (from your facilitator)
-A2A_SERVER_URL=https://a2a-expert.redriver-3b1b0600.eastus2.azurecontainerapps.io
-CITY_GUIDE_URL=https://city-guide.redriver-3b1b0600.eastus2.azurecontainerapps.io
+A2A_SERVER_URL=https://a2a-expert.<your-event>.azurecontainerapps.io
+CITY_GUIDE_URL=https://a2a-expert.<your-event>.azurecontainerapps.io/city-guide
 ```
 
 ::: danger Never commit this file
