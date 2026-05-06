@@ -7,7 +7,7 @@ description: Use a ContextProvider to persist your player_id across runs so you 
 
 ## The story so far
 
-You're registered and have your player ID. But if you restart the script, it would register you *again* - and you'd get a different player ID. Agents are stateless by default. This step fixes that.
+You're registered and have your player ID. But if you restart the script, it would register you *again*, and you'd get a different player ID. Agents are stateless by default. This step fixes that.
 
 ---
 
@@ -21,14 +21,14 @@ You're registered and have your player ID. But if you restart the script, it wou
 
 ## Why agents are stateless
 
-Every time `Agent.run()` is called, it starts with a fresh context: just the `instructions` and the current message. There is no built-in persistence. This is intentional - statelessness makes agents simple, composable, and easy to test.
+Every time `Agent.run()` is called, it starts with a fresh context: just the `instructions` and the current message. There is no built-in persistence. This is intentional, as statelessness makes agents simple, composable, and easy to test.
 
 But real workflows need state. You need to know:
 - Who you are (`player_id`)
 - What you've already done (which stops you've visited)
 - What you've saved (secret codes, transport choices)
 
-The solution is a **ContextProvider** - a hook that runs *before* and *after* each agent call to inject or extract state.
+The solution is a **ContextProvider**, a hook that runs *before* and *after* each agent call to inject or extract state.
 
 ---
 
@@ -47,7 +47,7 @@ The solution is a **ContextProvider** - a hook that runs *before* and *after* ea
                     └───────────────────────────┘
 ```
 
-`before_run()` is called *before* the model sees your message. It can add extra text to the agent's instructions - for example: `"Your player_id is PLR-XXXXXXXX. Use it for all tool calls."`.
+`before_run()` is called *before* the model sees your message. It can add extra text to the agent's instructions, for example: `"Your player_id is PLR-XXXXXXXX. Use it for all tool calls."`.
 
 `after_run()` is called *after* the model finishes. It can inspect the response and save any new information.
 
@@ -176,7 +176,7 @@ After the first run, open `sample-agent/memory.json`:
 }
 ```
 
-Later steps will add more keys to this file - `transport_stop1`, `stop2_location`, `transport_final` - building up a complete record of your quest progress.
+Later steps will add more keys to this file, like `transport_stop1`, `stop2_location`, and `transport_final`, building up a complete record of your quest progress.
 
 ::: info Next step
 [Step 5 - A2A: Consult the Transport Expert](step5) →

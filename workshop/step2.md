@@ -70,7 +70,7 @@ Without a system prompt, the model answers as a generic assistant. With `"You ar
 - Adopts a helpful, local-guide tone
 - Implicitly filters out irrelevant information
 
-Try changing the system prompt to `"You are a grumpy tour guide who hates questions."` and run it again - notice how the personality changes even though the question is identical.
+Try changing the system prompt to `"You are a grumpy tour guide who hates questions."` and run it again, and notice how the personality changes even though the question is identical.
 
 ---
 
@@ -83,7 +83,7 @@ python steps/step2_hello_world.py
 ::: tip Expected output
 ```
 Raleigh is famous for: Raleigh, the capital of North Carolina, is known for being
-part of the Research Triangle with Durham and Chapel Hill - home to major
+part of the Research Triangle with Durham and Chapel Hill, home to major
 universities like NC State, Duke, and UNC...
 ```
 :::
@@ -97,9 +97,9 @@ universities like NC State, Duke, and UNC...
 ## Where this approach falls short
 
 This code works for a single question, but notice what it can't do:
-- **No tools** - it can only answer from its training data; it can't look things up
-- **No memory** - each run starts fresh; it doesn't know what you said before
-- **No agency** - it doesn't decide *what* to do next; you hardcode the question
+- **No tools**: it can only answer from its training data; it can't look things up
+- **No memory**: each run starts fresh; it doesn't know what you said before
+- **No agency**: it doesn't decide *what* to do next; you hardcode the question
 
 The next step introduces the **Microsoft Agent Framework**, which solves all three problems.
 

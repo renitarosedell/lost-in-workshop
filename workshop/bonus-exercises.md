@@ -1,18 +1,17 @@
 ---
 title: Bonus Exercises
-description: Four additional challenges to extend your Lost in Raleigh agent after completing the main quest.
+description: Three additional challenges to extend your Lost in Raleigh agent after completing the main quest.
 ---
 
 # Bonus Exercises
 
-Finished the main quest? Here are four bonus challenges. Each is self-contained - do them in any order.
+Finished the main quest? Here are three bonus challenges. Each is self-contained, so do them in any order.
 
 | Bonus | Challenge | Skill |
 |-------|-----------|-------|
 | A | Build your own A2A transport expert | FastAPI + Agent Framework |
 | B | Add streaming responses | Async token streaming |
-| C | Multi-agent orchestration | Planner / Runner pattern |
-| D | Eval harness | Parallel quest runs + scoring |
+| C | Eval harness | Parallel quest runs + scoring |
 
 ---
 
@@ -172,102 +171,7 @@ with Live(text, refresh_per_second=20) as live:
 
 ---
 
-## Bonus C - Multi-Agent Orchestration <Badge type="warning" text="Advanced" />
-
-::: info What you'll build
-A **Planner** agent that breaks the quest into steps, and a **Runner** agent that executes
-each step using the MCP tools. The Planner never calls tools directly.
-:::
-
-### Architecture
-
-```
-User
- │
- ▼
-Planner (no tools) ──── generates plan as JSON list of actions
- │
- ▼
-Runner (MCPStreamableHTTPTool) ──── executes each action
-```
-
-::: details Starter code
-import asyncio, json, os, re
-from agent_framework import Agent, MCPStreamableHTTPTool
-from agent_framework.openai import OpenAIChatClient
-from dotenv import load_dotenv
-
-load_dotenv()
-
-MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "http://localhost:8000/mcp")
-
-async def main():
-    client_factory = lambda: OpenAIChatClient(
-        azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
-        api_key=os.environ["AZURE_OPENAI_API_KEY"],
-        model=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
-    )
-
-    # Planner: reads the quest rules, returns a JSON list of steps
-    planner = Agent(
-        client=client_factory(),
-        name="Planner",
-        instructions=(
-            "You are a quest planner. Given the quest objective, return a JSON array "
-            "of steps. Each step is an object: { 'action': str, 'tool': str, 'args': dict }. "
-            "Return ONLY valid JSON. Do not call any tools."
-        ),
-    )
-    plan_session = planner.create_session()
-    plan_text = (await planner.run(
-        "Plan the steps to complete the Lost in Raleigh quest end-to-end.",
-        session=plan_session,
-    )).text or "[]"
-
-    match = re.search(r"\[.*\]", plan_text, re.DOTALL)
-    plan = json.loads(match.group(0)) if match else []
-    print("Plan:", json.dumps(plan, indent=2))
-
-    # Runner: executes each step
-    game_mcp = MCPStreamableHTTPTool(
-        name="Lost in Raleigh Game Server",
-        url=MCP_SERVER_URL,
-        description="MCP game server.",
-    )
-    await game_mcp.connect()
-
-    runner = Agent(
-        client=client_factory(),
-        name="Runner",
-        instructions="Execute the given instruction using the available tools.",
-        tools=[game_mcp],
-    )
-
-    for step in plan:
-        print(f"\nExecuting: {step.get('action')}")
-        session = runner.create_session()
-        result = await runner.run(
-            f"Execute this step: {json.dumps(step)}",
-            session=session,
-        )
-        print(result.text)
-
-    await game_mcp.close()
-
-asyncio.run(main())
-```
-
-:::
-
-::: tip Challenge
-Add a **Critic** agent that reviews the Runner's output after each step and decides whether
-to retry, skip, or continue. If the Critic says "retry," call the Runner again with the
-error message as context.
-:::
-
----
-
-## Bonus D - Eval Harness <Badge type="warning" text="Advanced" />
+## Bonus C - Eval Harness <Badge type="warning" text="Advanced" />
 
 ::: info What you'll build
 Run the full quest three times in parallel and produce a score comparison table.

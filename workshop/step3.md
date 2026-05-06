@@ -7,7 +7,7 @@ description: Switch from raw API calls to Microsoft Agent Framework and connect 
 
 ## The story so far
 
-You know the model works. Now it's time to enter the game. The **Lost in Raleigh** game server manages players, quests, and scoring. Your agent will register with it using the **Model Context Protocol** (MCP) - the industry standard for connecting agents to external tools.
+You know the model works. Now it's time to enter the game. The **Lost in Raleigh** game server manages players, quests, and scoring. Your agent will register with it using the **Model Context Protocol** (MCP), the industry standard for connecting agents to external tools.
 
 ---
 
@@ -22,15 +22,15 @@ You know the model works. Now it's time to enter the game. The **Lost in Raleigh
 
 ## What is MCP?
 
-MCP is an open standard (originally from Anthropic, now widely adopted) that lets any AI agent call any tool in a standardised way. Instead of writing custom HTTP client code for every API, you point your agent at an MCP server and it automatically discovers all available tools - their names, parameters, and descriptions.
+MCP is an open standard (originally from Anthropic, now widely adopted) that lets any AI agent call any tool in a standardised way. Instead of writing custom HTTP client code for every API, you point your agent at an MCP server and it automatically discovers all available tools, including their names, parameters, and descriptions.
 
-**Why this is powerful:** Your agent doesn't just make API calls - it *reads the tool descriptions* and decides *which* tool to call, *when*, and with *what arguments*. You don't have to hardcode the logic. The model figures it out from the descriptions.
+**Why this is powerful:** Your agent doesn't just make API calls, it *reads the tool descriptions* and decides *which* tool to call, *when*, and with *what arguments*. You don't have to hardcode the logic. The model figures it out from the descriptions.
 
 The game server exposes tools like:
-- `register_player` - join the game and get assigned a quest
-- `declare_transport_stop1` - record which transport you used to reach stop 1
-- `submit_secret_code` - submit the code you found in the document bundle
-- `declare_transport_final` - finish the quest and receive your score
+- `register_player`: join the game and get assigned a quest
+- `declare_transport_stop1`: record which transport you used to reach stop 1
+- `submit_secret_code`: submit the code you found in the document bundle
+- `declare_transport_final`: finish the quest and receive your score
 
 ---
 
@@ -111,13 +111,13 @@ asyncio.run(main())
 
 ### Why each block matters
 
-**`OpenAIChatClient`** - wraps the Azure OpenAI endpoint. Think of it as the "brain" your agent uses. Swap this for a different client to use a different model provider.
+**`OpenAIChatClient`**: wraps the Azure OpenAI endpoint. Think of it as the "brain" your agent uses. Swap this for a different client to use a different model provider.
 
-**`MCPStreamableHTTPTool`** - connects to the game server and fetches its tool list. The agent can now "see" all the server's tools and call any of them. You don't need to write a single line of HTTP client code.
+**`MCPStreamableHTTPTool`**: connects to the game server and fetches its tool list. The agent can now "see" all the server's tools and call any of them. You don't need to write a single line of HTTP client code.
 
-**`Agent(..., tools=[game_mcp])`** - creates the reasoning loop. The agent receives your message, thinks about what tools are available, calls the right one, and formulates a response.
+**`Agent(..., tools=[game_mcp])`**: creates the reasoning loop. The agent receives your message, thinks about what tools are available, calls the right one, and formulates a response.
 
-**`agent.create_session()`** - creates a conversation context. The session holds the message history for this run. We'll explore sessions more in Step 6.
+**`agent.create_session()`**: creates a conversation context. The session holds the message history for this run. We'll explore sessions more in Step 6.
 
 ---
 
@@ -134,7 +134,7 @@ Quest: The Glenwood Getaway
 Stop 1: Glenwood South
 A2A Expert: https://a2a-expert.redriver-3b1b0600.eastus2.azurecontainerapps.io
 ```
-Note your `player_id` - you'll need it in later steps.
+Note your `player_id`, you'll need it in later steps.
 :::
 
 ::: info Track your progress

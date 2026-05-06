@@ -51,7 +51,7 @@ python -m venv .venv
 :::
 
 ::: tip Your prompt changes
-Once the virtual environment is active, your terminal prompt shows `(.venv)`. All packages you install go into this isolated environment - they won't affect other Python projects on your machine.
+Once the virtual environment is active, your terminal prompt shows `(.venv)`. All packages you install go into this isolated environment, so they won't affect other Python projects on your machine.
 :::
 
 ---
@@ -76,7 +76,7 @@ and enter the code XXXXXXXX to authenticate.
 1. Open that URL in your browser
 2. Enter the code shown in the terminal
 3. Sign in with the **same Microsoft account** that has your Azure subscription
-4. Return to the terminal - it will confirm you are logged in
+4. Return to the terminal, it will confirm you are logged in
 
 ::: tip Expected output
 ```json
@@ -104,10 +104,10 @@ pip install -r requirements.txt
 ```
 
 The `requirements.txt` includes:
-- `agent-framework` - Microsoft Agent Framework
-- `openai` - Azure OpenAI SDK
-- `python-dotenv` - loads `.env` files
-- `httpx` - async HTTP client (used for A2A calls)
+- `agent-framework`: Microsoft Agent Framework
+- `openai`: Azure OpenAI SDK
+- `python-dotenv`: loads `.env` files
+- `httpx`: async HTTP client (used for A2A calls)
 
 ::: details What is installed?
 Run `pip list` after the install to see the full list. The key packages are `agent-framework`, `openai`, and `httpx`.

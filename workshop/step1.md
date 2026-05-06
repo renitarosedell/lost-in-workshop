@@ -1,13 +1,22 @@
 ---
 title: "Step 1: Connect to Azure OpenAI"
-description: Verify your Azure OpenAI credentials using the bare openai SDK - no agent framework yet.
+description: Verify your Azure OpenAI credentials using the bare openai SDK, with no agent framework yet.
 ---
 
 # Step 1 - Connect to Azure OpenAI <Badge type="tip" text="~10 min" />
 
+::: warning Before you start
+Complete all three Getting Started steps first:
+1. [Get Azure Subscription](get-azure) - claim your event subscription or free trial
+2. [Developer Environment Setup](dev-setup) - create your virtual environment and `.env` file
+3. [Azure AI Foundry Setup](azure-foundry-setup) - deploy `gpt-4o-mini` and copy your endpoint and key
+
+**Do not skip these.** Step 1 will fail without a working `.env` file.
+:::
+
 ## The story so far
 
-You've just arrived in Raleigh, NC. Before you can start navigating the city, you need to make sure your AI engine is running. Think of this step as turning the key in the ignition - if the model responds, everything else will work.
+You've just arrived in Raleigh, NC. Before you can start navigating the city, you need to make sure your AI engine is running. Think of this step as turning the key in the ignition, and if the model responds, everything else will work.
 
 ---
 
@@ -23,9 +32,9 @@ You've just arrived in Raleigh, NC. Before you can start navigating the city, yo
 
 Azure OpenAI is the same GPT model family you know, but hosted inside your Azure subscription. This matters for three reasons:
 
-1. **Data residency** - your prompts and completions stay within your Azure region
-2. **Enterprise security** - API keys are managed by Azure RBAC; no shared rate limits
-3. **AI Foundry integration** - you can swap models, add fine-tuning, and monitor usage all in one place
+1. **Data residency**: your prompts and completions stay within your Azure region
+2. **Enterprise security**: API keys are managed by Azure RBAC; no shared rate limits
+3. **AI Foundry integration**: you can swap models, add fine-tuning, and monitor usage all in one place
 
 The `AzureOpenAI` client from the `openai` SDK handles the slightly different authentication flow: instead of a single API key sent to `api.openai.com`, you send your key to your own endpoint URL (`https://your-hub.openai.azure.com/`).
 
@@ -94,7 +103,7 @@ The file `steps/step1_foundry_test.py` is already in the repo with the complete 
 
 ## Key takeaway
 
-You're talking directly to the model over HTTP. There is no agent logic, no tool-calling, no memory - just a request and a response. The next steps build on top of this foundation.
+You're talking directly to the model over HTTP. There is no agent logic, no tool-calling, no memory, just a request and a response. The next steps build on top of this foundation.
 
 ::: info Next step
 [Step 2 - Hello Raleigh](step2) →

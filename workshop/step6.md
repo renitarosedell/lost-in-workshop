@@ -7,7 +7,7 @@ description: Use a shared session to declare your transport choice across two co
 
 ## The story so far
 
-You've picked your transport to stop 1. Now you need to officially declare it to the game server using the `declare_transport_stop1` tool. But you'll do it in a specific way: across **two conversational turns** - to learn how sessions carry context between calls.
+You've picked your transport to stop 1. Now you need to officially declare it to the game server using the `declare_transport_stop1` tool. But you'll do it in a specific way: across **two conversational turns**, to learn how sessions carry context between calls.
 
 ---
 
@@ -49,8 +49,8 @@ await agent.run(f"Declare transport={transport} for player {player_id}.", sessio
 ```
 
 But the two-turn pattern is more realistic for real applications:
-1. **Turn 1** - establish context or let the user confirm something
-2. **Turn 2** - take action based on that confirmed context
+1. **Turn 1**: establish context or let the user confirm something
+2. **Turn 2**: take action based on that confirmed context
 
 This mirrors how users actually interact with AI assistants: they say something, get confirmation, then say "yes, do it". The session makes that workflow work.
 
@@ -158,7 +158,7 @@ turn1 = await agent.run("My transport choice is: rideshare. Confirm.", session=s
 turn2 = await agent.run("Now declare it.", session=session)  # knows from turn 1!
 ```
 
-Without `session=session` on turn 2, the agent would ask "declare what?" - it would have no context. With the shared session, it knows exactly what to declare.
+Without `session=session` on turn 2, the agent would ask "declare what?", as it would have no context. With the shared session, it knows exactly what to declare.
 
 ---
 

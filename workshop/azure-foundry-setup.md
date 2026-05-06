@@ -11,7 +11,7 @@ description: Create your Azure OpenAI deployment in Azure AI Foundry. Complete t
 Make sure you have an Azure subscription. If you don't have one yet, see [Get Azure Subscription](get-azure) first.
 :::
 
-This guide walks you through creating an Azure OpenAI deployment in Azure AI Foundry - the service your agent uses to call GPT-4o-mini.
+This guide walks you through creating an Azure OpenAI deployment in Azure AI Foundry, the service your agent uses to call GPT-4o-mini.
 
 
 ---
@@ -21,10 +21,10 @@ This guide walks you through creating an Azure OpenAI deployment in Azure AI Fou
 1. Open your browser and go to the URL printed on your subscription card
    (something like `https://azure.microsoft.com/en-us/free/...`).
 2. Sign in with a **personal Microsoft account** (Outlook.com, Hotmail.com, Live.com).
-   If you do not have one, click "Create one" and follow the prompts - it takes two minutes.
+   If you do not have one, click "Create one" and follow the prompts, it takes two minutes.
 3. Enter the promotional code from your card when prompted.
 4. Complete the sign-up form. You do not need to enter a credit card for a free
-   trial subscription - click "I agree" when asked about the free offer terms.
+   trial subscription, so click "I agree" when asked about the free offer terms.
 
 ::: tip Expected result
 You are redirected to the Azure portal (`portal.azure.com`) and you can see "Microsoft Azure"
@@ -96,7 +96,7 @@ under "Hubs."
 :::
 
 ::: details Troubleshooting
-If you get a **quota** error, try a different region - West US 2 or East US are good alternatives.
+If you get a **quota** error, try a different region, West US 2 or East US are good alternatives.
 :::
 
 ---
@@ -122,7 +122,7 @@ The project is created in under 30 seconds. You land on the project overview pag
 3. Search for `gpt-4o-mini` and select it.
 4. Click **Confirm**.
 5. In the deployment configuration:
-   - **Deployment name**: `gpt-4o-mini` (keep the default - this becomes your
+   - **Deployment name**: `gpt-4o-mini` (keep the default, this becomes your
      `AZURE_OPENAI_DEPLOYMENT_NAME`)
    - **Tokens per minute**: leave at the default (usually 10K TPM for free tier)
 6. Click **Deploy**.
@@ -141,7 +141,7 @@ If you see **"Quota exceeded"**, try `East US` instead of `East US 2`.
 
 1. Click on your `gpt-4o-mini` deployment to open its details.
 2. Find the **Target URI** (endpoint). It looks like:
-   `https://your-hub.openai.azure.com/` - copy it.
+   `https://your-hub.openai.azure.com/`, copy it.
 3. Click **Keys and Endpoints** (or look for \"API key\" on the same page).
    Copy **Key 1**.
 4. Note your deployment name: `gpt-4o-mini` (or whatever you named it in step 6).
@@ -212,9 +212,9 @@ Model response: Hello! I am ready to help you navigate Raleigh.
 - **`ResourceNotFoundError`**: check that `AZURE_OPENAI_ENDPOINT` ends with a `/` and matches
   the endpoint shown in Foundry.
 - **`DeploymentNotFound`**: check that `AZURE_OPENAI_DEPLOYMENT_NAME` matches the name you gave
-  the deployment in step 6 exactly - it is case-sensitive.
+  the deployment in step 6 exactly, and it is case-sensitive.
 :::
 
 ---
 
-You are ready. Move on to the [Workshop Guide](workshop) - Step 2.
+You are ready. Move on to the [Workshop Guide](workshop), Step 2.

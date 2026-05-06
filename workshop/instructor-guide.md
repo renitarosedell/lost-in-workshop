@@ -1,13 +1,13 @@
 ---
 title: Instructor Guide
-description: End-to-end setup guide for workshop instructors - dependencies, deployment, and day-of operations.
+description: End-to-end setup guide for workshop instructors, covering dependencies, deployment, and day-of operations.
 ---
 
 # Instructor Guide
 
 <Badge type="danger" text="Facilitators only" />
 
-This guide walks you through everything needed to run a Lost in Workshop event from scratch - from provisioning Azure infrastructure to handing attendees their subscription codes.
+This guide walks you through everything needed to run a Lost in Workshop event from scratch, from provisioning Azure infrastructure to handing attendees their subscription codes.
 
 ::: info Page not linked in nav
 Share this URL directly with co-facilitators. It does not appear in the site navigation.
@@ -25,7 +25,7 @@ notepad scripts\deploy.config.json
 .\scripts\deploy.ps1
 ```
 
-The config file (`scripts/deploy.config.json`) is gitignored - your API key will never be committed. The manual steps below explain what each phase does if you need to run them individually or troubleshoot.
+The config file (`scripts/deploy.config.json`) is gitignored, so your API key will never be committed. The manual steps below explain what each phase does if you need to run them individually or troubleshoot.
 :::
 
 ---
@@ -79,7 +79,7 @@ The secret codes embedded in the bundles are:
 | The Warehouse Run | `TOBACCO55` |
 
 ::: warning Keep these private
-Do not share secret codes with attendees before or during the workshop. Codes are embedded in the prose of one chapter per bundle - finding them is part of the exercise.
+Do not share secret codes with attendees before or during the workshop. Codes are embedded in the prose of one chapter per bundle, and finding them is part of the exercise.
 :::
 
 ---
@@ -210,10 +210,10 @@ pip install -r requirements.txt
 ```
 
 `requirements.txt` installs:
-- `agent-framework` - the scaffolding used in workshop steps
-- `openai` - Azure OpenAI client
-- `python-dotenv` - `.env` file loading
-- `httpx` + `requests` - HTTP clients for MCP and A2A calls
+- `agent-framework`: the scaffolding used in workshop steps
+- `openai`: Azure OpenAI client
+- `python-dotenv`: `.env` file loading
+- `httpx` + `requests`: HTTP clients for MCP and A2A calls
 
 ::: tip Smoke test
 ```bash

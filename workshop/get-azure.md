@@ -12,7 +12,7 @@ In case you do not have an Azure subscription, this page shows you how to get on
 ## Azure Classroom <Badge type="tip" text="Recommended for this event" />
 
 ::: info This offer applies to Lost in Workshop events run by the Global AI Community.
-You will receive **$10 USD credit valid for 5 days** - plenty for this workshop.
+You will receive **$10 USD credit valid for 5 days**, which is plenty for this workshop.
 :::
 
 ### Step 1 - Request subscription
@@ -70,7 +70,7 @@ You can see your subscription at [portal.azure.com](https://portal.azure.com). T
 
 #### Invite code already redeemed?
 
-Ask your facilitator for a fresh code - each code is single-use.
+Ask your facilitator for a fresh code, as each code is single-use.
 
 ---
 

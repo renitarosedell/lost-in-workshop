@@ -253,4 +253,4 @@ Paste these into the workshop Slack/Teams channel before the session starts.
 az group delete --name $RESOURCE_GROUP --yes --no-wait
 ```
 
-This removes all resources - Container Apps, ACR, storage account, and networking.
+This removes all resources, including Container Apps, ACR, storage account, and networking.

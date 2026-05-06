@@ -5,7 +5,7 @@ description: URLs and access information for all shared services running during 
 
 # Event Resources
 
-This page lists all the URLs and shared endpoints you will need during the workshop. Your facilitator will fill these in before the event - bookmark this page.
+This page lists all the URLs and shared endpoints you will need during the workshop. Your facilitator will fill these in before the event, so bookmark this page.
 
 ::: info These values go in your `.env` file
 Copy each URL into the matching variable in `sample-agent/.env`. See [Developer Environment Setup](dev-setup) for the full setup guide.
