@@ -139,10 +139,6 @@ A2A Expert: https://a2a-expert.redriver-3b1b0600.eastus2.azurecontainerapps.io
 Note your `player_id`, you'll need it in later steps.
 :::
 
-::: info Track your progress
-Your registration appears on the admin dashboard immediately. Ask your facilitator for the dashboard URL - it's the `MCP_SERVER_URL` with `/mcp` replaced by `/admin`.
-:::
-
 ::: details Stuck? Use the fallback
 `cheatsheet/step3_mcp_connect.py` contains the complete working solution. Run it with `python cheatsheet/step3_mcp_connect.py`.
 :::
