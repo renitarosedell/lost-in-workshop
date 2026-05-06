@@ -1,4 +1,4 @@
-# Lost in Workshop v2
+# Lost in Workshop - Raleigh
 
 A hands-on workshop for building AI agents that connect to a Model Context Protocol (MCP) server to play **Lost in San Francisco** — a narrative quest game where attendees guide their agent across the city to reach Fort Mason in time for Build.
 
