@@ -168,7 +168,7 @@ No second registration. Your `player_id` is safe across restarts.
 
 ## What's in memory.json?
 
-After the first run, open `sample-agent/memory.json`:
+After the first run, open `create-agent/memory.json`:
 
 ```json
 {

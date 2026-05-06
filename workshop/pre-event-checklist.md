@@ -64,7 +64,7 @@ All items should be ✅ before attendees arrive. This checklist takes ~15 minute
 
 - [ ] Your own `gpt-4o-mini` deployment is responding:
   ```bash
-  python sample-agent/steps/step1_foundry_test.py
+  python create-agent/steps/step1_foundry_test.py
   ```
   Expected: `Connected to Azure OpenAI!`
 
@@ -76,7 +76,7 @@ All items should be ✅ before attendees arrive. This checklist takes ~15 minute
 
 - [ ] Run the full fallback agent against the live server:
   ```bash
-  cd sample-agent
+  cd create-agent
   python agent.py
   ```
   Expected: All six phases complete, final score printed, entry appears on admin leaderboard.

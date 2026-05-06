@@ -39,7 +39,7 @@ By the end of the workshop you will have built an agent that:
 | Folder | Purpose |
 | --- | --- |
 | [workshop/](workshop/) | Step-by-step workshop guide and facilitator notes. |
-| [sample-agent/](sample-agent/) | Reference Python agent (Microsoft Agent Framework) used throughout the workshop. |
+| [create-agent/](create-agent/) | Reference Python agent (Microsoft Agent Framework) used throughout the workshop. |
 | [lost-in-raleigh/](lost-in-raleigh/) | MCP game server + FastAPI admin UI that powers the quest. |
 | [a2a-expert/](a2a-expert/) | A2A transport expert agent consulted in Step 5. |
 | [city-guide/](city-guide/) | 20-chapter Raleigh city guide used as source material for the quest. |

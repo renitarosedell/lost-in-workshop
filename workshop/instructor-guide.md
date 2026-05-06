@@ -37,7 +37,7 @@ The config file (`scripts/deploy.config.json`) is gitignored, so your API key wi
 | **Game server** (`lost-in-raleigh`) | FastMCP + FastAPI - manages players, quests, leaderboard | Azure Container App |
 | **A2A expert** (`a2a-expert`) | GPT-4o-mini powered transport advisor | Azure Container App |
 | **Document bundles** | ZIP files of city-guide chapters (one per quest) | Azure Blob Storage |
-| **Attendee agent** (`sample-agent`) | Python agent skeleton attendees build on | Attendee laptop |
+| **Attendee agent** (`create-agent`) | Python agent skeleton attendees build on | Attendee laptop |
 
 ---
 
@@ -198,7 +198,7 @@ Post `MCP_SERVER_URL` to the workshop Slack/Teams channel and on the room screen
 Attendees run this themselves during [Azure Foundry Setup](azure-foundry-setup) step 8. But if you want to pre-verify the environment works:
 
 ```bash
-cd sample-agent
+cd create-agent
 python -m venv .venv
 
 # Windows

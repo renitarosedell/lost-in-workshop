@@ -67,7 +67,7 @@ export default defineConfig({
           text: 'Getting Started',
           items: [
             { text: 'Get Azure Subscription', link: '/workshop/get-azure' },
-            { text: 'Dev Environment Setup', link: '/workshop/dev-setup' },
+            { text: 'Developer Environment Setup', link: '/workshop/dev-setup' },
             { text: 'Azure AI Foundry Setup', link: '/workshop/azure-foundry-setup' },
             { text: 'Event Resources', link: '/workshop/event-resources' },
           ],

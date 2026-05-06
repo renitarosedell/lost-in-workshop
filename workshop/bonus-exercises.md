@@ -178,7 +178,7 @@ Run the full quest three times in parallel and produce a score comparison table.
 Useful for testing prompt changes or transport strategy variations.
 :::
 
-### Starter: `sample-agent/eval_harness.py`
+### Starter: `create-agent/eval_harness.py`
 
 ```python
 """Run the quest 3 times and compare scores."""

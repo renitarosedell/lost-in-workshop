@@ -39,12 +39,12 @@ cd lost-in-workshop
 
 ::: code-group
 ```bash [macOS / Linux]
-cd sample-agent
+cd create-agent
 python -m venv .venv
 source .venv/bin/activate
 ```
 ```powershell [Windows]
-cd sample-agent
+cd create-agent
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
@@ -190,7 +190,7 @@ If you haven't yet created your Azure OpenAI deployment, follow the [Azure Found
 
 ## 7. Verify your setup
 
-Run the connectivity test from inside `sample-agent/`:
+Run the connectivity test from inside `create-agent/`:
 
 ```bash
 python steps/step1_foundry_test.py

@@ -155,15 +155,15 @@ The endpoint and key are also visible on the project overview page at
 
 ## 8. Create your .env file
 
-1. In your terminal, change directory to `sample-agent/`:
+1. In your terminal, change directory to `create-agent/`:
 
 ::: code-group
 ```bash [macOS / Linux]
-cd sample-agent
+cd create-agent
 cp .env.example .env
 ```
 ```powershell [Windows]
-cd sample-agent
+cd create-agent
 copy .env.example .env
 ```
 :::

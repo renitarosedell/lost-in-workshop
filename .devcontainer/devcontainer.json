@@ -4,7 +4,7 @@
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
-  "postCreateCommand": "cd sample-agent && pip install -r requirements.txt",
+  "postCreateCommand": "cd create-agent && pip install -r requirements.txt",
   "customizations": {
     "vscode": {
       "extensions": [

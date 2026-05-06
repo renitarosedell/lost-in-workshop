@@ -36,7 +36,7 @@ memory persistence, **A2A expert agents**, and multi-agent orchestration.
 - Create your Azure OpenAI deployment → [Azure AI Foundry Setup](azure-foundry-setup)
 - Get the shared event URLs → [Event Resources](event-resources)
 
-All step files are in `sample-agent/steps/`. Run each from inside the `sample-agent/` folder:
+All step files are in `create-agent/steps/`. Run each from inside the `create-agent/` folder:
 
 ```bash
 python steps/step1_foundry_test.py

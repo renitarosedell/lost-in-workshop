@@ -6,7 +6,7 @@ from pathlib import Path
 
 from agent_framework import ContextProvider, SessionContext
 
-# memory.json lives alongside sample-agent/ (one level up from steps/)
+# memory.json lives alongside create-agent/ (one level up from steps/)
 MEMORY_FILE = Path(__file__).parent.parent / "memory.json"
 
 
